@@ -1,1 +1,2 @@
 include ':openid-connect-server-spring-boot-config'
+include ':openid-connect-server-spring-boot-ui-thymeleaf'

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html data-th-lang="${#locale.language}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head data-th-replace="fragments/header :: head(#{home.title})">
+</head>
+<body>
+<div id="wrap">
+	<span data-th-replace="fragments/topbar :: topbar(pageName=#{home.title})"></span>
+	<div class="container-fluid main">
+		<div class="row-fluid">
+			<th-block data-th-replace="fragments/sidebar :: sidebar" />
+			<div class="span10">
+				<div class="hero-unit">
+					<th-block data-th-replace="fragments/landingPageWelcome :: landingPageWelcome" />
+				</div>
+				<!-- Example row of columns -->
+				<div class="row-fluid">
+					<div class="span6">
+						<th-block data-th-replace="fragments/landingPageAbout :: landingPageAbout" />
+					</div>
+					<div class="span6">
+						<th-block data-th-replace="fragments/landingPageContact :: landingPageContact" />
+					</div>
+	
+				</div>
+				<hr/>
+				<!-- Example row of columns -->
+				<div class="row-fluid">
+					<div class="span12">
+						<th-block data-th-replace="fragments/landingPageStats :: landingPageStats" />
+					</div>
+				</div>
+	
+			</div>
+		</div>
+	</div>
+	<div id="push"></div>
+</div>
+<th-block data-th-replace="fragments/footer :: footer"/>
+</body>
+</html>

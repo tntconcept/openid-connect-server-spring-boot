@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th-block data-th-fragment="copyright">
+<span data-th-utext="#{copyright(${project == null ? '' : project.version})}"></span>
+</th-block>
+</body>
+</html>
+
