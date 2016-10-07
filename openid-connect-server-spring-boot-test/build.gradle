@@ -1,0 +1,11 @@
+
+dependencies {
+  
+ 	testCompile project(':openid-connect-server-spring-boot-config')
+	testCompile project(':openid-connect-server-spring-boot-ui-thymeleaf')
+	
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    testCompile("org.springframework.security:spring-security-test:4.0.4.RELEASE")
+    testCompile("com.jayway.jsonpath:json-path:2.0.0")
+}
+
