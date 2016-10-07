@@ -1,0 +1,37 @@
+spring:
+  jpa:
+    properties:
+      eclipselink:
+        weaving: false
+        logging:
+          level:
+            ROOT: INFO
+            sql: INFO
+        cache.shared.default: false
+  datasource:
+    initialize: true
+    schema: classpath:/db/tables/hsql_database_tables.sql,classpath:/db/tables/security-schema.sql
+    data: classpath:/db/tables/loading_temp_tables.sql,classpath:/db/users.sql,classpath:/db/clients.sql,classpath:/db/scopes.sql
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.security: INFO
+server:
+  port: 8080
+  contextPath: /
+
+openid:
+  connect:
+    server:
+      host: localhost
+      issuer: http://${openid.connect.server.host}:${server.port}${server.contextPath}
+      topbarTitle: OpenID Connect Server
+      logoImageUrl: resources/images/openid_connect_small.png
+      regTokenLifeTime: 172800
+    jsonMessageSource:
+      baseDirectory: classpath:/static/resources/js/locale/
+      useCodeAsDefaultMessage: true
+security:
+  basic:
+    enabled: false
+ 

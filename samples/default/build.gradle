@@ -1,0 +1,34 @@
+buildscript {
+	ext {
+		springBootVersion = "1.3.3.RELEASE"
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'spring-boot'
+
+jar {
+	baseName = 'openid-connect-server-spring-boot-samples-default'
+	version = '0.0.1-SNAPSHOT'
+}
+
+eclipse.project.name = 'openid-connect-server-spring-boot-samples-default' 
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter')
+	//TODO switch to artifact versioning for samples 
+	compile project(':openid-connect-server-spring-boot-config')
+	compile project(':openid-connect-server-spring-boot-ui-thymeleaf')
+
+}

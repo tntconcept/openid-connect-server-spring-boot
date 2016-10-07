@@ -1,0 +1,1 @@
+A Spring Boot Application configured to mimic the default MITREid OpenID Connect WebApp meant for maven and gradle overlay projects.
