@@ -1,0 +1,32 @@
+
+
+description = "A spring boot autoconfiguration library that simplifies getting started with the OpenID Connect Server reference implementation at https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server"
+
+dependencies {
+    // Spring Boot Starters
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
+	compile("org.springframework.security.oauth:spring-security-oauth2:${springSecurityOauthVersion}")	
+   	compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}") {
+    	exclude group: 'org.hibernate', module: 'hibernate-entitymanager'
+    }
+
+    // OpenID Connect
+    compile("org.mitre:openid-connect-server:${openIdConnectVersion}")
+    compile("org.bouncycastle:bcprov-jdk15on:1.52")    
+	
+	//UI Update to Thymeleaf
+	runtime("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
+    runtime("org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE")
+
+	//Embedded default db
+    runtime("org.hsqldb:hsqldb:2.3.3")
+    runtime("org.eclipse.persistence:org.eclipse.persistence.jpa:2.5.2") 
+    runtime("com.zaxxer:HikariCP:2.4.3")
+
+	runtime("org.springframework.boot:spring-boot-starter-logging:${springBootVersion}")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    testCompile("org.springframework.security:spring-security-test:4.0.4.RELEASE")
+    testCompile("com.jayway.jsonpath:json-path:2.0.0")
+}

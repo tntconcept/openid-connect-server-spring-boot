@@ -1,0 +1,72 @@
+package org.mitre.springboot.config.oauth2;
+
+import org.mitre.oauth2.web.CorsFilter;
+import org.mitre.oauth2.web.RevocationEndpoint;
+import org.mitre.openid.connect.assertion.JWTBearerClientAssertionTokenEndpointFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter;
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+
+@Configuration
+@Order(103)
+public class RevokeWebSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	private CorsFilter corsFilter;
+	
+	@Autowired
+	private OAuth2AuthenticationEntryPoint authenticationEntryPoint;
+	
+	@Autowired
+	private JWTBearerClientAssertionTokenEndpointFilter clientAssertiontokenEndpointFilter;
+	
+	@Autowired
+	private ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter;
+	
+	@Autowired
+	@Qualifier("clientUserDetailsService")
+	private  UserDetailsService clientUserDetailsService;
+	
+	@Autowired
+	@Qualifier("uriEncodedClientUserDetailsService")
+	private UserDetailsService uriEncodedClientUserDetailsService;
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(clientUserDetailsService);
+		auth.userDetailsService(uriEncodedClientUserDetailsService);
+	}
+	
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		// @formatter:off
+		http
+			.requestMatchers()
+				.antMatchers("/"+RevocationEndpoint.URL+"**")
+				.and()
+			.httpBasic()
+				.authenticationEntryPoint(authenticationEntryPoint)
+				.and()
+			.addFilterAfter(clientAssertiontokenEndpointFilter, AbstractPreAuthenticatedProcessingFilter.class)
+			.addFilterAfter(corsFilter, SecurityContextPersistenceFilter.class)
+			.addFilterAfter(clientCredentialsTokenEndpointFilter, BasicAuthenticationFilter.class)	
+			.exceptionHandling()
+				.authenticationEntryPoint(authenticationEntryPoint)
+				.and()
+			.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		;
+		// @formatter:on
+	}
+}
