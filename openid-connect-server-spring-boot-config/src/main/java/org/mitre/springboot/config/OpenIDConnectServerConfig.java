@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableResourceServer
 @EnableAuthorizationServer
 @EnableConfigurationProperties()
+@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class OpenIDConnectServerConfig {
 
 	@Bean(name="config")
