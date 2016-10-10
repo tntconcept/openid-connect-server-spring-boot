@@ -11,8 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
-@Order(104)
-//@EnableOAuth2Client
+@Order(140)
 @Configuration
 public class StaticResourcesWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired

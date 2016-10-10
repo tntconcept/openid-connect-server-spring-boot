@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEn
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 @Configuration
-@Order(109)
+@Order(190)
 public class UserInfoResourceServerConfig extends ResourceServerConfigurerAdapter {
 	String PATTERN = "/" + org.mitre.openid.connect.web.UserInfoEndpoint.URL + "**";
 

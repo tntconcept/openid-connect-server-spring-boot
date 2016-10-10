@@ -14,7 +14,7 @@ import org.mitre.oauth2.web.IntrospectionEndpoint;
 @Transactional
 public class IntrospectEndpointAuthorizationTests extends OAuthAuthorizationTestsBase {
 	
-	//TODO verify ClientCredentialsTokenEndpointFilter type of access with client_id and client_secret on the URI rather than basic auth
+	
 	//TODO verify JWT access via JWTBearerClientAssertionTokenEndpointFilter rather than basic auth
 	@Test
 	public void userGetIntrospectEndpointSuccess() throws Exception {
@@ -23,6 +23,22 @@ public class IntrospectEndpointAuthorizationTests extends OAuthAuthorizationTest
 			get("/"+IntrospectionEndpoint.URL)
 			.param("token", accessToken)
 			.with(httpBasic("client","secret"))
+			)
+			.andExpect(status().is(200))
+			.andExpect(jsonPath("sub", is("01921.FLANRJQW")))
+			.andReturn()
+			.getResponse()
+			;
+	}
+	
+	@Test
+	public void userGetIntrospectClientCredentialsOnUriEndpointSuccess() throws Exception {
+		String accessToken = getUserAccessToken();
+		mockMvc.perform(
+			get("/"+IntrospectionEndpoint.URL)
+			.param("token", accessToken)
+			.param("client_id", "client")
+			.param("client_secret", "secret")
 			)
 			.andExpect(status().is(200))
 			.andExpect(jsonPath("sub", is("01921.FLANRJQW")))

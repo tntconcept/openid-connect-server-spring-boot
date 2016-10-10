@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 
-@Order(106)
+@Order(160)
 @Configuration
 public class WellKnownWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired

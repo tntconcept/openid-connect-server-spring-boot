@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEn
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 @Configuration
-@Order(111)
+@Order(210)
 public class ProtectedResourceRegistrationResourceServerConfig extends ResourceServerConfigurerAdapter {
 	String PATTERN = "/" + org.mitre.openid.connect.web.ProtectedResourceRegistrationEndpoint.URL + "/**";
 

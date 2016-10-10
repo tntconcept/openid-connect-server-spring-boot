@@ -17,7 +17,7 @@ import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurity
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@Order(201)
+@Order(600)
 @Configuration
 public class UserConfig extends WebSecurityConfigurerAdapter {
 
@@ -63,11 +63,7 @@ public class UserConfig extends WebSecurityConfigurerAdapter {
 			.csrf()
 				.and()
 			.formLogin()
-				//.usernameParameter("j_username")
-				//.passwordParameter("j_password")
 				.loginPage("/login")
-				//.loginProcessingUrl("/j_spring_security_check")
-				//.loginProcessingUrl("/login")
 				.failureUrl("/login?error=failure")
 				.successHandler(authenticationTimeStamper)
 				.permitAll()

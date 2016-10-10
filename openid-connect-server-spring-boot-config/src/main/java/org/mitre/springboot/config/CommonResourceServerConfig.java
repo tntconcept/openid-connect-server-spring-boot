@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEn
 import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
 
 @Configuration
-@Order(107)
+@Order(170)
 public class CommonResourceServerConfig extends ResourceServerConfigurerAdapter { 
 
 	@Autowired

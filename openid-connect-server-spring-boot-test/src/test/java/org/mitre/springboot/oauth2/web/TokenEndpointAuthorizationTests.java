@@ -16,9 +16,9 @@ public class TokenEndpointAuthorizationTests extends OAuthAuthorizationTestsBase
 	//TODO token tests
 	
 	@Test
-	public void anonymousGetIntrospectEndpointUnauthenticated() throws Exception {
+	public void anonymousGetTokenEndpointUnauthenticated() throws Exception {
 		mockMvc.perform(
-			get("/"+IntrospectionEndpoint.URL))
+			get("/token"))
 			.andExpect(status().is(401))
 			;
 	}

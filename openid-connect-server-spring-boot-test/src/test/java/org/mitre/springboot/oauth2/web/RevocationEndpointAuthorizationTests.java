@@ -1,19 +1,21 @@
 package org.mitre.springboot.oauth2.web;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.transaction.Transactional;
 
 import org.junit.Test;
+import org.mitre.oauth2.web.IntrospectionEndpoint;
 import org.mitre.oauth2.web.RevocationEndpoint;
 
 @Transactional
 public class RevocationEndpointAuthorizationTests extends OAuthAuthorizationTestsBase {
 
-	//TODO verify ClientCredentialsTokenEndpointFilter type of access with client_id and client_secret on the URI rather than basic auth
 	//TODO verify JWT access via JWTBearerClientAssertionTokenEndpointFilter rather than basic auth
 	@Test
 	public void userGetRevocationEndpointClientIdAuthenticationSuccess() throws Exception {
@@ -25,6 +27,21 @@ public class RevocationEndpointAuthorizationTests extends OAuthAuthorizationTest
 			)
 			.andExpect(status().is(200))
 			.andDo(print())
+			.andReturn()
+			.getResponse()
+			;
+	}
+	
+	@Test
+	public void userGetRevocationEndpointClientCredentialsOnUriEndpointSuccess() throws Exception {
+		String accessToken = getUserAccessToken();
+		mockMvc.perform(
+			get("/"+RevocationEndpoint.URL)
+			.param("token", accessToken)
+			.param("client_id", "client")
+			.param("client_secret", "secret")
+			)
+			.andExpect(status().is(200))
 			.andReturn()
 			.getResponse()
 			;

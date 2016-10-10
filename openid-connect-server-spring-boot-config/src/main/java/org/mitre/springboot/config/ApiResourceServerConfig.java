@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 
 @Configuration
-@Order(108)
+@Order(180)
 public class ApiResourceServerConfig extends ResourceServerConfigurerAdapter {
 	String PATTERN = "/" + org.mitre.openid.connect.web.RootController.API_URL + "/**";
 

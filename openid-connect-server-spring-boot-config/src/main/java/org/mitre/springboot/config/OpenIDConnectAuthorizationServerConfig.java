@@ -33,7 +33,7 @@ import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
  */
 @Configuration
 //@ConditionalOnMissingBean(AuthorizationServerConfigurer.class)
-@Order(200)
+@Order(500)
 public class OpenIDConnectAuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
 	@Autowired

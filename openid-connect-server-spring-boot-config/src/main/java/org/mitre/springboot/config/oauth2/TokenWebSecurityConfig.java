@@ -4,11 +4,14 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import org.mitre.oauth2.web.CorsFilter;
+import org.mitre.oauth2.web.IntrospectionEndpoint;
+import org.mitre.oauth2.web.RevocationEndpoint;
 import org.mitre.openid.connect.assertion.JWTBearerAuthenticationProvider;
 import org.mitre.openid.connect.assertion.JWTBearerClientAssertionTokenEndpointFilter;
 import org.mitre.openid.connect.filter.MultiUrlRequestMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -27,8 +30,13 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
+/**
+ * Configuration of OAuth 2.0 endpoints for token management (granting, inspection and revocation)
+ * @author barretttucker
+ *
+ */
 @Configuration
-@Order(101)
+@Order(110)
 public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
@@ -48,36 +56,50 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	protected OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler;
 	
+	@Autowired
+	protected ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter;
+	
+	@Autowired
+	protected JWTBearerClientAssertionTokenEndpointFilter jwtBearerClientAssertionTokenEndpointFilter;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(clientUserDetailsService);
 		auth.userDetailsService(uriEncodedClientUserDetailsService);
 	}
-
 	
 	@Bean
-	public ClientCredentialsTokenEndpointFilter clientCredentialsEndpointFilter() throws Exception {
+	@ConditionalOnMissingBean(ClientCredentialsTokenEndpointFilter.class)
+	public ClientCredentialsTokenEndpointFilter clientCredentialsEndpointFilter(
+			@Qualifier("clientAuthenticationMatcher") MultiUrlRequestMatcher clientAuthenticationMatcher
+			) throws Exception {
 		ClientCredentialsTokenEndpointFilter filter = new ClientCredentialsTokenEndpointFilter();
-		filter.setRequiresAuthenticationRequestMatcher(clientAuthMatcher());
+		filter.setRequiresAuthenticationRequestMatcher(clientAuthenticationMatcher);
 		filter.setAuthenticationManager(authenticationManager());
 		return filter;
 	}
 	
+	@Autowired
 	@Bean
-	public JWTBearerClientAssertionTokenEndpointFilter clientAssertionEndpointFilter( ) {
-		JWTBearerClientAssertionTokenEndpointFilter filter = new JWTBearerClientAssertionTokenEndpointFilter(clientAuthMatcher());	
-		filter.setAuthenticationManager(new ProviderManager(Collections.<AuthenticationProvider>singletonList(new JWTBearerAuthenticationProvider())));
+	@ConditionalOnMissingBean(JWTBearerClientAssertionTokenEndpointFilter.class)
+	public JWTBearerClientAssertionTokenEndpointFilter clientAssertionEndpointFilter( 
+			@Qualifier("clientAuthenticationMatcher") MultiUrlRequestMatcher clientAuthenticationMatcher,
+			JWTBearerAuthenticationProvider jwtBearerAuthenticationProvider
+			) {
+		JWTBearerClientAssertionTokenEndpointFilter filter = new JWTBearerClientAssertionTokenEndpointFilter(clientAuthenticationMatcher);	
+		filter.setAuthenticationManager(new ProviderManager(Collections.<AuthenticationProvider>singletonList(jwtBearerAuthenticationProvider)));
 		return filter;
 	}
-	
-	//TODO allow override above
+
 	@Bean
+	@ConditionalOnMissingBean(JWTBearerAuthenticationProvider.class)
 	public JWTBearerAuthenticationProvider jwtBearerAuthenticationProvider() {
 		return new JWTBearerAuthenticationProvider();
 	}
 	
-	@Bean
-	public MultiUrlRequestMatcher clientAuthMatcher() {
+	@Bean(name="clientAuthenticationMatcher")
+	@ConditionalOnMissingBean(type={"javax.servlet.http.HttpServletRequest.MultiUrlRequestMatcher"}, name="clientAuthenticationMatcher")
+	public MultiUrlRequestMatcher clientAuthenticationMatcher() {
 		HashSet<String> urls = new HashSet<String>();
 		urls.add("/introspect");
 		urls.add("/revoke");
@@ -90,7 +112,10 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		http
 			.requestMatchers()
-				.antMatchers("/token")
+				.antMatchers(
+						"/token", 
+						"/"+IntrospectionEndpoint.URL+"**", 
+						"/"+RevocationEndpoint.URL+"**")
 				.and()
 			.httpBasic()
 				.authenticationEntryPoint(authenticationEntryPoint)
@@ -99,8 +124,8 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.OPTIONS, "/token").permitAll()
 				.antMatchers("/token").authenticated()
 				.and()
-			.addFilterAfter(clientAssertionEndpointFilter(), AbstractPreAuthenticatedProcessingFilter.class)
-			.addFilterAfter(clientCredentialsEndpointFilter(), BasicAuthenticationFilter.class)	
+			.addFilterAfter(jwtBearerClientAssertionTokenEndpointFilter, AbstractPreAuthenticatedProcessingFilter.class)
+			.addFilterAfter(clientCredentialsTokenEndpointFilter, BasicAuthenticationFilter.class)	
 			.addFilterAfter(corsFilter, SecurityContextPersistenceFilter.class)
 			
 			.exceptionHandling()
