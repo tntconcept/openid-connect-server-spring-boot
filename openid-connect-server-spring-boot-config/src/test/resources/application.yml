@@ -19,7 +19,11 @@ logging:
 server:
   port: 8080
   contextPath: /
-
+security:
+  basic:
+    enabled: false
+ 
+ 
 openid:
   connect:
     server:
@@ -28,10 +32,14 @@ openid:
       topbarTitle: OpenID Connect Server
       logoImageUrl: resources/images/openid_connect_small.png
       regTokenLifeTime: 172800
+      forceHttps: false
+      rqpTokenLifeTime: 
+      locale: en
+      languageNamespaces: 
+        - messages
+      dualClient: false
     jsonMessageSource:
       baseDirectory: classpath:/static/resources/js/locale/
       useCodeAsDefaultMessage: true
-security:
-  basic:
-    enabled: false
+
  
