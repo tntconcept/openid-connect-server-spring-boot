@@ -4,7 +4,9 @@ OpenID Connect Spring Boot starter using MITREid Connect
 
 #Configuration properties
 
-## MITREid OpenId Connect properties (ConfigurationPropertiesBean.java)[https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/blob/master/openid-connect-common/src/main/java/org/mitre/openid/connect/config/ConfigurationPropertiesBean.java]
+## MITREid OpenId Connect properties [ConfigurationPropertiesBean.java](https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/blob/master/openid-connect-common/src/main/java/org/mitre/openid/connect/config/ConfigurationPropertiesBean.java)
+
+### sample application.yml
 ```YAML
 openid:
   connect:
@@ -25,6 +27,7 @@ openid:
       useCodeAsDefaultMessage: true
 ```
 
+### sample application.yml
 ## MITREid OpenId Connect Spring Boot properties 
 ```YAML
 spring:
