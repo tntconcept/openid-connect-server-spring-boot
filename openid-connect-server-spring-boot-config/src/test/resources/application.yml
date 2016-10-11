@@ -37,5 +37,16 @@ openid:
     jsonMessageSource:
       baseDirectory: classpath:/static/resources/js/locale/
       useCodeAsDefaultMessage: true
-
- 
+    scheduling:
+      enabled: true
+      corePoolSize: 5
+      tasks:
+        clearExpiredTokens:
+          fixedDelay: 30000
+          initialDelay: 60000
+        clearExpiredSites:
+          fixedDelay: 30000
+          initialDelay: 60000
+        clearExpiredAuthorizationCodes:
+          fixedDelay: 30000
+          initialDelay: 60000

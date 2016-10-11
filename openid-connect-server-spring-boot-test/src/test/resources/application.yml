@@ -31,4 +31,5 @@ openid:
     jsonMessageSource:
       baseDirectory: classpath:/static/resources/js/locale/
       useCodeAsDefaultMessage: true
-
+    scheduling:
+      enabled: false

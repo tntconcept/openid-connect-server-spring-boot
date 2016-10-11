@@ -19,7 +19,6 @@ public class ApiResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
-		
 		http
 			.requestMatchers()
 				.antMatchers(PATTERN)
@@ -28,11 +27,8 @@ public class ApiResourceServerConfig extends ResourceServerConfigurerAdapter {
 				.and()
 			.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			
 		;
 		// @formatter:on
 	}
-	
-
 
 }
