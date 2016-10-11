@@ -43,15 +43,18 @@ public class EclipseLinkJpaConfig extends JpaBaseConfiguration {
 		return new EclipseLinkJpaVendorAdapter();
 	}
 
-	/*Explicitly defining this bean as MITRE code looks for a TransactionManager named "defaultTransactionManager"*/
-	//@Bean
+	/* 
+	 * Explicitly defining this bean as MITREid code looks for a TransactionManager named "defaultTransactionManager"
+	 * */
 	@Bean(name="defaultTransactionManager")
 	@Override
 	public PlatformTransactionManager transactionManager() {
 		return new JpaTransactionManager();
 	}
 	
-	/*Explicitly defining this bean as MITRE code looks for a persistenceUnit named "defaultPersistenceUnit"*/
+	/*
+	 * Explicitly defining this bean as MITRE code looks for a persistenceUnit named "defaultPersistenceUnit"
+	 * */
 	@Bean
 	@Primary
 	@Override

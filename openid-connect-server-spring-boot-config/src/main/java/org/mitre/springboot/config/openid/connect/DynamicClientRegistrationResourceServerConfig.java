@@ -1,4 +1,4 @@
-package org.mitre.springboot.config;
+package org.mitre.springboot.config.openid.connect;
 
 import org.mitre.oauth2.web.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;

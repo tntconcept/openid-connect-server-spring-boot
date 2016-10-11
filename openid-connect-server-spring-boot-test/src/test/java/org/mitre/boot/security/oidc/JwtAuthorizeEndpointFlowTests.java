@@ -39,6 +39,8 @@ public class JwtAuthorizeEndpointFlowTests extends EndpointTestsBase {
     String clientId = "client";
 	String secret = "secret";
 	
+	//TODO test whitelist and blacklist flows
+	
 	/**
 	 * Walks through the flow around a OIDC JWT Redirect authorize request
 	 * @throws Exception
