@@ -4,11 +4,13 @@ import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
 import org.mitre.springboot.config.annotation.EnableOpenIDConnectServer;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @ConditionalOnClass(EnableOpenIDConnectServer.class)
-@ComponentScan(basePackages = {"org.mitre", "org.mitre.config"}) 
+@ComponentScan(basePackages = {"org.mitre", "org.mitre.springboot.config"}) 
 @EnableTransactionManagement
 @EnableJpaRepositories
 @EnableAutoConfiguration
@@ -30,10 +32,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAuthorizationServer
 @EnableConfigurationProperties()
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
+@Order(101)
 public class OpenIDConnectServerConfig {
 
 	@Bean(name="config")
 	@ConfigurationProperties(prefix = "openid.connect.server")
+	@ConditionalOnMissingBean(ConfigurationPropertiesBean.class)
 	public ConfigurationPropertiesBean configurationPropertiesBean() {
     	return new ConfigurationPropertiesBean();
 	}
