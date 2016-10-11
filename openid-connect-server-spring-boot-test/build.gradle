@@ -7,5 +7,7 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     testCompile("org.springframework.security:spring-security-test:4.0.4.RELEASE")
     testCompile("com.jayway.jsonpath:json-path:2.0.0")
+    
+    testRuntime "com.h2database:h2:1.4.192"
 }
 
