@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -57,9 +58,11 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler;
 	
 	@Autowired
+	@Lazy
 	protected ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter;
 	
 	@Autowired
+	@Lazy
 	protected JWTBearerClientAssertionTokenEndpointFilter jwtBearerClientAssertionTokenEndpointFilter;
 	
 	@Override
@@ -69,8 +72,9 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Bean
+	@Autowired
 	@ConditionalOnMissingBean(ClientCredentialsTokenEndpointFilter.class)
-	public ClientCredentialsTokenEndpointFilter clientCredentialsEndpointFilter(
+	public ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter(
 			@Qualifier("clientAuthenticationMatcher") MultiUrlRequestMatcher clientAuthenticationMatcher
 			) throws Exception {
 		ClientCredentialsTokenEndpointFilter filter = new ClientCredentialsTokenEndpointFilter();
@@ -82,7 +86,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	@Bean
 	@ConditionalOnMissingBean(JWTBearerClientAssertionTokenEndpointFilter.class)
-	public JWTBearerClientAssertionTokenEndpointFilter clientAssertionEndpointFilter( 
+	public JWTBearerClientAssertionTokenEndpointFilter jwtBearerClientAssertionTokenEndpointFilter(
 			@Qualifier("clientAuthenticationMatcher") MultiUrlRequestMatcher clientAuthenticationMatcher,
 			JWTBearerAuthenticationProvider jwtBearerAuthenticationProvider
 			) {
