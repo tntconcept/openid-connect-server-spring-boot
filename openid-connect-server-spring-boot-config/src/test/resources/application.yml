@@ -18,11 +18,7 @@ logging:
     org.springframework.security: INFO
 server:
   port: 8080
-  contextPath: /
-security:
-  basic:
-    enabled: false
- 
+  contextPath: / 
  
 openid:
   connect:

@@ -31,7 +31,5 @@ openid:
     jsonMessageSource:
       baseDirectory: classpath:/static/resources/js/locale/
       useCodeAsDefaultMessage: true
-security:
-  basic:
-    enabled: false
+
  
