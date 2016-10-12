@@ -26,8 +26,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories(basePackages = {"org.mitre"})
 @EnableTransactionManagement
+@EnableJpaRepositories(basePackages = {"org.mitre"})
 @EntityScan(basePackages = {"org.mitre"} )
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 public class EclipseLinkJpaConfig extends JpaBaseConfiguration {

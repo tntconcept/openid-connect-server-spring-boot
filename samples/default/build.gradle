@@ -32,5 +32,6 @@ dependencies {
 	compile project(':openid-connect-server-spring-boot-config')
 	compile project(':openid-connect-server-spring-boot-ui-thymeleaf')
 
-    runtime("org.hsqldb:hsqldb:2.3.3")
+    runtime "com.h2database:h2:1.4.192"
+
 }

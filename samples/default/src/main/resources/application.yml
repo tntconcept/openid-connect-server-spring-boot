@@ -11,7 +11,7 @@ spring:
   datasource:
     initialize: true
     schema: classpath:/db/tables/hsql_database_tables.sql,classpath:/db/tables/security-schema.sql
-    data: classpath:/db/tables/loading_temp_tables.sql,classpath:/db/users.sql,classpath:/db/clients.sql,classpath:/db/scopes.sql
+    data: classpath:/db/users.sql,classpath:/db/clients.sql,classpath:/db/scopes.sql
 logging:
   level:
     ROOT: INFO
