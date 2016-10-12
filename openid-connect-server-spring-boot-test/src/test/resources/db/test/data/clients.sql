@@ -59,8 +59,15 @@ INSERT INTO client_grant_type (owner_id, grant_type) VALUES
 	(@a, 'refresh_token');
 	
 INSERT INTO whitelisted_site(client_id, creator_user_id) VALUES
-	('unit-tests',@a);
+	(@a,'unit-tests');
 	
+INSERT INTO whitelisted_site_scope(owner_id, scope) VALUES
+	(@a, 'openid'),
+	(@a, 'profile'),
+	(@a, 'email'),
+	(@a, 'address'),
+	(@a, 'phone'),
+	(@a, 'offline_access');
 	
 	
 -- 
