@@ -27,8 +27,10 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
+	
 	//TODO switch to artifact versioning for samples 
 	compile project(':openid-connect-server-spring-boot-config')
 	compile project(':openid-connect-server-spring-boot-ui-thymeleaf')
 
+    runtime("org.hsqldb:hsqldb:2.3.3")
 }
