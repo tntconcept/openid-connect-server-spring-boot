@@ -4,10 +4,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 import org.mitre.jose.keystore.JWKSetKeyStore;
+import org.mitre.jwt.encryption.service.JWTEncryptionAndDecryptionService;
 import org.mitre.jwt.encryption.service.impl.DefaultJWTEncryptionAndDecryptionService;
+import org.mitre.jwt.signer.service.JWTSigningAndValidationService;
 import org.mitre.jwt.signer.service.impl.DefaultJWTSigningAndValidationService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
@@ -15,33 +17,36 @@ import org.springframework.core.io.Resource;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWEAlgorithm;
 
-//TODO spring boot property targeting
 @Configuration
 public class CryptoConfig {
-	@Bean(name = "defaultKeyStore")
-	public JWKSetKeyStore defaultKeyStore(@Value("classpath:keystore.jwks") Resource location) {
+	
+	@Bean
+	@ConditionalOnMissingBean(JWKSetKeyStore.class)
+	public JWKSetKeyStore defaultKeyStore(@Value("${openid.connect.crypto.keystore.path}") Resource location) {
 		JWKSetKeyStore keystore = new JWKSetKeyStore();
 		keystore.setLocation(location);
 		return keystore;
 	}
 	
-	@Bean(name = "defaultsignerService")
-	public DefaultJWTSigningAndValidationService defaultJwtSigningAndValidationService(
-			@Qualifier("defaultKeyStore") JWKSetKeyStore keystore,
-			@Value("rsa1") String defaultSignerId,
-			@Value("RS256") String defaultSigningAlgorithmName) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	@Bean
+	@ConditionalOnMissingBean(JWTSigningAndValidationService.class)
+	public JWTSigningAndValidationService defaultJwtSigningAndValidationService(
+			JWKSetKeyStore keystore,
+			@Value("${openid.connect.crypto.signing.defaultSignerKeyId}") String defaultSignerKeyId,
+			@Value("${openid.connect.crypto.signing.defaultSigningAlgorithmName}") String defaultSigningAlgorithmName) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		DefaultJWTSigningAndValidationService s = new DefaultJWTSigningAndValidationService(keystore);
-		s.setDefaultSignerKeyId(defaultSignerId);
+		s.setDefaultSignerKeyId(defaultSignerKeyId);
 		s.setDefaultSigningAlgorithmName(defaultSigningAlgorithmName);
 		return s;
 	}
 	
-	@Bean(name = "defaultEncryptionService")
-	public DefaultJWTEncryptionAndDecryptionService defaultJwtEncryptionAndDecryptionService(
-			@Qualifier("defaultKeyStore") JWKSetKeyStore keystore, 
-			@Value("RSA1_5") JWEAlgorithm defaultAlgorithm,
-			@Value("rsa1") String defaultDecryptionKeyId,
-			@Value("rsa1") String defaultEncryptionKeyId
+	@Bean
+	@ConditionalOnMissingBean(JWTEncryptionAndDecryptionService.class)
+	public JWTEncryptionAndDecryptionService defaultJwtEncryptionAndDecryptionService(
+			JWKSetKeyStore keystore, 
+			@Value("${openid.connect.crypto.encrypt.defaultAlgorithm}") JWEAlgorithm defaultAlgorithm,
+			@Value("${openid.connect.crypto.encrypt.defaultDecryptionKeyId}") String defaultDecryptionKeyId,
+			@Value("${openid.connect.crypto.encrypt.defaultEncryptionKeyId}") String defaultEncryptionKeyId
 			) throws NoSuchAlgorithmException, InvalidKeySpecException, JOSEException {
 		DefaultJWTEncryptionAndDecryptionService s = new DefaultJWTEncryptionAndDecryptionService(keystore);
 		s.setDefaultAlgorithm(defaultAlgorithm);

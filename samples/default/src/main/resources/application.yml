@@ -31,16 +31,13 @@ openid:
     jsonMessageSource:
       baseDirectory: classpath:/static/resources/js/locale/
       useCodeAsDefaultMessage: true
-    scheduling:
-      enabled: true
-      corePoolSize: 5
-      tasks:
-        clearExpiredTokens:
-          fixedDelay: 30000
-          initialDelay: 60000
-        clearExpiredSites:
-          fixedDelay: 30000
-          initialDelay: 60000
-        clearExpiredAuthorizationCodes:
-          fixedDelay: 30000
-          initialDelay: 60000
+    crypto:
+      keystore:
+        path: classpath:keystore.jwks
+      signing:
+        defaultSignerKeyId: rsa1
+        defaultSigningAlgorithmName: RS256
+      encrypt:
+        defaultAlgorithm: RSA1_5
+        defaultDecryptionKeyId: rsa1
+        defaultEncryptionKeyId: rsa1
