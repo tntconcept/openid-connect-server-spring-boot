@@ -37,6 +37,8 @@ public class JwtAuthorizeEndpointFlowTests extends EndpointTestsBase {
 	String state = UUID.randomUUID().toString();
 	String userSubject = "01921.FLANRJQW";
     String clientId = "client";
+    String whitelistclientId = "whitelistclient";
+    String whitelistclientRedirectUrl = "http://whitelist.localhost/";
 	String secret = "secret";
 	
 	//TODO test whitelist and blacklist flows
@@ -118,10 +120,10 @@ public class JwtAuthorizeEndpointFlowTests extends EndpointTestsBase {
         Assert.assertEquals("openid profile", queryParamsByName.get("scope"));
        
         SignedJWT accessToken = SignedJWT.parse(queryParamsByName.get("access_token").toString());
-        validateAccessToken(accessToken);
+        validateAccessToken(accessToken, clientId);
 
         SignedJWT idToken = SignedJWT.parse(queryParamsByName.get("id_token").toString());
-        validateIdToken(idToken);
+        validateIdToken(idToken, clientId);
               
 	}
 	/**
@@ -217,15 +219,99 @@ public class JwtAuthorizeEndpointFlowTests extends EndpointTestsBase {
 		String json = result.getResponse().getContentAsString();  
         HashMap<String,Object> map = mapper.readValue(json, new TypeReference<HashMap<String,Object>>(){}); 
         SignedJWT accessToken = SignedJWT.parse(map.get("access_token").toString());
-        validateAccessToken(accessToken);
+        validateAccessToken(accessToken, clientId);
 
         SignedJWT idToken = SignedJWT.parse(map.get("id_token").toString());
-        validateIdToken(idToken);
+        validateIdToken(idToken, clientId);
 	}
 	
+	/**
+	 * Walks through the UI flow around a Authorization Code redirect /authorize request for whitelisted app (no confirm allow necessary)
+	 * @throws Exception
+	 */
+	@Test
+	public void codeResponseTypeLoginFlowWhitelistTest() throws Exception {
+
+		//Request authorize, expect login redirect
+        mockMvc.perform(
+			get("/authorize")
+			.session(mockSession)
+			.param("response_type", "code")
+			.param("client_id", whitelistclientId)
+			.param("redirect_uri", whitelistclientRedirectUrl)
+			.param("scope", "openid profile email")
+			.param("state", state)
+			.param("nonce", nonce)
+			)
+			.andExpect(status().isFound())
+			.andExpect(redirectedUrl("http://localhost/login"))
+			.andDo(print())
+			;     
+        
+        //Login to establish session
+        String authorizeLocation = mockMvc.perform(
+			post("/login")
+			.session(mockSession)
+			.with(csrf())
+			.param("username", username)
+			.param("password", password))
+			.andDo(print())
+			.andExpect(status().isFound())
+			.andExpect(redirectedUrlPattern("http://localhost/authorize*")) //?response_type=code%20token%20id_token&client_id=client&redirect_uri=http://localhost/&scope=openid%20profile%20email&state=af0ifjsldkj&nonce=n-0S6_WzA2Mj
+			.andReturn()
+			.getResponse()
+			.getHeader("Location")
+			;
+        
+        
+        //Follow redirect back to authorize view
+        MvcResult authResult = mockMvc.perform(
+			get(authorizeLocation)
+			.session(mockSession))
+			//.with(csrf())
+			.andDo(print())
+			.andExpect(status().isFound())
+			.andExpect(redirectedUrlPattern("http://whitelist.localhost/*"))
+			.andReturn();
+			;
+        
+        //Extract authorization code for Oauth2 /token authorization_code request
+        
+        List<NameValuePair> params = URLEncodedUtils.parse(new URI(authResult.getResponse().getRedirectedUrl()), "UTF-8");
+        String code = null;
+        for(NameValuePair pair: params) {
+        	if(pair.getName().equals("code")) {
+	        	code =  pair.getValue();
+        	}
+        }
+        Assert.assertNotNull(code);
+        
+        //Token endpoint request
+		MvcResult result = mockMvc.perform(
+			post("/token")
+			.with(httpBasic(whitelistclientId,secret))
+			.param("grant_type", "authorization_code")
+			.param("code", code)
+			.param("redirect_uri", whitelistclientRedirectUrl)
+			)
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("token_type", is("Bearer")))
+			.andExpect(jsonPath("scope", is("openid email profile")))
+			.andExpect(jsonPath("expires_in", is(3599)))
+			.andReturn()      
+	         ;     
+		String json = result.getResponse().getContentAsString();  
+        HashMap<String,Object> map = mapper.readValue(json, new TypeReference<HashMap<String,Object>>(){}); 
+        SignedJWT accessToken = SignedJWT.parse(map.get("access_token").toString());
+        validateAccessToken(accessToken,whitelistclientId);
+
+        SignedJWT idToken = SignedJWT.parse(map.get("id_token").toString());
+        validateIdToken(idToken,whitelistclientId);
+	}
 	
-	protected void validateAccessToken(SignedJWT accessToken) throws ParseException {
-        Assert.assertEquals("client",accessToken.getJWTClaimsSet().getAudience().get(0));
+	protected void validateAccessToken(SignedJWT accessToken, String clientId) throws ParseException {
+        Assert.assertEquals(clientId,accessToken.getJWTClaimsSet().getAudience().get(0));
         Assert.assertEquals("http://localhost:-1/",accessToken.getJWTClaimsSet().getIssuer());
         Assert.assertNotNull(accessToken.getJWTClaimsSet().getExpirationTime());
         Assert.assertNotNull(accessToken.getJWTClaimsSet().getIssueTime());
@@ -233,12 +319,13 @@ public class JwtAuthorizeEndpointFlowTests extends EndpointTestsBase {
         
         //TODO validate RSA signature
 	}
+
 	
-	protected void validateIdToken(SignedJWT idToken) throws ParseException {
+	protected void validateIdToken(SignedJWT idToken, String clientId) throws ParseException {
 
         Assert.assertEquals(userSubject, idToken.getJWTClaimsSet().getSubject());
         Assert.assertEquals(nonce, idToken.getJWTClaimsSet().getStringClaim("nonce"));
-        Assert.assertEquals("client",idToken.getJWTClaimsSet().getAudience().get(0));
+        Assert.assertEquals(clientId,idToken.getJWTClaimsSet().getAudience().get(0));
         Assert.assertEquals("rsa1",idToken.getJWTClaimsSet().getStringClaim("kid"));
         Assert.assertEquals("http://localhost:-1/",idToken.getJWTClaimsSet().getIssuer());
         
