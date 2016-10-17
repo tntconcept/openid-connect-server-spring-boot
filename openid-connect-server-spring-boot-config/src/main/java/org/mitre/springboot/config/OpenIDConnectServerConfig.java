@@ -24,9 +24,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @ConditionalOnClass(EnableOpenIDConnectServer.class)
 @ComponentScan(basePackages = {"org.mitre", "org.mitre.springboot.config"}) 
-@EnableTransactionManagement
-@EnableJpaRepositories
-@EnableAutoConfiguration
 @EnableWebSecurity
 @EnableResourceServer
 @EnableAuthorizationServer
@@ -51,5 +48,7 @@ public class OpenIDConnectServerConfig {
 	public WebResponseExceptionTranslator defaultWebResponseExceptionTranslator() {
 		return new DefaultWebResponseExceptionTranslator();
 	}
+	
+	
 	
 }

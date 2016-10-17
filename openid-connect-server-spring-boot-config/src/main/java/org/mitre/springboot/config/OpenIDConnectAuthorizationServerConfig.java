@@ -10,11 +10,14 @@ import org.mitre.oauth2.token.StructuredScopeAwareOAuth2RequestValidator;
 import org.mitre.openid.connect.request.ConnectOAuth2RequestFactory;
 import org.mitre.openid.connect.token.TofuUserApprovalHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
@@ -31,8 +34,8 @@ import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
  * Wires in the MitreID OpenID Connect implementations into the Spring Security Oauth 2.0 stack, overrides OAuth2AuthorizationServerConfiguration
  * 
  */
+
 @Configuration
-//@ConditionalOnMissingBean(AuthorizationServerConfigurer.class)
 @Order(500)
 public class OpenIDConnectAuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
