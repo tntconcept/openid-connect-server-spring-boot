@@ -49,13 +49,5 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/static/resources/");
     }
 	
-	/*
-	 * This is to allow resolution of the MitreID json endpoint view beans
-	 */
-	@Bean
-    public BeanNameViewResolver beanViewResolver() {
-        BeanNameViewResolver resolver = new BeanNameViewResolver();
-        resolver.setOrder(0);
-        return resolver;
-    }
+
 }

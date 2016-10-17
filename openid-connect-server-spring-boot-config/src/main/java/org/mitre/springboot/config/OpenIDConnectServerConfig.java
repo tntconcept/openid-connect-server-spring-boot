@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEn
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.web.servlet.view.BeanNameViewResolver;
 
 @Configuration
 @ConditionalOnClass(EnableOpenIDConnectServer.class)
@@ -60,5 +61,14 @@ public class OpenIDConnectServerConfig {
 		return new OAuth2WebSecurityExpressionHandler();
 	}
 	
+	/*
+	 * This is to allow resolution of the MitreID json endpoint view beans used in API and OIDC endpoints
+	 */
+	@Bean
+    public BeanNameViewResolver beanViewResolver() {
+        BeanNameViewResolver resolver = new BeanNameViewResolver();
+        resolver.setOrder(0);
+        return resolver;
+    }
 	
 }
