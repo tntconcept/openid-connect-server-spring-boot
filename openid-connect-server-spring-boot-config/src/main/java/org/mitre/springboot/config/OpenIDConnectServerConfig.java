@@ -15,7 +15,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.error.DefaultWebResponseExceptionTranslator;
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
+import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 
 @Configuration
@@ -46,6 +48,17 @@ public class OpenIDConnectServerConfig {
 		return new DefaultWebResponseExceptionTranslator();
 	}
 	
+	@Bean
+	public OAuth2AuthenticationEntryPoint oauth2AuthenticationEntryPoint() {
+		OAuth2AuthenticationEntryPoint entryPoint = new OAuth2AuthenticationEntryPoint();
+		entryPoint.setRealmName("openidconnect");
+		return entryPoint;
+	}
+
+	@Bean
+	public OAuth2WebSecurityExpressionHandler oauthWebExpressionHandler() {
+		return new OAuth2WebSecurityExpressionHandler();
+	}
 	
 	
 }

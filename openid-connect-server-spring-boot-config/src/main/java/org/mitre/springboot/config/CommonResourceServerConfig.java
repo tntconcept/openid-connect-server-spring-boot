@@ -18,18 +18,6 @@ public class CommonResourceServerConfig extends ResourceServerConfigurerAdapter 
 	@Autowired
 	private DefaultOAuth2ProviderTokenService defaultOAuth2ProviderTokenService;
 	
-	@Bean
-	public OAuth2AuthenticationEntryPoint oauth2AuthenticationEntryPoint() {
-		OAuth2AuthenticationEntryPoint entryPoint = new OAuth2AuthenticationEntryPoint();
-		entryPoint.setRealmName("openidconnect");
-		return entryPoint;
-	}
-
-	@Bean
-	public OAuth2WebSecurityExpressionHandler oauthWebExpressionHandler() {
-		return new OAuth2WebSecurityExpressionHandler();
-	}
-	
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		resources.stateless(false);
