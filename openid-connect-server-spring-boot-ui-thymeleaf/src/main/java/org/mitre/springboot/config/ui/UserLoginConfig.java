@@ -16,9 +16,6 @@ public class UserLoginConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AuthenticationTimeStamper authenticationTimeStamper;
-		
-	@Autowired
-	private AuthorizationRequestFilter authRequestFilter ;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -39,11 +36,6 @@ public class UserLoginConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/**")
 				.permitAll()
 				.and()
-			.authorizeRequests()
-				.antMatchers("/authorize")
-				.hasRole("USER")
-				.and()
-			.addFilterAfter(authRequestFilter, SecurityContextPersistenceFilter.class)
 			.logout()
 				.logoutSuccessUrl("/login?logout")
 				//TODO upgrade default logout UI this should be a POST with CSRF for safety

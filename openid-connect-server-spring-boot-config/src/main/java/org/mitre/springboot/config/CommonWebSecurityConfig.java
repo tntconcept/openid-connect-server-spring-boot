@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
 
-@Order(700)
+@Order(700) 
 @Configuration
 public class CommonWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
