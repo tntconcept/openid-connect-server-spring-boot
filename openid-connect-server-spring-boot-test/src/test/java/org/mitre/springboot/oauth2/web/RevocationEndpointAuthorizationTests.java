@@ -1,16 +1,13 @@
 package org.mitre.springboot.oauth2.web;
 
-import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.transaction.Transactional;
 
 import org.junit.Test;
-import org.mitre.oauth2.web.IntrospectionEndpoint;
 import org.mitre.oauth2.web.RevocationEndpoint;
 
 @Transactional

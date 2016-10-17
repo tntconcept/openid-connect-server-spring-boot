@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import javax.transaction.Transactional;
 
 import org.junit.Test;
-import org.mitre.oauth2.web.IntrospectionEndpoint;
 
 @Transactional
 public class TokenEndpointAuthorizationTests extends OAuthAuthorizationTestsBase {

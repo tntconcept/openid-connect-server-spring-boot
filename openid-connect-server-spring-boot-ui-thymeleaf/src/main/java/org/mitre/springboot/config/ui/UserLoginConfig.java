@@ -18,7 +18,6 @@ public class UserLoginConfig extends WebSecurityConfigurerAdapter {
 	private AuthenticationTimeStamper authenticationTimeStamper;
 		
 	@Autowired
-	//private PromptFilter promptFilter;
 	private AuthorizationRequestFilter authRequestFilter ;
 	
 	@Override
