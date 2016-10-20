@@ -18,6 +18,21 @@ public class WhitelistApiAuthorizationTests extends ApiAuthorizationTestsBase {
 	}
 	
 	@Test
+	public void adminGetWhitelistByIdSuccess() throws Exception {
+		adminSession();
+		checkGetAccess("/api/whitelist/1", 200);
+	}
+
+	@Test
+	public void adminDeleteWhitelistByIdSuccess() throws Exception {
+		adminSession();
+		checkGetAccess("/api/whitelist/1", 200);
+		checkDeleteAccess("/api/whitelist/1", 200);
+		checkGetAccess("/api/whitelist/1", 404);
+	}
+
+	
+	@Test
 	public void adminPostApiWhitelistSucess() throws Exception {
 		adminSession();
 		checkPostAccess("/api/whitelist", 200);
