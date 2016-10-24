@@ -1,12 +1,21 @@
 package org.mitre.springboot.openid.connect.web;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -46,6 +55,70 @@ public class DynamicClientRegistrationEndpointAuthorizationTests extends ApiAuth
 				.andDo(print())
 				.andExpect(status().is(201))
 				;
+	}
+	
+	@Test
+	public void readDynamicClientSuccess() throws Exception{
+		//userSession();
+		mapper.setSerializationInclusion(Include.NON_NULL);	
+		mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+		String postContent = mapper.writeValueAsString(getClientDetailsEntity("https://test.url.com"));
+		String result = mockMvc.perform(
+				post("/register")
+ 				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(postContent)
+				.session(mockSession).locale(Locale.ENGLISH)
+				.with(csrf()))
+				.andDo(print())
+				.andExpect(status().is(201))
+				.andReturn().getResponse().getContentAsString()
+				;
+		Map<String,String> resultMap = mapper.readValue(result, Hashtable.class);
+		log.info("access token is " + resultMap.get("registration_access_token"));
+		String client_id = resultMap.get("client_id");
+		String responseContent = mockMvc.perform(
+				get("/register/"+client_id)
+ 				.contentType(MediaType.APPLICATION_JSON_VALUE)
+ 				.header("Authorization", "Bearer " + resultMap.get("registration_access_token"))
+				.session(mockSession).locale(Locale.ENGLISH)
+				.with(csrf()))
+				
+				.andDo(print())
+				.andExpect(status().is(200))
+				.andReturn().getResponse().getContentAsString();
+		;
+		//log.info("get response = " + responseContent);
+		
+	}
+
+	@Test
+	public void readDynamicClientAnonymousFail() throws Exception{
+		//userSession();
+		mapper.setSerializationInclusion(Include.NON_NULL);	
+		mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+		String postContent = mapper.writeValueAsString(getClientDetailsEntity("https://test.url.com"));
+		String result = mockMvc.perform(
+				post("/register")
+ 				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(postContent)
+				.session(mockSession).locale(Locale.ENGLISH)
+				.with(csrf()))
+				.andDo(print())
+				.andExpect(status().is(201))
+				.andReturn().getResponse().getContentAsString()
+				;
+		Map<String,String> resultMap = mapper.readValue(result, Hashtable.class);
+		log.info("access token is " + resultMap.get("registration_access_token"));
+		String client_id = resultMap.get("client_id");
+		mockMvc.perform(
+				get("/register/"+client_id)
+ 				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.session(mockSession).locale(Locale.ENGLISH)
+				.with(csrf()))
+				.andDo(print())
+				.andExpect(status().is(401));
+		//log.info("get response = " + responseContent);
+		
 	}
 	
 	//TODO:  test registry with software statement, and other permutations of various clientdetails that can be set.
