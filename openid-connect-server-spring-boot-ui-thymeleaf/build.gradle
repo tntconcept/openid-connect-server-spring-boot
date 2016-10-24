@@ -25,6 +25,9 @@ dependencies {
 	
 	// OpenID Connect
     compile("org.mitre:openid-connect-server:${openIdConnectVersion}")
+    compile("org.bouncycastle:bcprov-jdk15on:1.52")    
+    
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
 	compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
 	
 	runtime("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")

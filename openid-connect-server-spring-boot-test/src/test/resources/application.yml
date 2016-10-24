@@ -28,9 +28,6 @@ openid:
       topbarTitle: OpenID Connect Server
       logoImageUrl: resources/images/openid_connect_small.png
       regTokenLifeTime: 172800
-    jsonMessageSource:
-      baseDirectory: classpath:/static/resources/js/locale/
-      useCodeAsDefaultMessage: true
     scheduling:
       enabled: false
     crypto:
