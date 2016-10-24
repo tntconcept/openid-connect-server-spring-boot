@@ -26,15 +26,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EntityScan(basePackages = {"org.mitre.oauth2.model","org.mitre.openid.connect.model","org.mitre.uma.model"} )
+@EntityScan(basePackages = {"org.mitre.oauth2.model","org.mitre.openid.connect.model"} )
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 public class EclipseLinkJpaConfig extends JpaBaseConfiguration {
 
 	@Autowired
 	private JpaProperties properties;
-
-	@Autowired
-	private DataSource dataSource;
 
 	@Override
 	protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
@@ -66,7 +63,6 @@ public class EclipseLinkJpaConfig extends JpaBaseConfiguration {
 	@Override
 	protected Map<String, Object> getVendorProperties() {
 		Map<String, Object> vendorProperties = new LinkedHashMap<String, Object>();
-		vendorProperties.putAll(this.properties.getHibernateProperties(this.dataSource));
 		return vendorProperties;
 	}
 
