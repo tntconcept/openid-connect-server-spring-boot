@@ -27,10 +27,6 @@ openid:
       issuer: http://${openid.connect.server.host}:${server.port}${server.contextPath}
       topbarTitle: OpenID Connect Server
       logoImageUrl: resources/images/openid_connect_small.png
-      regTokenLifeTime: 172800
-    jsonMessageSource:
-      baseDirectory: classpath:/static/resources/js/locale/
-      useCodeAsDefaultMessage: true
     crypto:
       keystore:
         path: classpath:keystore.jwks
