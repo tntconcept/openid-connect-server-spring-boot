@@ -9,8 +9,7 @@ OpenID Connect Spring Boot starter using MITREid Connect
 openid:
   connect:
     server:
-      host: localhost
-      issuer: http://${openid.connect.server.host}:${server.port}${server.contextPath}
+      issuer: http://localhost:8080/
       topbarTitle: OpenID Connect Server
       logoImageUrl: resources/images/openid_connect_small.png
     crypto:
