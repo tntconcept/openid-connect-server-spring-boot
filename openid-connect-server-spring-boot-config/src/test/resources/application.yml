@@ -46,7 +46,6 @@ openid:
         defaultEncryptionKeyId: rsa1
     jsonMessageSource:
       baseDirectory: classpath:/static/resources/js/locale/
-      useCodeAsDefaultMessage: true
     scheduling:
       enabled: true
       corePoolSize: 5

@@ -1,12 +1,10 @@
-# openid-connect-spring-boot-starter
+# openid-connect-spring-boot-config
 OpenID Connect Spring Boot starter using MITREid Connect 
 
 
 #Configuration properties
 
-## MITREid OpenId Connect properties [ConfigurationPropertiesBean.java](https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/blob/master/openid-connect-common/src/main/java/org/mitre/openid/connect/config/ConfigurationPropertiesBean.java)
-
-### sample application.yml
+### Sample minimal application.yml
 ```YAML
 openid:
   connect:
@@ -15,21 +13,16 @@ openid:
       issuer: http://${openid.connect.server.host}:${server.port}${server.contextPath}
       topbarTitle: OpenID Connect Server
       logoImageUrl: resources/images/openid_connect_small.png
-      regTokenLifeTime: 172800
-      forceHttps: false
-      rqpTokenLifeTime: 
-      locale: en
-      languageNamespaces: 
-        - messages
-      dualClient: false
-    jsonMessageSource:
-      baseDirectory: classpath:/static/resources/js/locale/
-      useCodeAsDefaultMessage: true
-```
-
-### sample application.yml
-## MITREid OpenId Connect Spring Boot properties 
-```YAML
+    crypto:
+      keystore:
+        path: classpath:keystore.jwks
+      signing:
+        defaultSignerKeyId: rsa1
+        defaultSigningAlgorithmName: RS256
+      encrypt:
+        defaultAlgorithm: RSA1_5
+        defaultDecryptionKeyId: rsa1
+        defaultEncryptionKeyId: rsa1
 spring:
   jpa:
     properties:
@@ -39,7 +32,7 @@ spring:
   datasource:
     initialize: true
     schema: classpath:/db/tables/hsql_database_tables.sql,classpath:/db/tables/security-schema.sql
-security:
-  basic:
-    enabled: false
+
 ```
+
+## openid.connect.server properties injected into [ConfigurationPropertiesBean.java](https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/blob/master/openid-connect-common/src/main/java/org/mitre/openid/connect/config/ConfigurationPropertiesBean.java)
