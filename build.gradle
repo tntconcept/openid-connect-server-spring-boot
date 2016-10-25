@@ -51,8 +51,8 @@ subprojects {
 		sign configurations.archives
 	}
 
-	project.ext.set("ossrhUsername",  project.hasProperty("ossrhUsername") ? ossrhUsername : "")
-	project.ext.set("ossrhPassword",  project.hasProperty("ossrhPassword") ? ossrhPassword : "")
+	project.ext.set("ossrhUsername",  project.hasProperty("ossrhUsername") ? ossrhUsername : System.getenv("ossrhUsername"))
+	project.ext.set("ossrhPassword",  project.hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhPassword"))
 	
 	uploadArchives {
 		repositories {
