@@ -46,30 +46,27 @@ subprojects {
 		archives javadocJar, sourcesJar
 	}
 
-
 	signing {
-		required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+		required {gradle.taskGraph.hasTask("uploadArchives") }  
 		sign configurations.archives
 	}
 
-	project.ext.set("ossrhUsername", System.properties['ossrhUsername'])
-	project.ext.set("ossrhPassword", System.properties['ossrhPassword'])
+	project.ext.set("ossrhUsername",  project.hasProperty("ossrhUsername") ? ossrhUsername : "")
+	project.ext.set("ossrhPassword",  project.hasProperty("ossrhPassword") ? ossrhPassword : "")
 	
 	uploadArchives {
 		repositories {
 			mavenDeployer {
 				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-				repository(url: mavenLocal().url)
-				
-				/*
+				//for local install: repository(url: mavenLocal().url)
+					
 				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
 					authentication(userName: ossrhUsername, password: ossrhPassword)
 				}
 	
 				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-					authentication(userName: ossrhUsername, password: ossrhPassword)
+					authentication (userName: ossrhUsername, password: ossrhPassword)
 				}
-				*/
 	
 				pom.project {
 					name project.name
