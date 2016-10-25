@@ -1,35 +1,115 @@
 subprojects {
 	buildscript {
-    ext {
-		springVersion = "4.2.5.RELEASE"
-        springBootVersion = "1.3.3.RELEASE"
-		springSecurityOauthVersion = "2.0.9.RELEASE"
-        openIdConnectVersion = "1.2.3"
-    }
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {url "http://repo.spring.io/plugins-snapshot"}
-        maven {url "http://repo.spring.io/milestone"}
-    	maven {url "http://repo.spring.io/release"}
-
-    }
+		ext {
+			springVersion = "4.2.5.RELEASE"
+			springBootVersion = "1.3.3.RELEASE"
+			springSecurityOauthVersion = "2.0.9.RELEASE"
+			openIdConnectVersion = "1.2.3"
+		}
+		repositories {
+			mavenCentral()
+			jcenter()
+			maven {url "http://repo.spring.io/plugins-snapshot"}
+			maven {url "http://repo.spring.io/milestone"}
+			maven {url "http://repo.spring.io/release"}
+		}
 	}
 	
-  apply plugin: "eclipse"
-  apply plugin: "idea"
-  apply plugin: "java"
-  apply plugin: "maven"
-  //apply plugin: "maven-publish"
-  
-  group = "net.simpledynamics"
-  version = "0.0.1"
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
+	apply plugin: "eclipse"
+	apply plugin: "idea" 
+	apply plugin: "java"
+	apply plugin: "maven"
+	apply plugin: "signing"
 
-  repositories {
-	  mavenCentral()
-	  maven { url "http://repo.spring.io/milestone" }
-	  maven { url "http://repo.springsource.org/libs-snapshot" }
-  }
+	group = "net.simpledynamics"
+	version = "0.0.1-SNAPSHOT"
+	ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+	repositories {
+		mavenCentral()
+	}
+
+	task javadocJar(type: Jar) {
+		classifier = 'javadoc'
+		from javadoc
+	}
+
+	task sourcesJar(type: Jar) {
+		classifier = 'sources'
+		from sourceSets.main.allSource
+	}
+	
+	artifacts {
+		archives javadocJar, sourcesJar
+	}
+
+
+	signing {
+		required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+		sign configurations.archives
+	}
+
+	project.ext.set("ossrhUsername", System.properties['ossrhUsername'])
+	project.ext.set("ossrhPassword", System.properties['ossrhPassword'])
+	
+	uploadArchives {
+		repositories {
+			mavenDeployer {
+				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+				repository(url: mavenLocal().url)
+				
+				/*
+				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+					authentication(userName: ossrhUsername, password: ossrhPassword)
+				}
+	
+				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+					authentication(userName: ossrhUsername, password: ossrhPassword)
+				}
+				*/
+	
+				pom.project {
+					name project.name
+					description project.description
+					packaging 'jar'
+					url 'https://github.com/simpledynamics/openid-connect-server-spring-boot'
+					
+					scm {
+						connection 'scm:git:https://github.com/simpledynamics/openid-connect-server-spring-boot.git'
+						developerConnection 'scm:git:https://github.com/simpledynamics/openid-connect-server-spring-boot.git'
+						url 'https://github.com/simpledynamics/openid-connect-server-spring-boot'
+					}
+	
+					licenses {
+						license {
+							name 'The Apache License, Version 2.0'
+							url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+						}
+					}
+	
+					organization {
+						name 'Simple Dynamics'
+						url 'http://www.simpledynamics.net/'
+					}
+					
+					developers {
+						developer {
+							id 'barretttucker'
+							name 'Barrett Tucker'
+							email 'barrett@simpledynamics.net'
+						}
+						developer {
+							id 'nategrover'
+							name 'Nate Grover'
+							email 'nate@simpledynamics.net'
+						}
+					}
+				}
+			}
+		}
+	}
+	
 }
