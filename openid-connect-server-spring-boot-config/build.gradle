@@ -1,7 +1,4 @@
 
-
-description = "A spring boot autoconfiguration library that simplifies getting started with the OpenID Connect Server reference implementation at https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server"
-
 dependencies {
     // Spring Boot Starters
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
