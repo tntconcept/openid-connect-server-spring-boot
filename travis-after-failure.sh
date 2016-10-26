@@ -1,2 +1,2 @@
-#!/bin/bash
+#!/bin/bash 
 ./travis/junit-errors-to-stdout.sh
