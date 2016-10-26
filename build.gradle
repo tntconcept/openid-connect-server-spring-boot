@@ -21,9 +21,15 @@ subprojects {
 	apply plugin: "maven"
 	apply plugin: "signing"
 
+	ext {
+		baseVersion = "0.0.1"
+		isSnapshot = true
+		snapshotSuffix = "-SNAPSHOT"
+		projectVersion = baseVersion + (isSnapshot ? snapshotSuffix : "")
+	}
+
 	group = "net.simpledynamics"
-	version = "0.0.1-SNAPSHOT"
-	ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+	version = projectVersion
 
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
@@ -47,18 +53,20 @@ subprojects {
 	}
 
 	signing {
-		required {gradle.taskGraph.hasTask("uploadArchives") }  
+		required {!isSnapshot && gradle.taskGraph.hasTask("uploadArchives") }  
 		sign configurations.archives
 	}
 
-	project.ext.set("ossrhUsername",  project.hasProperty("ossrhUsername") ? ossrhUsername : System.getenv("ossrhUsername"))
-	project.ext.set("ossrhPassword",  project.hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhPassword"))
+	project.ext.set("ossrhUsername",  project.hasProperty("ossrhUsername") ? ossrhUsername : System.getenv("SONATYPE_USERNAME"))
+	project.ext.set("ossrhPassword",  project.hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("SONATYPE_PASSWORD"))
 	
 	uploadArchives {
 		repositories {
 			mavenDeployer {
 				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-				//for local install: repository(url: mavenLocal().url)
+				
+				//for local maven deploy testing
+				//repository(url: mavenLocal().url)
 					
 				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
 					authentication(userName: ossrhUsername, password: ossrhPassword)
@@ -67,6 +75,7 @@ subprojects {
 				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
 					authentication (userName: ossrhUsername, password: ossrhPassword)
 				}
+				
 	
 				pom.project {
 					name project.name
