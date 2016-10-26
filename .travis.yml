@@ -22,4 +22,4 @@ after_sucess:
   - chmod +x ./publish.sh; ./publish.sh
  
 install: /bin/true
-after_failure: ./travis-after-failure.sh
+after_failure: chmod +x ./travis-after-failure.sh; ./travis-after-failure.sh
