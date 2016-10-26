@@ -17,7 +17,7 @@ env:
     - secure: P8VR8Ehiq1ybE/2JyvMeVsKWb/j4XJlUjDetnbIq1OMmP0A2pS+5mFm0LqYbzpXmkZKTiG2UCBTXYBZpQyKi9NtehRiFNJHp2crxCTrBXe2tJIwOx46f/i48XFXMI039b0eb4kQfeDJmIhl0KNavXo2pp1kZ6M96U5mv+XDGKoOeSu9WR0ihAJwmpitWVQsDh2qQbr+mTj+UOgAgZmB03PAHfsL3QYszeAC5nphF8WWx9GCDt53UHj4hDibyM1qGBfV1GMg25KD4shsevh1hIkVk8eh8mmLoUYI/8SQbjCX1E1otbNKS0IpdwOYwU7Q3VMZFWL5IMWg1o0G0ZjVy8wQAcV+Diei4o8HU/KMrev3ILDZQs/Qf9DKqybATGwomZLvD2ygiwfyG4tGBvtjPeQboEVPq/7QUGQtbG+6TlqEoMT9e0DC3lsQlh3zgpp7epp+ojkw0J8Ht1ib5+eVHlLUnfhKJlDnhznx4Namztidxahq3qwGFRyg3oUprCWIVbZjWc9VGDQLSbMLrgZ4x0334R0yOosyeV/TfeP5WbRHnZe1fv+8EUbD8Qzv9VufMIMhW5pnCRMvtEgbOO3c+Hggk9YsSg9qgDFZBNgaZZ6q2WoW8qqNGJ9iALWZgKWTSNWfoR4OsGU9+N8tg7IZozD/HmscXLbHrqYSXZkLQP2o=
     - TERM=dumb
 
-after_sucess:
+after_success:
   - chmod +x ./publish.sh; ./publish.sh
  
 install: /bin/true
