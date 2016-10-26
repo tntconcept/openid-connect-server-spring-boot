@@ -18,7 +18,7 @@ env:
     - TERM=dumb
 
 after_success:
-  - chmod +x ./publish.sh; ./publish.sh
+  - ./gradlew uploadArchives -i -s
  
 install: /bin/true
 after_failure: chmod +x ./travis-after-failure.sh; ./travis-after-failure.sh
