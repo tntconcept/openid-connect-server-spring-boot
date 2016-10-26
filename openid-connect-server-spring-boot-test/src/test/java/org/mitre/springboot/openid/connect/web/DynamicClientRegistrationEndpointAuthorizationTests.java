@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
@@ -67,10 +69,12 @@ public class DynamicClientRegistrationEndpointAuthorizationTests extends ApiAuth
 				.andExpect(status().is(201))
 				.andReturn().getResponse().getContentAsString()
 				;
-		Map<String,String> resultMap = mapper.readValue(result, Hashtable.class);
+
+		Map<String,String> resultMap = mapper.readValue(result, new TypeReference<Map<String,Object>>(){});
+		
 		log.info("access token is " + resultMap.get("registration_access_token"));
 		String client_id = resultMap.get("client_id");
-		String responseContent = mockMvc.perform(
+		mockMvc.perform(
 				get("/register/"+client_id)
  				.contentType(MediaType.APPLICATION_JSON_VALUE)
  				.header("Authorization", "Bearer " + resultMap.get("registration_access_token"))
