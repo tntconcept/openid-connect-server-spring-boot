@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 
 ./gradlew uploadArchives -i -s
 RETVAL=$?
