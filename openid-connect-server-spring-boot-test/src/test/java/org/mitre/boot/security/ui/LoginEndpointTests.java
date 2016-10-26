@@ -11,12 +11,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.mitre.springboot.EndpointTestsBase;
 import org.springframework.mock.web.MockHttpSession;
 
+@Transactional
 public class LoginEndpointTests extends EndpointTestsBase {
 	
 	@Test

@@ -23,11 +23,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mitre.springboot.EndpointTestsBase;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.nimbusds.jwt.SignedJWT;
 
-
+@Transactional
 public class JwtAuthorizeEndpointFlowTests extends EndpointTestsBase {
 
 	//Test data based upon in memory default db scripts
