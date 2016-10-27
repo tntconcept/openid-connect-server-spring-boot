@@ -105,9 +105,9 @@ public class DynamicClientRegistrationEndpointAuthorizationTests extends ApiAuth
 				.andExpect(status().is(201))
 				.andReturn().getResponse().getContentAsString()
 				;
-		Map<String,String> resultMap = mapper.readValue(result, new TypeReference<HashMap<String,String>>(){});
+		Map<String,Object> resultMap = mapper.readValue(result, new TypeReference<HashMap<String,Object>>(){});
 		log.info("access token is " + resultMap.get("registration_access_token"));
-		String client_id = resultMap.get("client_id");
+		String client_id = (String)resultMap.get("client_id");
 		mockMvc.perform(
 				get("/register/"+client_id)
  				.contentType(MediaType.APPLICATION_JSON_VALUE)
