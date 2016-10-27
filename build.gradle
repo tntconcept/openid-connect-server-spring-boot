@@ -22,7 +22,7 @@ subprojects {
 	apply plugin: "signing"
 
 	ext {
-		baseVersion = "0.0.1"
+		baseVersion = "0.1.0"
 		isSnapshot = true
 		snapshotSuffix = "-SNAPSHOT"
 		projectVersion = baseVersion + (isSnapshot ? snapshotSuffix : "")
@@ -53,7 +53,7 @@ subprojects {
 	}
 
 	signing {
-		required {!isSnapshot && gradle.taskGraph.hasTask("uploadArchives") }  
+		required {gradle.taskGraph.hasTask("uploadArchives") }  
 		sign configurations.archives
 	}
 

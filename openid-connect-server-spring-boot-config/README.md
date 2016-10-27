@@ -1,6 +1,5 @@
-# openid-connect-spring-boot-config
-OpenID Connect Spring Boot starter using MITREid Connect 
-
+# OpenID Connect Spring Boot config starter
+---
 
 #Configuration properties
 
