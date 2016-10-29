@@ -22,5 +22,5 @@ if [ -n "$FILES" ]; then
 	done
 	echo '====================================================='
 else
-	echo 'No */build/test-results/*.xml files found with failing tests.'
+	echo 'No */build/test-results/*.xml files found with failing tests. '
 fi
