@@ -1,2 +1,3 @@
-#!/bin/bash 
-./travis/junit-errors-to-stdout.sh
+#!/bin/bash
+chmod +x ./.travis/junit-errors-to-stdout.sh
+./.travis/junit-errors-to-stdout.sh
