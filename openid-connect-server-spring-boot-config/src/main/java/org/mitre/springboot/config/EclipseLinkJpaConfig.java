@@ -55,6 +55,8 @@ public class EclipseLinkJpaConfig extends JpaBaseConfiguration {
 	@ConditionalOnMissingBean({ LocalContainerEntityManagerFactoryBean.class, EntityManagerFactory.class })
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder factoryBuilder) {
 		LocalContainerEntityManagerFactoryBean factory = super.entityManagerFactory(factoryBuilder);
+		factory.getJpaPropertyMap().put("eclipselink.weaving","false");
+		factory.getJpaPropertyMap().put("eclipselink.cache.shared.default","false");
 		factory.setPersistenceUnitName("defaultPersistenceUnit");
 		return factory;
 	}

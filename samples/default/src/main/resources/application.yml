@@ -2,12 +2,10 @@ spring:
   jpa:
     properties:
       eclipselink:
-        weaving: false
         logging:
           level:
             ROOT: INFO
             sql: INFO
-        cache.shared.default: false
   datasource:
     initialize: true
     schema: classpath:/db/tables/hsql_database_tables.sql,classpath:/db/tables/security-schema.sql
