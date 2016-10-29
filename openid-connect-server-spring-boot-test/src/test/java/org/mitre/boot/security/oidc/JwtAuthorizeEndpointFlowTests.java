@@ -1,6 +1,7 @@
 package org.mitre.boot.security.oidc;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -117,7 +118,7 @@ public class JwtAuthorizeEndpointFlowTests extends EndpointTestsBase {
         
         Assert.assertEquals(state, queryParamsByName.get("state"));
         Assert.assertEquals("Bearer", queryParamsByName.get("token_type"));
-        Assert.assertEquals("3599", queryParamsByName.get("expires_in"));
+        Assert.assertTrue(Integer.valueOf(queryParamsByName.get("expires_in").toString()) < 3600);
         Assert.assertEquals("openid profile", queryParamsByName.get("scope"));
        
         SignedJWT accessToken = SignedJWT.parse(queryParamsByName.get("access_token").toString());
@@ -214,7 +215,7 @@ public class JwtAuthorizeEndpointFlowTests extends EndpointTestsBase {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("token_type", is("Bearer")))
 			.andExpect(jsonPath("scope", is("openid profile")))
-			.andExpect(jsonPath("expires_in", is(3599)))
+			.andExpect(jsonPath("expires_in", lessThan(3600)))
 			.andReturn()      
 	         ;     
 		String json = result.getResponse().getContentAsString();  
@@ -299,7 +300,7 @@ public class JwtAuthorizeEndpointFlowTests extends EndpointTestsBase {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("token_type", is("Bearer")))
 			.andExpect(jsonPath("scope", is("openid email profile")))
-			.andExpect(jsonPath("expires_in", is(3599)))
+			.andExpect(jsonPath("expires_in", lessThan(3600)))
 			.andReturn()      
 	         ;     
 		String json = result.getResponse().getContentAsString();  

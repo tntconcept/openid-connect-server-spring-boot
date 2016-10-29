@@ -1,6 +1,7 @@
 package org.mitre.springboot.oauth2.web;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -130,7 +131,7 @@ public abstract class OAuthAuthorizationTestsBase extends EndpointTestsBase {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("token_type", is("Bearer")))
 			.andExpect(jsonPath("scope", is("openid profile")))
-			.andExpect(jsonPath("expires_in", is(3599)))
+			.andExpect(jsonPath("expires_in", lessThan(3600)))
 			.andReturn()      
 	         ;     
 		String json = result.getResponse().getContentAsString();  
