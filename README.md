@@ -1,7 +1,7 @@
 # Spring Boot MITREid Connect
 ---
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.simpledynamics/openid-connect-server-spring-boot/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.simpledynamics/openid-connect-server-spring-boot) [![Travis CI](https://travis-ci.org/simpledynamics/openid-connect-server-spring-boot.svg?branch=master)](https://travis-ci.org/simpledynamics/openid-connect-server-spring-boot)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.simpledynamics/openid-connect-server-spring-boot-config/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.simpledynamics/openid-connect-server-spring-boot-config) [![Travis CI](https://travis-ci.org/simpledynamics/openid-connect-server-spring-boot.svg?branch=master)](https://travis-ci.org/simpledynamics/openid-connect-server-spring-boot)
 
 A Spring Boot Configuration for the [MITREid OpenID Connect Server](https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server). 
 
