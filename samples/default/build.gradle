@@ -14,11 +14,6 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 
-jar {
-	baseName = 'openid-connect-server-spring-boot-samples-default'
-	version = '0.0.1-SNAPSHOT'
-}
-
 eclipse.project.name = 'openid-connect-server-spring-boot-samples-default' 
 
 repositories {
@@ -27,11 +22,9 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
-	
-	//TODO switch to artifact versioning for samples 
-	compile project(':openid-connect-server-spring-boot-config')
-	compile project(':openid-connect-server-spring-boot-ui-thymeleaf')
+	 
+	compile ('net.simpledynamics:openid-connect-server-spring-boot-config:+')
+	compile ('net.simpledynamics:openid-connect-server-spring-boot-ui-thymeleaf:+')
 
-    runtime "com.h2database:h2:1.4.192"
-
+    runtime ('com.h2database:h2:1.4.192')
 }

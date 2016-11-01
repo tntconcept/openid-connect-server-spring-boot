@@ -22,7 +22,7 @@ subprojects {
 	apply plugin: "signing"
 
 	ext {
-		baseVersion = "0.1.1"
+		baseVersion = "0.1.2"
 		isSnapshot = true
 		snapshotSuffix = "-SNAPSHOT"
 		projectVersion = baseVersion + (isSnapshot ? snapshotSuffix : "")
