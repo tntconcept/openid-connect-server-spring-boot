@@ -36,8 +36,21 @@
 	<td align="center">false</td>
 	<td align="left"></td>
 </tr>
-<tr><td colspan="4"><b>Cryptography and JWT Signing (<a href="./src/main/java/org/mitre/springboot/config/CryptoConfig.java">CryptoConfig</a>) </b></td></tr>
+<tr><td colspan="4"><b>Spring Datasource (<a href="https://github.com/spring-projects/spring-boot/blob/v1.4.1.RELEASE/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/jdbc/DataSourceProperties.java">DataSourceProperties</a>) </b></td></tr>
+<tr>
+	<td align="left">spring.datasource.initialize</td>
+	<td align="center">X</td>
+	<td align="center"></td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">spring.datasource.schema</td>
+	<td align="center">X</td>
+	<td align="center"></td>
+	<td align="left">E.g. Embedded DB: "classpath:/db/tables/hsql_database_tables.sql,classpath:/db/tables/security-schema.sql"</td>
+</tr>
 
+<tr><td colspan="4"><b>Cryptography and JWT Signing (<a href="./src/main/java/org/mitre/springboot/config/CryptoConfig.java">CryptoConfig</a>) </b></td></tr>
 <tr>
 	<td align="left">openid.connect.crypto.keystore.path</td>
 	<td align="center">X</td>
@@ -74,20 +87,56 @@
 	<td align="center"></td>
 	<td align="left"></td>
 </tr>
+<tr><td colspan="4"><b>Scheduled Tasks (<a href="./src/main/java/org/mitre/springboot/config/ScheduledTaskConfig.java">ScheduledTaskConfig</a>) </b></td></tr>
 <tr>
-	<td align="left"></td>
+	<td align="left">openid.connect.scheduling.enabled</td>
 	<td align="center"></td>
-	<td align="center"></td>
+	<td align="center">true</td>
 	<td align="left"></td>
 </tr>
 <tr>
+	<td align="left">openid.connect.scheduling.corePoolSize</td>
+	<td align="center"></td>
+	<td align="center">5</td>
 	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">openid.connect.scheduling.tasks.clearExpiredTokens.fixedDelay</td>
 	<td align="center"></td>
+	<td align="center">30000</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">openid.connect.scheduling.tasks.clearExpiredTokens.initialDelay</td>
 	<td align="center"></td>
+	<td align="center">60000</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">openid.connect.scheduling.tasks.clearExpiredSites.fixedDelay</td>
+	<td align="center"></td>
+	<td align="center">30000</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">openid.connect.scheduling.tasks.clearExpiredSites.initialDelay</td>
+	<td align="center"></td>
+	<td align="center">60000</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">openid.connect.scheduling.tasks.clearExpiredAuthorizationCodes.fixedDelay</td>
+	<td align="center"></td>
+	<td align="center">30000</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">openid.connect.scheduling.tasks.clearExpiredAuthorizationCodes.initialDelay</td>
+	<td align="center"></td>
+	<td align="center">60000</td>
 	<td align="left"></td>
 </tr>
 <table>
-
 
 ### Sample minimal application.yml
 ```YAML
