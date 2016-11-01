@@ -23,8 +23,8 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	 
-	compile ('net.simpledynamics:openid-connect-server-spring-boot-config:+')
-	compile ('net.simpledynamics:openid-connect-server-spring-boot-ui-thymeleaf:+')
+	compile ('net.simpledynamics:openid-connect-server-spring-boot-config:0.1.2')
+	compile ('net.simpledynamics:openid-connect-server-spring-boot-ui-thymeleaf:0.1.2')
 
     runtime ('com.h2database:h2:1.4.192')
 }

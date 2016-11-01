@@ -1,11 +1,4 @@
 spring:
-  jpa:
-    properties:
-      eclipselink:
-        logging:
-          level:
-            ROOT: INFO
-            sql: INFO
   datasource:
     initialize: true
     schema: classpath:/db/tables/hsql_database_tables.sql,classpath:/db/tables/security-schema.sql
@@ -18,7 +11,6 @@ logging:
 openid:
   connect:
     server:
-      host: localhost
       issuer: http://localhost:8080/
       topbarTitle: OpenID Connect Server
       logoImageUrl: resources/images/openid_connect_small.png
