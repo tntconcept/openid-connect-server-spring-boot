@@ -10,3 +10,5 @@ This project separates the OpenID Connect Server [configuration](openid-connect-
 The [default](samples/default) sample application attempts to be as close as possible to the [maven overlay web application](https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/tree/master/openid-connect-server-webapp) from MITREid, while other samples give examples of how to customize the OpenID Connect server to fit your needs.
 
 Pull requests and feature improvements are welcome.
+
+Currently supports Spring Boot 1.3.3, MitreId Connect 1.2.3, and Spring Security 4.2.5
