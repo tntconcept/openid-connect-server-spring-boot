@@ -142,6 +142,12 @@
 	<td align="center">true</td>
 	<td align="left">When set to false the Whitelist API endpoint is not exposed.</td>
 </tr>
+<tr>
+	<td align="left">openid.connect.server.endpoints.approvedsite.enabled</td>
+	<td align="center"></td>
+	<td align="center">true</td>
+	<td align="left">When set to false the ApprovedSite API endpoint is not exposed.</td>
+</tr>
 <table>
 
 ### Sample minimal application.yml
@@ -162,6 +168,9 @@ openid:
         defaultEncryptionKeyId: rsa1
     endpoints:
       whitelist:
+        enabled: true                
+    endpoints:
+      approvedsite:
         enabled: true                
 spring:
   datasource:
