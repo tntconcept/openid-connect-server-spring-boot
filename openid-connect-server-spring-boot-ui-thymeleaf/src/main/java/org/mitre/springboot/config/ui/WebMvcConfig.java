@@ -1,6 +1,7 @@
 package org.mitre.springboot.config.ui;
 
 import org.mitre.openid.connect.config.JsonMessageSource;
+import org.mitre.openid.connect.web.RootController;
 import org.mitre.openid.connect.web.ServerConfigInterceptor;
 import org.mitre.openid.connect.web.UserInfoInterceptor;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -59,5 +61,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		registry.addResourceHandler("/resources/**").addResourceLocations(
 				"classpath:/static/resources/");
 	}
+	
+	@Configuration
+	@Import(RootController.class)
+	public static class RootControllerConfiguration {}
+
+	
 
 }

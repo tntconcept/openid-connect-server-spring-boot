@@ -1,6 +1,7 @@
 package org.mitre.springboot.config;
 
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
+import org.mitre.openid.connect.web.RootController;
 import org.mitre.openid.connect.web.WhitelistAPI;
 import org.mitre.springboot.config.annotation.EnableOpenIDConnectServer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -129,12 +131,12 @@ public class OpenIDConnectServerConfig {
 	 * Separate config for this package with excludes for the configurable specific classes in the package (currently one for Whitelist).  Once we have a config for each individual class in place we can remove this one for the package. 
 	 */
 	@Configuration
-	@ComponentScan(basePackages={"org.mitre.openid.connect.web"}, excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes=WhitelistAPI.class))
+	@ComponentScan(basePackages={"org.mitre.openid.connect.web"}, excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes={WhitelistAPI.class, RootController.class}))
 	public static class WebEndpointConfiguration {}
 
 	@Configuration
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.whitelist.enabled", matchIfMissing=true)
-	@ComponentScan(basePackages={"org.mitre.openid.connect.web"},includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes={WhitelistAPI.class}))
+	@Import(value=WhitelistAPI.class)
 	public static class WhitelistEndpointConfiguration {}
 
 }
