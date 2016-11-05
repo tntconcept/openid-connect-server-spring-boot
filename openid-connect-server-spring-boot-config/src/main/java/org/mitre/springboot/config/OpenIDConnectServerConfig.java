@@ -1,14 +1,18 @@
 package org.mitre.springboot.config;
 
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
+import org.mitre.openid.connect.web.WhitelistAPI;
 import org.mitre.springboot.config.annotation.EnableOpenIDConnectServer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -45,7 +49,7 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 "org.mitre.openid.connect.token",
 //"org.mitre.openid.connect.util",
 "org.mitre.openid.connect.view",
-"org.mitre.openid.connect.web",
+//"org.mitre.openid.connect.web",
 
 //Commons packages
 //"org.mitre.discovery.util",
@@ -58,15 +62,11 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 "org.mitre.oauth2.model.convert",
 //"org.mitre.oauth2.repository",
 //"org.mitre.oauth2.service",
-"org.mitre.oauth2.service.impl",
 //"org.mitre.openid.connect",
-"org.mitre.openid.connect.config",
 "org.mitre.openid.connect.model",
 "org.mitre.openid.connect.model.convert",
 //"org.mitre.openid.connect.repository",
 //"org.mitre.openid.connect.service",
-"org.mitre.openid.connect.view",
-//"org.mitre.openid.connect.web",
 "org.mitre.uma.model",
 "org.mitre.uma.model.convert",
 //"org.mitre.uma.repository",
@@ -75,7 +75,8 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.util.jpa",
 
 //Spring boot packages
-"org.mitre.springboot.config"}) 
+"org.mitre.springboot.config"}
+)
 @EnableWebSecurity
 @EnableResourceServer
 @EnableAuthorizationServer
@@ -122,5 +123,18 @@ public class OpenIDConnectServerConfig {
         resolver.setOrder(0);
         return resolver;
     }
+
+	
+	/*
+	 * Separate config for this package with excludes for the configurable specific classes in the package (currently one for Whitelist).  Once we have a config for each individual class in place we can remove this one for the package. 
+	 */
+	@Configuration
+	@ComponentScan(basePackages={"org.mitre.openid.connect.web"}, excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes=WhitelistAPI.class))
+	public static class WebEndpointConfiguration {}
+
+	@Configuration
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.whitelist.enabled", matchIfMissing=true)
+	@ComponentScan(basePackages={"org.mitre.openid.connect.web"},includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes={WhitelistAPI.class}))
+	public static class WhitelistEndpointConfiguration {}
 
 }

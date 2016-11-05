@@ -56,3 +56,6 @@ openid:
         clearExpiredAuthorizationCodes:
           fixedDelay: 30000
           initialDelay: 60000
+    endpoints:
+      whitelist:
+        enabled: true           

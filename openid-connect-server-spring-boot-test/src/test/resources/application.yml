@@ -38,3 +38,6 @@ openid:
         defaultAlgorithm: RSA1_5
         defaultDecryptionKeyId: rsa1
         defaultEncryptionKeyId: rsa1
+    endpoints:
+      whitelist:
+        enabled: true        
