@@ -136,6 +136,12 @@
 	<td align="center">60000</td>
 	<td align="left"></td>
 </tr>
+<tr>
+	<td align="left">openid.connect.server.endpoints.whitelist.enabled</td>
+	<td align="center"></td>
+	<td align="center">true</td>
+	<td align="left">When set to false the Whitelist API endpoint is not exposed.</td>
+</tr>
 <table>
 
 ### Sample minimal application.yml
@@ -154,6 +160,9 @@ openid:
         defaultAlgorithm: RSA1_5
         defaultDecryptionKeyId: rsa1
         defaultEncryptionKeyId: rsa1
+    endpoints:
+      whitelist:
+        enabled: true                
 spring:
   datasource:
     initialize: true
