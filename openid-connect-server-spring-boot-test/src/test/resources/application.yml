@@ -40,4 +40,6 @@ openid:
         defaultEncryptionKeyId: rsa1
     endpoints:
       whitelist:
-        enabled: true        
+        enabled: true
+      approvedsite:
+        enabled: true

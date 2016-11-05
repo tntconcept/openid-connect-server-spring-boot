@@ -58,4 +58,6 @@ openid:
           initialDelay: 60000
     endpoints:
       whitelist:
-        enabled: true           
+        enabled: true                 
+      approvedsite:
+        enabled: true
