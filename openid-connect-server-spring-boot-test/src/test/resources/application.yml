@@ -54,4 +54,6 @@ openid:
       jwksetpublishing:
         enabled: true
       protectedresourceregistration:
+        enabled: true
+      stats:
         enabled: true        

@@ -9,6 +9,7 @@ import org.mitre.openid.connect.web.DynamicClientRegistrationEndpoint;
 import org.mitre.openid.connect.web.JWKSetPublishingEndpoint;
 import org.mitre.openid.connect.web.ProtectedResourceRegistrationEndpoint;
 import org.mitre.openid.connect.web.RootController;
+import org.mitre.openid.connect.web.StatsAPI;
 import org.mitre.openid.connect.web.WhitelistAPI;
 import org.mitre.springboot.config.annotation.EnableOpenIDConnectServer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -138,7 +139,7 @@ public class OpenIDConnectServerConfig {
 	 * Separate config for this package with excludes for each of the specific class configurations that follow.  RootController will remain excluded by default and is part of the UI project only. 
 	 */
 	@Configuration
-	@ComponentScan(basePackages={"org.mitre.openid.connect.web"}, excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes={WhitelistAPI.class, RootController.class, ApprovedSiteAPI.class, BlacklistAPI.class, ClientAPI.class, DataAPI.class, DynamicClientRegistrationEndpoint.class,JWKSetPublishingEndpoint.class,ProtectedResourceRegistrationEndpoint.class}))
+	@ComponentScan(basePackages={"org.mitre.openid.connect.web"}, excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes={WhitelistAPI.class, RootController.class, ApprovedSiteAPI.class, BlacklistAPI.class, ClientAPI.class, DataAPI.class, DynamicClientRegistrationEndpoint.class,JWKSetPublishingEndpoint.class,ProtectedResourceRegistrationEndpoint.class, StatsAPI.class}))
 	public static class WebEndpointConfiguration {}
 
 	@Configuration
@@ -180,4 +181,11 @@ public class OpenIDConnectServerConfig {
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.protectedresourceregistration.enabled", matchIfMissing=true)
 	@Import(value=ProtectedResourceRegistrationEndpoint.class)
 	public static class ProtectedResourceRegistrationEndpointConfiguration {}
+
+	@Configuration
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.stats.enabled", matchIfMissing=true)
+	@Import(value=StatsAPI.class)
+	public static class StatsEndpointConfiguration {}
+
+
 }
