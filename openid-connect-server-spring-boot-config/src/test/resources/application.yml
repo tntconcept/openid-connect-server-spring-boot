@@ -63,3 +63,5 @@ openid:
         enabled: true
       blacklist:
         enabled: true        
+      client:
+        enabled: true                
