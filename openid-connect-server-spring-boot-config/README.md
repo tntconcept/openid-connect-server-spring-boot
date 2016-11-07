@@ -172,6 +172,12 @@
 	<td align="center">true</td>
 	<td align="left">When set to false the DynamicClientRegistration endpoint is not exposed.</td>
 </tr>
+<tr>
+	<td align="left">openid.connect.server.endpoints.jwksetpublishing.enabled</td>
+	<td align="center"></td>
+	<td align="center">true</td>
+	<td align="left">When set to false the JWKSetPublishing endpoint is not exposed.</td>
+</tr>
 <table>
 
 ### Sample minimal application.yml
@@ -202,7 +208,9 @@ openid:
       data:
         enabled: true
       dynamicclientregistration:
-        enabled: true                        
+        enabled: true
+      jwksetpublishing:
+        enabled: true                                
 spring:
   datasource:
     initialize: true
