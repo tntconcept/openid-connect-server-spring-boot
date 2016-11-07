@@ -58,12 +58,14 @@ openid:
           initialDelay: 60000
     endpoints:
       whitelist:
-        enabled: true                 
+        enabled: true
       approvedsite:
         enabled: true
       blacklist:
-        enabled: true        
+        enabled: true
       client:
         enabled: true
       data:
-        enabled: true                                        
+        enabled: true
+      dynamicclientregistration:
+        enabled: true        
