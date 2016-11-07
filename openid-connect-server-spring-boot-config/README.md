@@ -160,6 +160,12 @@
 	<td align="center">true</td>
 	<td align="left">When set to false the Client API endpoint is not exposed.</td>
 </tr>
+<tr>
+	<td align="left">openid.connect.server.endpoints.data.enabled</td>
+	<td align="center"></td>
+	<td align="center">true</td>
+	<td align="left">When set to false the Data API endpoint is not exposed.</td>
+</tr>
 <table>
 
 ### Sample minimal application.yml
@@ -186,6 +192,8 @@ openid:
       blacklist:
         enabled: true                
       client:
+        enabled: true                
+      data:
         enabled: true                
 spring:
   datasource:
