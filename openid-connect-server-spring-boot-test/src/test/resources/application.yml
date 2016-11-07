@@ -56,4 +56,6 @@ openid:
       protectedresourceregistration:
         enabled: true
       stats:
+        enabled: true
+      userinfo:
         enabled: true        
