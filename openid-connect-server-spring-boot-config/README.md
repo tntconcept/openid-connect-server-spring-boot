@@ -184,6 +184,12 @@
 	<td align="center">true</td>
 	<td align="left">When set to false the ProtectedResourceRegistration endpoint is not exposed.</td>
 </tr>
+<tr>
+	<td align="left">openid.connect.server.endpoints.stats.enabled</td>
+	<td align="center"></td>
+	<td align="center">true</td>
+	<td align="left">When set to false the StatsAPI endpoint is not exposed.</td>
+</tr>
 <table>
 
 ### Sample minimal application.yml
@@ -218,6 +224,8 @@ openid:
       jwksetpublishing:
         enabled: true                                
       protectedresourceregistration:
+        enabled: true                                
+      stats:
         enabled: true                                
 spring:
   datasource:
