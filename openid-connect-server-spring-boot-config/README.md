@@ -190,6 +190,12 @@
 	<td align="center">true</td>
 	<td align="left">When set to false the StatsAPI endpoint is not exposed.</td>
 </tr>
+<tr>
+	<td align="left">openid.connect.server.endpoints.userinfo.enabled</td>
+	<td align="center"></td>
+	<td align="center">true</td>
+	<td align="left">When set to false the UserInfo endpoint is not exposed.</td>
+</tr>
 <table>
 
 ### Sample minimal application.yml
@@ -226,6 +232,8 @@ openid:
       protectedresourceregistration:
         enabled: true                                
       stats:
+        enabled: true                                
+      userinfo:
         enabled: true                                
 spring:
   datasource:
