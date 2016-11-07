@@ -166,6 +166,12 @@
 	<td align="center">true</td>
 	<td align="left">When set to false the Data API endpoint is not exposed.</td>
 </tr>
+<tr>
+	<td align="left">openid.connect.server.endpoints.dynamicclientregistration.enabled</td>
+	<td align="center"></td>
+	<td align="center">true</td>
+	<td align="left">When set to false the DynamicClientRegistration endpoint is not exposed.</td>
+</tr>
 <table>
 
 ### Sample minimal application.yml
@@ -194,7 +200,9 @@ openid:
       client:
         enabled: true                
       data:
-        enabled: true                
+        enabled: true
+      dynamicclientregistration:
+        enabled: true                        
 spring:
   datasource:
     initialize: true
