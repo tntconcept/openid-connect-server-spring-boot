@@ -51,3 +51,5 @@ openid:
         enabled: true
       dynamicclientregistration:
         enabled: true
+      jwksetpublishing:
+        enabled: true        

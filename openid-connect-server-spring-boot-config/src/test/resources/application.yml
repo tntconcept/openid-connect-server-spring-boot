@@ -68,4 +68,6 @@ openid:
       data:
         enabled: true
       dynamicclientregistration:
-        enabled: true        
+        enabled: true
+      jwksetpublishing:
+        enabled: true                        
