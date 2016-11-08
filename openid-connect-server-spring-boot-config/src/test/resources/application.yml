@@ -57,23 +57,20 @@ openid:
           fixedDelay: 30000
           initialDelay: 60000
     endpoints:
-      whitelist:
-        enabled: true
-      approvedsite:
-        enabled: true
-      blacklist:
-        enabled: true
-      client:
-        enabled: true
-      data:
-        enabled: true
-      dynamicclientregistration:
-        enabled: true
-      jwksetpublishing:
-        enabled: true
+      api:
+        whitelist.enabled: true
+        approvedsite.enabled: true
+        blacklist.enabled: true
+        client.enabled: true
+        data.enabled: true
+      oidc:
+        dynamicclientregistration:
+          enabled: true
+        jwksetpublishing:
+          enabled: true
+        userinfo:
+          enabled: true
       protectedresourceregistration:
         enabled: true
       stats:
-        enabled: true
-      userinfo:
         enabled: true

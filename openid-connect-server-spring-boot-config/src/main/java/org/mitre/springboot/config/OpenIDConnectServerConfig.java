@@ -2,6 +2,7 @@ package org.mitre.springboot.config;
 
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
+import org.mitre.openid.connect.web.AuthenticationTimeStamper;
 import org.mitre.openid.connect.web.BlacklistAPI;
 import org.mitre.openid.connect.web.ClientAPI;
 import org.mitre.openid.connect.web.DataAPI;
@@ -137,46 +138,51 @@ public class OpenIDConnectServerConfig {
 
 	
 	/*
-	 * Separate config for this package with excludes for each of the specific class configurations that follow.  RootController will remain excluded by default and is part of the UI project only. 
+	 * Specific configuration for the package "org.mitre.openid.connect.web" 
 	 */
 	@Configuration
-	@ComponentScan(basePackages={"org.mitre.openid.connect.web"}, excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes={WhitelistAPI.class, RootController.class, ApprovedSiteAPI.class, BlacklistAPI.class, ClientAPI.class, DataAPI.class, DynamicClientRegistrationEndpoint.class,JWKSetPublishingEndpoint.class,ProtectedResourceRegistrationEndpoint.class, StatsAPI.class,UserInfoEndpoint.class}))
+	@Import(value=AuthenticationTimeStamper.class)
 	public static class WebEndpointConfiguration {}
 
 	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.whitelist.enabled", matchIfMissing=true)
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.whitelist.enabled", matchIfMissing=true)
 	@Import(value=WhitelistAPI.class)
 	public static class WhitelistEndpointConfiguration {}
 
 	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.approvedsite.enabled", matchIfMissing=true)
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.approvedsite.enabled", matchIfMissing=true)
 	@Import(value=ApprovedSiteAPI.class)
 	public static class ApprovedSiteEndpointConfiguration {}
 
 	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.blacklist.enabled", matchIfMissing=true)
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.blacklist.enabled", matchIfMissing=true)
 	@Import(value=BlacklistAPI.class)
 	public static class BlacklistEndpointConfiguration {}
 
 	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.client.enabled", matchIfMissing=true)
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.client.enabled", matchIfMissing=true)
 	@Import(value=ClientAPI.class)
 	public static class ClientEndpointConfiguration {}
 
 	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.data.enabled", matchIfMissing=true)
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.data.enabled", matchIfMissing=true)
 	@Import(value=DataAPI.class)
 	public static class DataEndpointConfiguration {}
 
 	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.dynamicclientregistration.enabled", matchIfMissing=true)
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.dynamicclientregistration.enabled", matchIfMissing=true)
 	@Import(value=DynamicClientRegistrationEndpoint.class)
 	public static class DynamicClientRegistrationEndpointConfiguration {}
 
 	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.jwksetpublishing.enabled", matchIfMissing=true)
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.jwksetpublishing.enabled", matchIfMissing=true)
 	@Import(value=JWKSetPublishingEndpoint.class)
 	public static class JWKsetPublishingEndpointConfiguration {}
+
+	@Configuration
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.userinfo.enabled", matchIfMissing=true)
+	@Import(value=UserInfoEndpoint.class)
+	public static class UserInfoEndpointConfiguration {}
 
 	@Configuration
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.protectedresourceregistration.enabled", matchIfMissing=true)
@@ -187,10 +193,5 @@ public class OpenIDConnectServerConfig {
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.stats.enabled", matchIfMissing=true)
 	@Import(value=StatsAPI.class)
 	public static class StatsEndpointConfiguration {}
-
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.userinfo.enabled", matchIfMissing=true)
-	@Import(value=UserInfoEndpoint.class)
-	public static class UserInfoEndpointConfiguration {}
-
+	
 }
