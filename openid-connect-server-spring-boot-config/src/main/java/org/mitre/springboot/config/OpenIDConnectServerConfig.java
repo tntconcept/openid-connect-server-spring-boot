@@ -5,6 +5,16 @@ import org.mitre.discovery.web.DiscoveryEndpoint;
 import org.mitre.jwt.signer.service.impl.ClientKeyCacheService;
 import org.mitre.jwt.signer.service.impl.JWKSetCacheService;
 import org.mitre.jwt.signer.service.impl.SymmetricKeyJWTValidatorCacheService;
+import org.mitre.oauth2.repository.AuthenticationHolderRepository;
+import org.mitre.oauth2.repository.AuthorizationCodeRepository;
+import org.mitre.oauth2.repository.OAuth2ClientRepository;
+import org.mitre.oauth2.repository.OAuth2TokenRepository;
+import org.mitre.oauth2.repository.SystemScopeRepository;
+import org.mitre.oauth2.repository.impl.JpaAuthenticationHolderRepository;
+import org.mitre.oauth2.repository.impl.JpaAuthorizationCodeRepository;
+import org.mitre.oauth2.repository.impl.JpaOAuth2ClientRepository;
+import org.mitre.oauth2.repository.impl.JpaOAuth2TokenRepository;
+import org.mitre.oauth2.repository.impl.JpaSystemScopeRepository;
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
@@ -48,7 +58,7 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //Server packages
 //"org.mitre.discovery.view",
 //"org.mitre.discovery.web",
-"org.mitre.oauth2.repository.impl",
+//"org.mitre.oauth2.repository.impl",
 "org.mitre.oauth2.service.impl",
 "org.mitre.oauth2.token",
 "org.mitre.oauth2.view",
@@ -211,6 +221,45 @@ public class OpenIDConnectServerConfig {
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.discovery.enabled", matchIfMissing=true)
 	@Import(value={WebfingerView.class, DiscoveryEndpoint.class})
 	public static class DiscoveryEndpointConfiguration {}
+	
+	/*
+	 * Specific configuration for "org.mitre.oauth2.repository.impl"
+	 */
+	
+	@Bean
+	@ConditionalOnMissingBean(AuthenticationHolderRepository.class)
+	public AuthenticationHolderRepository jpaAuthenticationHolderRepository() {
+		return new JpaAuthenticationHolderRepository();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(AuthorizationCodeRepository.class)
+	public AuthorizationCodeRepository jpaAuthorizationCodeRepository() {
+		return new JpaAuthorizationCodeRepository();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(OAuth2ClientRepository.class)
+	public OAuth2ClientRepository jpaOAuth2ClientRepository() {
+		return new JpaOAuth2ClientRepository();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(OAuth2TokenRepository.class)
+	public OAuth2TokenRepository jpaOAuth2TokenRepository() {
+		return new JpaOAuth2TokenRepository();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(SystemScopeRepository.class)
+	public SystemScopeRepository jpaSystemScopeRepository() {
+		return new JpaSystemScopeRepository();
+	}
+	
+	/*
+	 * Specific configuration for "org.mitre.oauth2.service.impl"
+	 */
+	
 	
 	
 }
