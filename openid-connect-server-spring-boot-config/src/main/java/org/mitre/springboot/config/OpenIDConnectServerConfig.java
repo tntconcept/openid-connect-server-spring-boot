@@ -15,6 +15,16 @@ import org.mitre.oauth2.repository.impl.JpaAuthorizationCodeRepository;
 import org.mitre.oauth2.repository.impl.JpaOAuth2ClientRepository;
 import org.mitre.oauth2.repository.impl.JpaOAuth2TokenRepository;
 import org.mitre.oauth2.repository.impl.JpaSystemScopeRepository;
+import org.mitre.oauth2.service.ClientDetailsEntityService;
+import org.mitre.oauth2.service.IntrospectionResultAssembler;
+import org.mitre.oauth2.service.OAuth2TokenEntityService;
+import org.mitre.oauth2.service.SystemScopeService;
+import org.mitre.oauth2.service.impl.BlacklistAwareRedirectResolver;
+import org.mitre.oauth2.service.impl.DefaultIntrospectionResultAssembler;
+import org.mitre.oauth2.service.impl.DefaultOAuth2AuthorizationCodeService;
+import org.mitre.oauth2.service.impl.DefaultOAuth2ClientDetailsEntityService;
+import org.mitre.oauth2.service.impl.DefaultOAuth2ProviderTokenService;
+import org.mitre.oauth2.service.impl.DefaultSystemScopeService;
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
@@ -42,6 +52,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.error.DefaultWebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
@@ -150,7 +161,7 @@ public class OpenIDConnectServerConfig {
 
 	
 	/*
-	 * Specific configuration for the package "org.mitre.openid.connect.web" 
+	 * Enabled configuration for the package "org.mitre.openid.connect.web" 
 	 */
 	@Configuration
 	@Import(value=AuthenticationTimeStamper.class)
@@ -215,7 +226,7 @@ public class OpenIDConnectServerConfig {
 	public static class JwtSignerServiceConfiguration {}
 	
 	/*
-	 * Specific configuration for "org.mitre.discovery.view","org.mitre.discovery.web"
+	 * Enabled configuration for "org.mitre.discovery.view","org.mitre.discovery.web"
 	 */
 	@Configuration
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.discovery.enabled", matchIfMissing=true)
@@ -223,7 +234,7 @@ public class OpenIDConnectServerConfig {
 	public static class DiscoveryEndpointConfiguration {}
 	
 	/*
-	 * Specific configuration for "org.mitre.oauth2.repository.impl"
+	 * Override configuration for "org.mitre.oauth2.repository.impl"
 	 */
 	
 	@Bean
@@ -257,9 +268,43 @@ public class OpenIDConnectServerConfig {
 	}
 	
 	/*
-	 * Specific configuration for "org.mitre.oauth2.service.impl"
+	 * Override configuration for "org.mitre.oauth2.service.impl"
 	 */
+	@Bean
+	@ConditionalOnMissingBean(BlacklistAwareRedirectResolver.class)
+	public BlacklistAwareRedirectResolver blacklistAwareRedirectResolver() {
+		return new BlacklistAwareRedirectResolver();
+	}
 	
+	@Bean
+	@ConditionalOnMissingBean(IntrospectionResultAssembler.class)
+	public IntrospectionResultAssembler defaultIntrospectionResultAssembler() {
+		return new DefaultIntrospectionResultAssembler();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(AuthorizationCodeServices.class)
+	public AuthorizationCodeServices defaultOAuth2AuthorizationCodeService() {
+		return new DefaultOAuth2AuthorizationCodeService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(ClientDetailsEntityService.class)
+	public ClientDetailsEntityService defaultOAuth2ClientDetailsEntityService() {
+		return new DefaultOAuth2ClientDetailsEntityService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(OAuth2TokenEntityService.class)
+	public OAuth2TokenEntityService defaultOAuth2ProviderTokenService() {
+		return new DefaultOAuth2ProviderTokenService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(SystemScopeService.class)
+	public SystemScopeService defaultSystemScopeService() {
+		return new DefaultSystemScopeService();
+	}
 	
 	
 }
