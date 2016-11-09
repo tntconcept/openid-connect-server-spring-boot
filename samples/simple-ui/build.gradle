@@ -24,7 +24,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter")
 	compile("org.springframework.boot:spring-boot-devtools")
 	    
-	compile("net.simpledynamics:openid-connect-server-spring-boot-config:0.1.3-SNAPSHOT")
+	compile("net.simpledynamics:openid-connect-server-spring-boot-config:0.1.3")
 
 	compile("org.webjars:jquery:3.1.1")
 	compile("org.webjars:bootstrap:3.3.7")
