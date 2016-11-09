@@ -1,7 +1,9 @@
 package org.mitre.springboot.config.openid.connect;
 
-import org.mitre.oauth2.web.CorsFilter;
+import javax.servlet.Filter;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,8 +14,6 @@ import org.springframework.security.web.authentication.Http403ForbiddenEntryPoin
 @Order(160)
 @Configuration
 public class WellKnownWebSecurityConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
-	private CorsFilter corsFilter;
 	
 	@Autowired
 	private Http403ForbiddenEntryPoint http403ForbiddenEntryPoint;

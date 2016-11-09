@@ -1,7 +1,10 @@
 package org.mitre.springboot.config.openid.connect;
 
+import javax.servlet.Filter;
+
 import org.mitre.oauth2.web.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +19,8 @@ public class UserInfoResourceServerConfig extends ResourceServerConfigurerAdapte
 	String PATTERN = "/" + org.mitre.openid.connect.web.UserInfoEndpoint.URL + "**";
 
 	@Autowired
-	private CorsFilter corsFilter; 
+	@Qualifier("corsFilter")
+	private Filter corsFilter;
 	
 	@Autowired
 	private OAuth2AuthenticationEntryPoint authenticationEntryPoint; 

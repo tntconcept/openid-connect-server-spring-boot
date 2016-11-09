@@ -1,5 +1,7 @@
 package org.mitre.springboot.config;
 
+import javax.servlet.Filter;
+
 import org.mitre.discovery.view.WebfingerView;
 import org.mitre.discovery.web.DiscoveryEndpoint;
 import org.mitre.jwt.signer.service.impl.ClientKeyCacheService;
@@ -30,6 +32,13 @@ import org.mitre.oauth2.service.impl.UriEncodedClientUserDetailsService;
 import org.mitre.oauth2.token.ChainedTokenGranter;
 import org.mitre.oauth2.token.JWTAssertionTokenGranter;
 import org.mitre.oauth2.token.StructuredScopeAwareOAuth2RequestValidator;
+import org.mitre.oauth2.view.TokenApiView;
+import org.mitre.oauth2.web.CorsFilter;
+import org.mitre.oauth2.web.IntrospectionEndpoint;
+import org.mitre.oauth2.web.OAuthConfirmationController;
+import org.mitre.oauth2.web.RevocationEndpoint;
+import org.mitre.oauth2.web.ScopeAPI;
+import org.mitre.oauth2.web.TokenAPI;
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
@@ -83,8 +92,8 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.oauth2.repository.impl",
 //"org.mitre.oauth2.service.impl",
 //"org.mitre.oauth2.token",
-"org.mitre.oauth2.view",
-"org.mitre.oauth2.web",
+//"org.mitre.oauth2.view",
+//"org.mitre.oauth2.web",
 //"org.mitre.openid.connect.assertion",
 //"org.mitre.openid.connect.config",
 //"org.mitre.openid.connect.exception",
@@ -356,6 +365,42 @@ public class OpenIDConnectServerConfig {
 	protected OAuth2RequestValidator requestValidator() {
 		return new StructuredScopeAwareOAuth2RequestValidator();
 	}
+	
+	/*
+	 * Endpoint configuration for "org.mitre.oauth2.view", "org.mitre.oauth2.web",
+	 */
+	
+	@Configuration
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.token.enabled", matchIfMissing=true)
+	@Import(value={TokenApiView.class, TokenAPI.class})
+	public static class TokenAPIConfiguration {}
+	
+	@Configuration
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.scope.enabled", matchIfMissing=true)
+	@Import(value={ScopeAPI.class})
+	public static class ScopeAPIConfiguration {}
+	
+	@Configuration
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oauth2.introspection.enabled", matchIfMissing=true)
+	@Import(value={IntrospectionEndpoint.class})
+	public static class IntrospectionEndpointConfiguration {}
+	
+	@Configuration
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oauth2.confirmation.enabled", matchIfMissing=true)
+	@Import(value={OAuthConfirmationController.class})
+	public static class OAuthConfirmationControllerConfiguration {}
+	
+	@Configuration
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oauth2.revocation.enabled", matchIfMissing=true)
+	@Import(value={RevocationEndpoint.class})
+	public static class RevocationEndpointConfiguration {}
+	
+	@Bean
+	@ConditionalOnMissingBean(name="corsFilter")
+	public Filter corsFilter() {
+		return new CorsFilter();
+	}
+	
 	
 	
 	

@@ -3,6 +3,8 @@ package org.mitre.springboot.config.oauth2;
 import java.util.Collections;
 import java.util.HashSet;
 
+import javax.servlet.Filter;
+
 import org.mitre.oauth2.web.CorsFilter;
 import org.mitre.oauth2.web.IntrospectionEndpoint;
 import org.mitre.oauth2.web.RevocationEndpoint;
@@ -41,7 +43,8 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	protected CorsFilter corsFilter;
+	@Qualifier("corsFilter")
+	private Filter corsFilter;
 	
 	@Autowired
 	protected OAuth2AuthenticationEntryPoint authenticationEntryPoint;
