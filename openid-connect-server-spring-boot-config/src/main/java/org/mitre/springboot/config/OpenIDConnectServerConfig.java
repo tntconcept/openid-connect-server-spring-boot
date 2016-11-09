@@ -20,11 +20,13 @@ import org.mitre.oauth2.service.IntrospectionResultAssembler;
 import org.mitre.oauth2.service.OAuth2TokenEntityService;
 import org.mitre.oauth2.service.SystemScopeService;
 import org.mitre.oauth2.service.impl.BlacklistAwareRedirectResolver;
+import org.mitre.oauth2.service.impl.DefaultClientUserDetailsService;
 import org.mitre.oauth2.service.impl.DefaultIntrospectionResultAssembler;
 import org.mitre.oauth2.service.impl.DefaultOAuth2AuthorizationCodeService;
 import org.mitre.oauth2.service.impl.DefaultOAuth2ClientDetailsEntityService;
 import org.mitre.oauth2.service.impl.DefaultOAuth2ProviderTokenService;
 import org.mitre.oauth2.service.impl.DefaultSystemScopeService;
+import org.mitre.oauth2.service.impl.UriEncodedClientUserDetailsService;
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
@@ -50,6 +52,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
@@ -70,7 +73,7 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.discovery.view",
 //"org.mitre.discovery.web",
 //"org.mitre.oauth2.repository.impl",
-"org.mitre.oauth2.service.impl",
+//"org.mitre.oauth2.service.impl",
 "org.mitre.oauth2.token",
 "org.mitre.oauth2.view",
 "org.mitre.oauth2.web",
@@ -306,5 +309,17 @@ public class OpenIDConnectServerConfig {
 		return new DefaultSystemScopeService();
 	}
 	
+	@Bean
+	@ConditionalOnMissingBean(name="clientUserDetailsService")
+	public UserDetailsService clientUserDetailsService() {
+		return new DefaultClientUserDetailsService();
+	}
 	
+	@Bean
+	@ConditionalOnMissingBean(name="uriEncodedClientUserDetailsService")
+	public UserDetailsService uriEncodedClientUserDetailsService() {
+		return new UriEncodedClientUserDetailsService();
+	}
+	
+
 }
