@@ -64,13 +64,8 @@ openid:
         client.enabled: true
         data.enabled: true
       oidc:
-        dynamicclientregistration:
-          enabled: true
-        jwksetpublishing:
-          enabled: true
-        userinfo:
-          enabled: true
-      protectedresourceregistration:
-        enabled: true
-      stats:
-        enabled: true
+        dynamicclientregistration.enabled: true
+        jwksetpublishing.enabled: true
+        userinfo.enabled: true
+        discovery.enabled: true
+      protectedresourceregistration.enabled: true

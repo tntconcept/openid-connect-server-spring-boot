@@ -22,8 +22,8 @@ public abstract class ApiAuthorizationTestsBase extends EndpointTestsBase {
 	protected void checkGetAccess(String uri, int status) throws Exception {
 		mockMvc.perform(
 			get(uri)
-			.session(mockSession).locale(Locale.ENGLISH)
-			.with(csrf()))
+			.session(mockSession)
+			.locale(Locale.ENGLISH))
 			.andExpect(status().is(status))
 			;
 	}
@@ -37,7 +37,8 @@ public abstract class ApiAuthorizationTestsBase extends EndpointTestsBase {
 			post(uri)
 			.contentType(MediaType.APPLICATION_JSON_VALUE)
 			.content(body)
-			.session(mockSession).locale(Locale.ENGLISH)
+			.session(mockSession)
+			.locale(Locale.ENGLISH)
 			.with(csrf()))
 			.andExpect(status().is(status))
 			;
@@ -52,7 +53,8 @@ public abstract class ApiAuthorizationTestsBase extends EndpointTestsBase {
 			put(uri)
 			.contentType(MediaType.APPLICATION_JSON_VALUE)
 			.content(body)
-			.session(mockSession).locale(Locale.ENGLISH)
+			.session(mockSession)
+			.locale(Locale.ENGLISH)
 			.with(csrf()))
 			.andExpect(status().is(status))
 			;
@@ -61,8 +63,9 @@ public abstract class ApiAuthorizationTestsBase extends EndpointTestsBase {
 	protected void checkDeleteAccess(String uri, int status) throws Exception {
 		mockMvc.perform(
 			delete(uri)
-			.session(mockSession).locale(Locale.ENGLISH)
-			.with(csrf()))
+			.session(mockSession)
+			.locale(Locale.ENGLISH)
+			)
 			.andExpect(status().is(status))
 			;
 	}
@@ -70,8 +73,9 @@ public abstract class ApiAuthorizationTestsBase extends EndpointTestsBase {
 	protected void checkGetAccess(String uri, int status, String jsonPath, String value) throws Exception {
 		mockMvc.perform(
 			get(uri)
-			.session(mockSession).locale(Locale.ENGLISH)
-			.with(csrf()))
+			.session(mockSession)
+			.locale(Locale.ENGLISH)
+			)
 			.andExpect(status().is(status))
 			.andExpect(jsonPath(jsonPath, is(value)))
 			;
@@ -80,8 +84,9 @@ public abstract class ApiAuthorizationTestsBase extends EndpointTestsBase {
 	protected void checkGetAccessMissingValue(String uri, int status, String missingJsonPath) throws Exception {
 		mockMvc.perform(
 			get(uri)
-			.session(mockSession).locale(Locale.ENGLISH)
-			.with(csrf()))
+			.session(mockSession)
+			.locale(Locale.ENGLISH)
+			)
 			.andExpect(status().is(status))
 			.andExpect(jsonPath(missingJsonPath).doesNotExist())
 			;

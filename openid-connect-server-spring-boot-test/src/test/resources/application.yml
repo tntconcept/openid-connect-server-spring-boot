@@ -39,23 +39,16 @@ openid:
         defaultDecryptionKeyId: rsa1
         defaultEncryptionKeyId: rsa1
     endpoints:
-      whitelist:
-        enabled: true
-      approvedsite:
-        enabled: true
-      blacklist:
-        enabled: true
-      client:
-        enabled: true
-      data:
-        enabled: true
-      dynamicclientregistration:
-        enabled: true
-      jwksetpublishing:
-        enabled: true
-      protectedresourceregistration:
-        enabled: true
-      stats:
-        enabled: true
-      userinfo:
-        enabled: true        
+      api:
+        whitelist.enabled: true
+        approvedsite.enabled: true
+        blacklist.enabled: true
+        client.enabled: true
+        data.enabled: true
+      oidc:
+        dynamicclientregistration.enabled: true
+        jwksetpublishing.enabled: true
+        userinfo.enabled: true
+        discovery.enabled: true
+      protectedresourceregistration.enabled: true
+      stats.enabled: true      

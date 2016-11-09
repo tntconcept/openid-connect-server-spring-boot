@@ -1,5 +1,10 @@
 package org.mitre.springboot.config;
 
+import org.mitre.discovery.view.WebfingerView;
+import org.mitre.discovery.web.DiscoveryEndpoint;
+import org.mitre.jwt.signer.service.impl.ClientKeyCacheService;
+import org.mitre.jwt.signer.service.impl.JWKSetCacheService;
+import org.mitre.jwt.signer.service.impl.SymmetricKeyJWTValidatorCacheService;
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
@@ -9,7 +14,6 @@ import org.mitre.openid.connect.web.DataAPI;
 import org.mitre.openid.connect.web.DynamicClientRegistrationEndpoint;
 import org.mitre.openid.connect.web.JWKSetPublishingEndpoint;
 import org.mitre.openid.connect.web.ProtectedResourceRegistrationEndpoint;
-import org.mitre.openid.connect.web.RootController;
 import org.mitre.openid.connect.web.StatsAPI;
 import org.mitre.openid.connect.web.UserInfoEndpoint;
 import org.mitre.openid.connect.web.WhitelistAPI;
@@ -21,9 +25,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -44,8 +46,8 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre", 
 
 //Server packages
-"org.mitre.discovery.view",
-"org.mitre.discovery.web",
+//"org.mitre.discovery.view",
+//"org.mitre.discovery.web",
 "org.mitre.oauth2.repository.impl",
 "org.mitre.oauth2.service.impl",
 "org.mitre.oauth2.token",
@@ -69,18 +71,18 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.jwt.encryption.service",
 //"org.mitre.jwt.encryption.service.impl",
 //"org.mitre.jwt.signer.service",
-"org.mitre.jwt.signer.service.impl",
-"org.mitre.oauth2.model",
-"org.mitre.oauth2.model.convert",
+//"org.mitre.jwt.signer.service.impl",
+//"org.mitre.oauth2.model",
+//"org.mitre.oauth2.model.convert",
 //"org.mitre.oauth2.repository",
 //"org.mitre.oauth2.service",
 //"org.mitre.openid.connect",
-"org.mitre.openid.connect.model",
-"org.mitre.openid.connect.model.convert",
+//"org.mitre.openid.connect.model",
+//"org.mitre.openid.connect.model.convert",
 //"org.mitre.openid.connect.repository",
 //"org.mitre.openid.connect.service",
-"org.mitre.uma.model",
-"org.mitre.uma.model.convert",
+//"org.mitre.uma.model",
+//"org.mitre.uma.model.convert",
 //"org.mitre.uma.repository",
 //"org.mitre.uma.service",
 //"org.mitre.util",
@@ -193,5 +195,22 @@ public class OpenIDConnectServerConfig {
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.stats.enabled", matchIfMissing=true)
 	@Import(value=StatsAPI.class)
 	public static class StatsEndpointConfiguration {}
+	
+	/*
+	 * Specific configuration for "org.mitre.jwt.signer.service.impl"
+	 */
+	
+	@Configuration
+	@Import(value={ClientKeyCacheService.class, JWKSetCacheService.class, SymmetricKeyJWTValidatorCacheService.class})
+	public static class JwtSignerServiceConfiguration {}
+	
+	/*
+	 * Specific configuration for "org.mitre.discovery.view","org.mitre.discovery.web"
+	 */
+	@Configuration
+	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.discovery.enabled", matchIfMissing=true)
+	@Import(value={WebfingerView.class, DiscoveryEndpoint.class})
+	public static class DiscoveryEndpointConfiguration {}
+	
 	
 }

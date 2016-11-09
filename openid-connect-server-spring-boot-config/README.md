@@ -136,47 +136,60 @@
 	<td align="center">60000</td>
 	<td align="left"></td>
 </tr>
+<tr><td colspan="4"><b>Endpoint Configuration  </b></td></tr>
 <tr>
-	<td align="left">openid.connect.server.endpoints.whitelist.enabled</td>
+	<td align="left">openid.connect.server.endpoints.api.whitelist.enabled</td>
 	<td align="center"></td>
 	<td align="center">true</td>
 	<td align="left">When set to false the Whitelist API endpoint is not exposed.</td>
 </tr>
 <tr>
-	<td align="left">openid.connect.server.endpoints.approvedsite.enabled</td>
+	<td align="left">openid.connect.server.endpoints.api.approvedsite.enabled</td>
 	<td align="center"></td>
 	<td align="center">true</td>
 	<td align="left">When set to false the ApprovedSite API endpoint is not exposed.</td>
 </tr>
 <tr>
-	<td align="left">openid.connect.server.endpoints.blacklist.enabled</td>
+	<td align="left">openid.connect.server.endpoints.api.blacklist.enabled</td>
 	<td align="center"></td>
 	<td align="center">true</td>
 	<td align="left">When set to false the Blacklist API endpoint is not exposed.</td>
 </tr>
 <tr>
-	<td align="left">openid.connect.server.endpoints.client.enabled</td>
+	<td align="left">openid.connect.server.endpoints.api.client.enabled</td>
 	<td align="center"></td>
 	<td align="center">true</td>
 	<td align="left">When set to false the Client API endpoint is not exposed.</td>
 </tr>
 <tr>
-	<td align="left">openid.connect.server.endpoints.data.enabled</td>
+	<td align="left">openid.connect.server.endpoints.api.data.enabled</td>
 	<td align="center"></td>
 	<td align="center">true</td>
 	<td align="left">When set to false the Data API endpoint is not exposed.</td>
 </tr>
 <tr>
-	<td align="left">openid.connect.server.endpoints.dynamicclientregistration.enabled</td>
+	<td align="left">openid.connect.server.endpoints.oidc.dynamicclientregistration.enabled</td>
 	<td align="center"></td>
 	<td align="center">true</td>
 	<td align="left">When set to false the DynamicClientRegistration endpoint is not exposed.</td>
 </tr>
 <tr>
-	<td align="left">openid.connect.server.endpoints.jwksetpublishing.enabled</td>
+	<td align="left">openid.connect.server.endpoints.oidc.jwksetpublishing.enabled</td>
 	<td align="center"></td>
 	<td align="center">true</td>
 	<td align="left">When set to false the JWKSetPublishing endpoint is not exposed.</td>
+</tr>
+<tr>
+	<td align="left">openid.connect.server.endpoints.oidc.userinfo.enabled</td>
+	<td align="center"></td>
+	<td align="center">true</td>
+	<td align="left">When set to false the UserInfo endpoint is not exposed.</td>
+</tr>
+<tr>
+	<td align="left">openid.connect.server.endpoints.oidc.discovery.enabled</td>
+	<td align="center"></td>
+	<td align="center">true</td>
+	<td align="left">When set to false the Discovery endpoint is not exposed.</td>
 </tr>
 <tr>
 	<td align="left">openid.connect.server.endpoints.protectedresourceregistration.enabled</td>
@@ -190,12 +203,7 @@
 	<td align="center">true</td>
 	<td align="left">When set to false the StatsAPI endpoint is not exposed.</td>
 </tr>
-<tr>
-	<td align="left">openid.connect.server.endpoints.userinfo.enabled</td>
-	<td align="center"></td>
-	<td align="center">true</td>
-	<td align="left">When set to false the UserInfo endpoint is not exposed.</td>
-</tr>
+
 <table>
 
 ### Sample minimal application.yml
@@ -213,28 +221,7 @@ openid:
       encrypt:
         defaultAlgorithm: RSA1_5
         defaultDecryptionKeyId: rsa1
-        defaultEncryptionKeyId: rsa1
-    endpoints:
-      whitelist:
-        enabled: true                
-      approvedsite:
-        enabled: true                
-      blacklist:
-        enabled: true                
-      client:
-        enabled: true                
-      data:
-        enabled: true
-      dynamicclientregistration:
-        enabled: true
-      jwksetpublishing:
-        enabled: true                                
-      protectedresourceregistration:
-        enabled: true                                
-      stats:
-        enabled: true                                
-      userinfo:
-        enabled: true                                
+        defaultEncryptionKeyId: rsa1                          
 spring:
   datasource:
     initialize: true
