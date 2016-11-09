@@ -27,6 +27,9 @@ import org.mitre.oauth2.service.impl.DefaultOAuth2ClientDetailsEntityService;
 import org.mitre.oauth2.service.impl.DefaultOAuth2ProviderTokenService;
 import org.mitre.oauth2.service.impl.DefaultSystemScopeService;
 import org.mitre.oauth2.service.impl.UriEncodedClientUserDetailsService;
+import org.mitre.oauth2.token.ChainedTokenGranter;
+import org.mitre.oauth2.token.JWTAssertionTokenGranter;
+import org.mitre.oauth2.token.StructuredScopeAwareOAuth2RequestValidator;
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
@@ -40,6 +43,7 @@ import org.mitre.openid.connect.web.StatsAPI;
 import org.mitre.openid.connect.web.UserInfoEndpoint;
 import org.mitre.openid.connect.web.WhitelistAPI;
 import org.mitre.springboot.config.annotation.EnableOpenIDConnectServer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -55,8 +59,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
+import org.springframework.security.oauth2.provider.OAuth2RequestValidator;
+import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.error.DefaultWebResponseExceptionTranslator;
+import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
@@ -74,7 +82,7 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.discovery.web",
 //"org.mitre.oauth2.repository.impl",
 //"org.mitre.oauth2.service.impl",
-"org.mitre.oauth2.token",
+//"org.mitre.oauth2.token",
 "org.mitre.oauth2.view",
 "org.mitre.oauth2.web",
 //"org.mitre.openid.connect.assertion",
@@ -162,6 +170,11 @@ public class OpenIDConnectServerConfig {
         return resolver;
     }
 
+	@Bean
+	@ConditionalOnMissingBean(OAuth2AccessDeniedHandler.class)
+	protected OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler(){
+		return new OAuth2AccessDeniedHandler();
+	}
 	
 	/*
 	 * Enabled configuration for the package "org.mitre.openid.connect.web" 
@@ -321,5 +334,29 @@ public class OpenIDConnectServerConfig {
 		return new UriEncodedClientUserDetailsService();
 	}
 	
-
+	/*
+	 * Override configuration for "org.mitre.oauth2.token"
+	 */
+	@Bean
+	@Autowired
+	@ConditionalOnMissingBean(name="chainedTokenGranter")
+	public TokenGranter chainedTokenGranter(OAuth2TokenEntityService tokenServices, ClientDetailsEntityService clientDetailsService, OAuth2RequestFactory requestFactory) {
+		return new ChainedTokenGranter(tokenServices, clientDetailsService, requestFactory);
+	}
+	
+	@Bean
+	@Autowired
+	@ConditionalOnMissingBean(name="jwtAssertionTokenGranter")
+	public TokenGranter jwtAssertionTokenGranter(OAuth2TokenEntityService tokenServices, ClientDetailsEntityService clientDetailsService, OAuth2RequestFactory requestFactory) {
+		return new JWTAssertionTokenGranter(tokenServices, clientDetailsService, requestFactory);
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(OAuth2RequestValidator.class)
+	protected OAuth2RequestValidator requestValidator() {
+		return new StructuredScopeAwareOAuth2RequestValidator();
+	}
+	
+	
+	
 }

@@ -2,14 +2,17 @@ package org.mitre.springboot.config;
 
 import java.util.Arrays;
 
+import org.mitre.oauth2.service.ClientDetailsEntityService;
+import org.mitre.oauth2.service.OAuth2TokenEntityService;
 import org.mitre.oauth2.service.impl.DefaultOAuth2ClientDetailsEntityService;
 import org.mitre.oauth2.service.impl.DefaultOAuth2ProviderTokenService;
 import org.mitre.oauth2.token.ChainedTokenGranter;
 import org.mitre.oauth2.token.JWTAssertionTokenGranter;
-import org.mitre.oauth2.token.StructuredScopeAwareOAuth2RequestValidator;
 import org.mitre.openid.connect.request.ConnectOAuth2RequestFactory;
 import org.mitre.openid.connect.token.TofuUserApprovalHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -18,6 +21,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.OAuth2RequestValidator;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenGranter;
@@ -52,23 +56,18 @@ public class OpenIDConnectAuthorizationServerConfig extends AuthorizationServerC
 	private AuthorizationCodeServices authorizationCodeServices;
 	
 	@Autowired
-	private ChainedTokenGranter chainedTokenGranter;
+	@Qualifier("chainedTokenGranter")
+	private TokenGranter chainedTokenGranter;
 	
 	@Autowired
 	private WebResponseExceptionTranslator exceptionTranslator;
 	
 	@Autowired 
-	private JWTAssertionTokenGranter jwtAssertionTokenGranter;
+	@Qualifier("jwtAssertionTokenGranter")
+	private TokenGranter jwtAssertionTokenGranter;
 	
-	@Bean
-	protected OAuth2RequestValidator requestValidator() {
-		return new StructuredScopeAwareOAuth2RequestValidator();
-	}
-	
-	@Bean
-	protected OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler(){
-		return new OAuth2AccessDeniedHandler();
-	}
+	@Autowired 
+	private OAuth2RequestValidator oAuth2RequestValidator;
 	
 	protected TokenGranter tokenGranter() {
 		return new CompositeTokenGranter(Arrays.<TokenGranter>asList(
@@ -88,7 +87,7 @@ public class OpenIDConnectAuthorizationServerConfig extends AuthorizationServerC
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		//TODO
 		endpoints
-			.requestValidator(requestValidator())
+			.requestValidator(oAuth2RequestValidator)
 			.pathMapping("/oauth/token", "/token")
 			.pathMapping("/oauth/authorize", "/authorize")
 			.tokenServices(tokenServices)
@@ -97,7 +96,6 @@ public class OpenIDConnectAuthorizationServerConfig extends AuthorizationServerC
 			.exceptionTranslator(exceptionTranslator)
 			.tokenGranter(tokenGranter())
 			.authorizationCodeServices(authorizationCodeServices)
-			
 		;
 	}
 	
