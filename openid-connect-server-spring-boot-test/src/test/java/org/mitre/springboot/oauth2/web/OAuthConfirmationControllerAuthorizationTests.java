@@ -11,4 +11,5 @@ public class OAuthConfirmationControllerAuthorizationTests extends ApiAuthorizat
 	//TODO OauthConfirmationControllerAuthorizationTests
 	@Test
 	public void TODO(){}
+	
 }
