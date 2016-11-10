@@ -74,6 +74,8 @@ import org.mitre.openid.connect.service.impl.MITREidDataService_1_0;
 import org.mitre.openid.connect.service.impl.MITREidDataService_1_1;
 import org.mitre.openid.connect.service.impl.MITREidDataService_1_2;
 import org.mitre.openid.connect.service.impl.UUIDPairwiseIdentiferService;
+import org.mitre.openid.connect.token.ConnectTokenEnhancer;
+import org.mitre.openid.connect.token.TofuUserApprovalHandler;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
 import org.mitre.openid.connect.web.BlacklistAPI;
@@ -106,12 +108,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.OAuth2RequestValidator;
 import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.error.DefaultWebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 
@@ -136,7 +140,7 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.openid.connect.repository.impl",
 //"org.mitre.openid.connect.request",
 //"org.mitre.openid.connect.service.impl",
-"org.mitre.openid.connect.token",
+//"org.mitre.openid.connect.token",
 //"org.mitre.openid.connect.util",
 "org.mitre.openid.connect.view",
 //"org.mitre.openid.connect.web",
@@ -574,5 +578,28 @@ public class OpenIDConnectServerConfig {
 		return new UUIDPairwiseIdentiferService();
 	}
 	
+	/*
+	 * Override configuration "org.mitre.openid.connect.token"
+	 */
+
+	/**
+	 * Due to required autowiring with no qualifier on
+	 * DefaultOAuth2ProviderTokenService of a TokenEnhancer instance, we can
+	 * only have one of these. If you have multiple token enhancers, you'll also
+	 * need to define your own DefaultOAuth2ProviderTokenService and inject a
+	 * TokenEnhancerChain with your list of TokenEnhancers
+	 */
+	@Bean
+	@ConditionalOnMissingBean(TokenEnhancer.class)
+	public TokenEnhancer connectTokenEnhancer() {
+		return new ConnectTokenEnhancer();
+	}
 	
+	@Bean()
+	@ConditionalOnMissingBean(UserApprovalHandler.class)
+	public UserApprovalHandler tofuUserApprovalHandler() {
+		return new TofuUserApprovalHandler();
+	}
+
+
 }

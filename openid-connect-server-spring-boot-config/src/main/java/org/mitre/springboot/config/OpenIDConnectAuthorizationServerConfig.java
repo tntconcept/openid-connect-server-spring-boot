@@ -4,16 +4,8 @@ import java.util.Arrays;
 
 import org.mitre.oauth2.service.ClientDetailsEntityService;
 import org.mitre.oauth2.service.OAuth2TokenEntityService;
-import org.mitre.oauth2.service.impl.DefaultOAuth2ClientDetailsEntityService;
-import org.mitre.oauth2.service.impl.DefaultOAuth2ProviderTokenService;
-import org.mitre.oauth2.token.ChainedTokenGranter;
-import org.mitre.oauth2.token.JWTAssertionTokenGranter;
-import org.mitre.openid.connect.request.ConnectOAuth2RequestFactory;
-import org.mitre.openid.connect.token.TofuUserApprovalHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -24,10 +16,10 @@ import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.OAuth2RequestValidator;
 import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
 import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenGranter;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeTokenGranter;
-import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.implicit.ImplicitTokenGranter;
 import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
@@ -41,13 +33,15 @@ import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
 public class OpenIDConnectAuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
 	@Autowired
-	private DefaultOAuth2ClientDetailsEntityService clientDetailsService;
+	private ClientDetailsEntityService clientDetailsService;
 	
 	@Autowired
-	private DefaultOAuth2ProviderTokenService tokenServices;
+	@Qualifier("defaultOAuth2ProviderTokenService")
+	private OAuth2TokenEntityService tokenServices;
 	
 	@Autowired
-	private TofuUserApprovalHandler tofuUserApprovalHandler;
+	@Qualifier("tofuUserApprovalHandler")
+	private UserApprovalHandler userApprovalHandler;
 	
 	@Autowired
 	@Qualifier("connectOAuth2RequestFactory")
@@ -92,7 +86,7 @@ public class OpenIDConnectAuthorizationServerConfig extends AuthorizationServerC
 			.pathMapping("/oauth/token", "/token")
 			.pathMapping("/oauth/authorize", "/authorize")
 			.tokenServices(tokenServices)
-			.userApprovalHandler(tofuUserApprovalHandler)
+			.userApprovalHandler(userApprovalHandler)
 			.requestFactory(requestFactory)
 			.exceptionTranslator(exceptionTranslator)
 			.tokenGranter(tokenGranter())
