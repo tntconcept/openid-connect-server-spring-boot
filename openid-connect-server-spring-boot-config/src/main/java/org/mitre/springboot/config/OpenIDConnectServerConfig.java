@@ -41,6 +41,18 @@ import org.mitre.oauth2.web.ScopeAPI;
 import org.mitre.oauth2.web.TokenAPI;
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
 import org.mitre.openid.connect.filter.AuthorizationRequestFilter;
+import org.mitre.openid.connect.repository.AddressRepository;
+import org.mitre.openid.connect.repository.ApprovedSiteRepository;
+import org.mitre.openid.connect.repository.BlacklistedSiteRepository;
+import org.mitre.openid.connect.repository.PairwiseIdentifierRepository;
+import org.mitre.openid.connect.repository.UserInfoRepository;
+import org.mitre.openid.connect.repository.WhitelistedSiteRepository;
+import org.mitre.openid.connect.repository.impl.JpaAddressRepository;
+import org.mitre.openid.connect.repository.impl.JpaApprovedSiteRepository;
+import org.mitre.openid.connect.repository.impl.JpaBlacklistedSiteRepository;
+import org.mitre.openid.connect.repository.impl.JpaPairwiseIdentifierRepository;
+import org.mitre.openid.connect.repository.impl.JpaUserInfoRepository;
+import org.mitre.openid.connect.repository.impl.JpaWhitelistedSiteRepository;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
 import org.mitre.openid.connect.web.BlacklistAPI;
@@ -99,7 +111,7 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.openid.connect.config",
 //"org.mitre.openid.connect.exception",
 //"org.mitre.openid.connect.filter",
-"org.mitre.openid.connect.repository.impl",
+//"org.mitre.openid.connect.repository.impl",
 "org.mitre.openid.connect.request",
 "org.mitre.openid.connect.service.impl",
 "org.mitre.openid.connect.token",
@@ -403,13 +415,54 @@ public class OpenIDConnectServerConfig {
 	}
 	
 	/*
-	 * Override configuration for org.mitre.openid.connect.filter
+	 * Override configuration for "org.mitre.openid.connect.filter"
 	 */
 	@Bean
 	@Autowired
 	@ConditionalOnMissingBean(name="authRequestFilter")
 	public Filter authRequestFilter() {
 		return new AuthorizationRequestFilter();
+	}
+	
+	/*
+	 * Override configuration "org.mitre.openid.connect.repository.impl"
+	 */
+	
+	@Bean
+	@ConditionalOnMissingBean(AddressRepository.class)
+	public AddressRepository jpaAddressRepository() {
+		return new JpaAddressRepository();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(ApprovedSiteRepository.class)
+	public ApprovedSiteRepository jpaApprovedSiteRepository() {
+		return new JpaApprovedSiteRepository();
+	}
+	
+	
+	@Bean
+	@ConditionalOnMissingBean(BlacklistedSiteRepository.class)
+	public BlacklistedSiteRepository jpaBlacklistedSiteRepository() {
+		return new JpaBlacklistedSiteRepository();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(PairwiseIdentifierRepository.class)
+	public PairwiseIdentifierRepository jpaPairwiseIdentifierRepository() {
+		return new JpaPairwiseIdentifierRepository();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(UserInfoRepository.class)
+	public UserInfoRepository jpaUserInfoRepository() {
+		return new JpaUserInfoRepository();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(WhitelistedSiteRepository.class)
+	public WhitelistedSiteRepository jpaWhitelistedSiteRepository() {
+		return new JpaWhitelistedSiteRepository();
 	}
 	
 }
