@@ -76,6 +76,15 @@ import org.mitre.openid.connect.service.impl.MITREidDataService_1_2;
 import org.mitre.openid.connect.service.impl.UUIDPairwiseIdentiferService;
 import org.mitre.openid.connect.token.ConnectTokenEnhancer;
 import org.mitre.openid.connect.token.TofuUserApprovalHandler;
+import org.mitre.openid.connect.view.ClientEntityViewForAdmins;
+import org.mitre.openid.connect.view.ClientEntityViewForUsers;
+import org.mitre.openid.connect.view.ClientInformationResponseView;
+import org.mitre.openid.connect.view.HttpCodeView;
+import org.mitre.openid.connect.view.JsonApprovedSiteView;
+import org.mitre.openid.connect.view.JsonEntityView;
+import org.mitre.openid.connect.view.JsonErrorView;
+import org.mitre.openid.connect.view.UserInfoJWTView;
+import org.mitre.openid.connect.view.UserInfoView;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
 import org.mitre.openid.connect.web.BlacklistAPI;
@@ -142,7 +151,7 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.openid.connect.service.impl",
 //"org.mitre.openid.connect.token",
 //"org.mitre.openid.connect.util",
-"org.mitre.openid.connect.view",
+//"org.mitre.openid.connect.view",
 //"org.mitre.openid.connect.web",
 
 //Commons packages
@@ -238,7 +247,7 @@ public class OpenIDConnectServerConfig {
 
 	@Configuration
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.approvedsite.enabled", matchIfMissing=true)
-	@Import(value=ApprovedSiteAPI.class)
+	@Import(value={ApprovedSiteAPI.class, JsonApprovedSiteView.class})
 	public static class ApprovedSiteEndpointConfiguration {}
 
 	@Configuration
@@ -248,7 +257,7 @@ public class OpenIDConnectServerConfig {
 
 	@Configuration
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.client.enabled", matchIfMissing=true)
-	@Import(value=ClientAPI.class)
+	@Import(value={ClientAPI.class, ClientEntityViewForAdmins.class, ClientEntityViewForUsers.class})
 	public static class ClientEndpointConfiguration {}
 
 	@Configuration
@@ -258,7 +267,7 @@ public class OpenIDConnectServerConfig {
 
 	@Configuration
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.dynamicclientregistration.enabled", matchIfMissing=true)
-	@Import(value=DynamicClientRegistrationEndpoint.class)
+	@Import(value={DynamicClientRegistrationEndpoint.class, ClientInformationResponseView.class})
 	public static class DynamicClientRegistrationEndpointConfiguration {}
 
 	@Configuration
@@ -268,12 +277,12 @@ public class OpenIDConnectServerConfig {
 
 	@Configuration
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.userinfo.enabled", matchIfMissing=true)
-	@Import(value=UserInfoEndpoint.class)
+	@Import(value={UserInfoEndpoint.class, UserInfoJWTView.class, UserInfoView.class})
 	public static class UserInfoEndpointConfiguration {}
 
 	@Configuration
 	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.protectedresourceregistration.enabled", matchIfMissing=true)
-	@Import(value=ProtectedResourceRegistrationEndpoint.class)
+	@Import(value={ProtectedResourceRegistrationEndpoint.class, ClientInformationResponseView.class})
 	public static class ProtectedResourceRegistrationEndpointConfiguration {}
 
 	@Configuration
@@ -601,5 +610,11 @@ public class OpenIDConnectServerConfig {
 		return new TofuUserApprovalHandler();
 	}
 
-
+	/*
+	 * Configuration for common views in "org.mitre.openid.connect.view"
+	 */
+	@Configuration
+	@Import(value={HttpCodeView.class, JsonEntityView.class,JsonErrorView.class })
+	public static class OpenIDConnectCommonViewConfiguration {}
+	
 }
