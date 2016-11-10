@@ -53,6 +53,7 @@ import org.mitre.openid.connect.repository.impl.JpaBlacklistedSiteRepository;
 import org.mitre.openid.connect.repository.impl.JpaPairwiseIdentifierRepository;
 import org.mitre.openid.connect.repository.impl.JpaUserInfoRepository;
 import org.mitre.openid.connect.repository.impl.JpaWhitelistedSiteRepository;
+import org.mitre.openid.connect.request.ConnectOAuth2RequestFactory;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
 import org.mitre.openid.connect.web.BlacklistAPI;
@@ -112,7 +113,7 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.openid.connect.exception",
 //"org.mitre.openid.connect.filter",
 //"org.mitre.openid.connect.repository.impl",
-"org.mitre.openid.connect.request",
+//"org.mitre.openid.connect.request",
 "org.mitre.openid.connect.service.impl",
 "org.mitre.openid.connect.token",
 //"org.mitre.openid.connect.util",
@@ -463,6 +464,17 @@ public class OpenIDConnectServerConfig {
 	@ConditionalOnMissingBean(WhitelistedSiteRepository.class)
 	public WhitelistedSiteRepository jpaWhitelistedSiteRepository() {
 		return new JpaWhitelistedSiteRepository();
+	}
+	
+	/*
+	 * Override configuration "org.mitre.openid.connect.request"
+	 */
+	
+	@Bean
+	@Autowired
+	@ConditionalOnMissingBean(name="connectOAuth2RequestFactory")
+	public OAuth2RequestFactory connectOAuth2RequestFactory(ClientDetailsEntityService clientDetailsService) {
+		return new ConnectOAuth2RequestFactory(clientDetailsService);
 	}
 	
 }

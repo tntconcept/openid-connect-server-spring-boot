@@ -50,7 +50,8 @@ public class OpenIDConnectAuthorizationServerConfig extends AuthorizationServerC
 	private TofuUserApprovalHandler tofuUserApprovalHandler;
 	
 	@Autowired
-	private ConnectOAuth2RequestFactory requestFactory;
+	@Qualifier("connectOAuth2RequestFactory")
+	private OAuth2RequestFactory requestFactory;
 	
 	@Autowired
 	private AuthorizationCodeServices authorizationCodeServices;
