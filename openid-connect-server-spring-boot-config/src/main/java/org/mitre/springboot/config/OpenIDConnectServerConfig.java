@@ -54,6 +54,26 @@ import org.mitre.openid.connect.repository.impl.JpaPairwiseIdentifierRepository;
 import org.mitre.openid.connect.repository.impl.JpaUserInfoRepository;
 import org.mitre.openid.connect.repository.impl.JpaWhitelistedSiteRepository;
 import org.mitre.openid.connect.request.ConnectOAuth2RequestFactory;
+import org.mitre.openid.connect.service.ApprovedSiteService;
+import org.mitre.openid.connect.service.BlacklistedSiteService;
+import org.mitre.openid.connect.service.OIDCTokenService;
+import org.mitre.openid.connect.service.PairwiseIdentiferService;
+import org.mitre.openid.connect.service.ScopeClaimTranslationService;
+import org.mitre.openid.connect.service.StatsService;
+import org.mitre.openid.connect.service.UserInfoService;
+import org.mitre.openid.connect.service.WhitelistedSiteService;
+import org.mitre.openid.connect.service.impl.DefaultApprovedSiteService;
+import org.mitre.openid.connect.service.impl.DefaultBlacklistedSiteService;
+import org.mitre.openid.connect.service.impl.DefaultOIDCTokenService;
+import org.mitre.openid.connect.service.impl.DefaultScopeClaimTranslationService;
+import org.mitre.openid.connect.service.impl.DefaultStatsService;
+import org.mitre.openid.connect.service.impl.DefaultUserInfoService;
+import org.mitre.openid.connect.service.impl.DefaultWhitelistedSiteService;
+import org.mitre.openid.connect.service.impl.DummyResourceSetService;
+import org.mitre.openid.connect.service.impl.MITREidDataService_1_0;
+import org.mitre.openid.connect.service.impl.MITREidDataService_1_1;
+import org.mitre.openid.connect.service.impl.MITREidDataService_1_2;
+import org.mitre.openid.connect.service.impl.UUIDPairwiseIdentiferService;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
 import org.mitre.openid.connect.web.BlacklistAPI;
@@ -66,6 +86,7 @@ import org.mitre.openid.connect.web.StatsAPI;
 import org.mitre.openid.connect.web.UserInfoEndpoint;
 import org.mitre.openid.connect.web.WhitelistAPI;
 import org.mitre.springboot.config.annotation.EnableOpenIDConnectServer;
+import org.mitre.uma.service.ResourceSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -114,7 +135,7 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.openid.connect.filter",
 //"org.mitre.openid.connect.repository.impl",
 //"org.mitre.openid.connect.request",
-"org.mitre.openid.connect.service.impl",
+//"org.mitre.openid.connect.service.impl",
 "org.mitre.openid.connect.token",
 //"org.mitre.openid.connect.util",
 "org.mitre.openid.connect.view",
@@ -476,5 +497,82 @@ public class OpenIDConnectServerConfig {
 	public OAuth2RequestFactory connectOAuth2RequestFactory(ClientDetailsEntityService clientDetailsService) {
 		return new ConnectOAuth2RequestFactory(clientDetailsService);
 	}
+	
+	/*
+	 * Override configuration "org.mitre.openid.connect.service.impl"
+	 */
+	
+	@Bean
+	@ConditionalOnMissingBean(ApprovedSiteService.class)
+	public ApprovedSiteService defaultApprovedSiteService() {
+		return new DefaultApprovedSiteService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(BlacklistedSiteService.class)
+	public BlacklistedSiteService defaultBlacklistedSiteService() {
+		return new DefaultBlacklistedSiteService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(OIDCTokenService.class)
+	public OIDCTokenService defaultOIDCTokenService() {
+		return new DefaultOIDCTokenService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(ScopeClaimTranslationService.class)
+	public ScopeClaimTranslationService scopeClaimTranslator() {
+		return new DefaultScopeClaimTranslationService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(StatsService.class)
+	public StatsService defaultStatsService() {
+		return new DefaultStatsService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(UserInfoService.class)
+	public UserInfoService defaultUserInfoService() {
+		return new DefaultUserInfoService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(WhitelistedSiteService.class)
+	public WhitelistedSiteService defaultWhitelistedSiteService() {
+		return new DefaultWhitelistedSiteService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(ResourceSetService.class)
+	public ResourceSetService dummyResourceSetService() {
+		return new DummyResourceSetService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(MITREidDataService_1_0.class)
+	public MITREidDataService_1_0 MITREidDataService_1_0() {
+		return new MITREidDataService_1_0();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(MITREidDataService_1_1.class)
+	public MITREidDataService_1_1 MITREidDataService_1_1() {
+		return new MITREidDataService_1_1();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(MITREidDataService_1_2.class)
+	public MITREidDataService_1_2 MITREidDataService_1_2() {
+		return new MITREidDataService_1_2();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(PairwiseIdentiferService.class)
+	public PairwiseIdentiferService uuidPairwiseIdentiferService() {
+		return new UUIDPairwiseIdentiferService();
+	}
+	
 	
 }
