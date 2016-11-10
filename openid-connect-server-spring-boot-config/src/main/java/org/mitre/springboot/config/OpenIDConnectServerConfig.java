@@ -40,6 +40,7 @@ import org.mitre.oauth2.web.RevocationEndpoint;
 import org.mitre.oauth2.web.ScopeAPI;
 import org.mitre.oauth2.web.TokenAPI;
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
+import org.mitre.openid.connect.filter.AuthorizationRequestFilter;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
 import org.mitre.openid.connect.web.BlacklistAPI;
@@ -97,7 +98,7 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 //"org.mitre.openid.connect.assertion",
 //"org.mitre.openid.connect.config",
 //"org.mitre.openid.connect.exception",
-"org.mitre.openid.connect.filter",
+//"org.mitre.openid.connect.filter",
 "org.mitre.openid.connect.repository.impl",
 "org.mitre.openid.connect.request",
 "org.mitre.openid.connect.service.impl",
@@ -401,7 +402,14 @@ public class OpenIDConnectServerConfig {
 		return new CorsFilter();
 	}
 	
-	
-	
+	/*
+	 * Override configuration for org.mitre.openid.connect.filter
+	 */
+	@Bean
+	@Autowired
+	@ConditionalOnMissingBean(name="authRequestFilter")
+	public Filter authRequestFilter() {
+		return new AuthorizationRequestFilter();
+	}
 	
 }
