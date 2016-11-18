@@ -1,0 +1,58 @@
+spring:
+  jpa:
+    properties:
+      eclipselink:
+        logging:
+          level:
+            ROOT: INFO
+            sql: INFO
+  datasource:
+    initialize: true
+    schema: classpath:/db/tables/hsql_database_tables.sql,classpath:/db/tables/security-schema.sql
+    data: 
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.security: INFO
+server:
+  port: 8080
+  contextPath: /
+
+openid:
+  connect:
+    server:
+      host: localhost
+      issuer: http://${openid.connect.server.host}:${server.port}${server.contextPath}
+      topbarTitle: OpenID Connect Server
+      logoImageUrl: resources/images/openid_connect_small.png
+      regTokenLifeTime: 172800
+    scheduling:
+      enabled: false
+    crypto:
+      keystore:
+        path: classpath:keystore.jwks
+      signing:
+        defaultSignerKeyId: rsa1
+        defaultSigningAlgorithmName: RS256
+      encrypt:
+        defaultAlgorithm: RSA1_5
+        defaultDecryptionKeyId: rsa1
+        defaultEncryptionKeyId: rsa1
+    endpoints:
+      api:
+        whitelist.enabled: false
+        approvedsite.enabled: false
+        blacklist.enabled: false
+        client.enabled: false
+        data.enabled: false
+        token.enabled: false
+        scope.enabled: false
+        stats.enabled: false   
+      oidc:
+        dynamicclientregistration.enabled: false
+        jwksetpublishing.enabled: false
+        userinfo.enabled: false
+        discovery.enabled: false
+#      protectedresourceregistration.enabled: false
+    
