@@ -2,9 +2,13 @@ package org.mitre.springboot.config;
 
 import javax.servlet.Filter;
 
-import org.mitre.oauth2.web.CorsFilter;
+import org.mitre.openid.connect.view.ClientInformationResponseView;
+import org.mitre.openid.connect.web.ProtectedResourceRegistrationEndpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,16 +18,29 @@ import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEn
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 @Configuration
+@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.protectedresourceregistration.enabled", matchIfMissing=true)
 @Order(210)
 public class ProtectedResourceRegistrationResourceServerConfig extends ResourceServerConfigurerAdapter {
 	String PATTERN = "/" + org.mitre.openid.connect.web.ProtectedResourceRegistrationEndpoint.URL + "/**";
 
 	@Autowired
 	@Qualifier("corsFilter")
-	private Filter corsFilter;
+	protected Filter corsFilter;
 	
 	@Autowired
-	private OAuth2AuthenticationEntryPoint authenticationEntryPoint; 
+	protected OAuth2AuthenticationEntryPoint authenticationEntryPoint; 
+	
+	@Bean
+	@ConditionalOnMissingBean(ProtectedResourceRegistrationEndpoint.class)
+	protected ProtectedResourceRegistrationEndpoint ProtectedResourceRegistrationEndpoint()  {
+		return new ProtectedResourceRegistrationEndpoint();
+	}
+	
+	@Bean(name=ClientInformationResponseView.VIEWNAME)
+	@ConditionalOnMissingBean(name=ClientInformationResponseView.VIEWNAME)
+	protected ClientInformationResponseView clientInformationResponseView()  {
+		return new ClientInformationResponseView();
+	}
 	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {

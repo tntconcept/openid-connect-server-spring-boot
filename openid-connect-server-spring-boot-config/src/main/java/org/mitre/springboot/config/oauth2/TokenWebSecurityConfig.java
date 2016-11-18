@@ -5,7 +5,6 @@ import java.util.HashSet;
 
 import javax.servlet.Filter;
 
-import org.mitre.oauth2.web.CorsFilter;
 import org.mitre.oauth2.web.IntrospectionEndpoint;
 import org.mitre.oauth2.web.RevocationEndpoint;
 import org.mitre.openid.connect.assertion.JWTBearerAuthenticationProvider;
@@ -44,7 +43,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	@Qualifier("corsFilter")
-	private Filter corsFilter;
+	protected Filter corsFilter;
 	
 	@Autowired
 	protected OAuth2AuthenticationEntryPoint authenticationEntryPoint;
@@ -72,6 +71,18 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(clientUserDetailsService);
 		auth.userDetailsService(uriEncodedClientUserDetailsService);
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(IntrospectionEndpoint.class)
+	protected IntrospectionEndpoint introspectionEndpoint()  {
+		return new IntrospectionEndpoint();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(RevocationEndpoint.class)
+	protected RevocationEndpoint revocationEndpoint()  {
+		return new RevocationEndpoint();
 	}
 	
 	@Bean

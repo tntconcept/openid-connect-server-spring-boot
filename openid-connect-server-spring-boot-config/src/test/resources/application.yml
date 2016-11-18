@@ -65,14 +65,11 @@ openid:
         data.enabled: true
         token.enabled: true
         scope.enabled: true
+        stats.enabled: true   
       oidc:
         dynamicclientregistration.enabled: true
         jwksetpublishing.enabled: true
         userinfo.enabled: true
         discovery.enabled: true
-      oauth2:
-        introspection.enabled: true
-        revocation.enabled: true
-        confirmation.enabled: true
       protectedresourceregistration.enabled: true
-      stats.enabled: true      
+         

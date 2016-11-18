@@ -34,9 +34,7 @@ import org.mitre.oauth2.token.JWTAssertionTokenGranter;
 import org.mitre.oauth2.token.StructuredScopeAwareOAuth2RequestValidator;
 import org.mitre.oauth2.view.TokenApiView;
 import org.mitre.oauth2.web.CorsFilter;
-import org.mitre.oauth2.web.IntrospectionEndpoint;
 import org.mitre.oauth2.web.OAuthConfirmationController;
-import org.mitre.oauth2.web.RevocationEndpoint;
 import org.mitre.oauth2.web.ScopeAPI;
 import org.mitre.oauth2.web.TokenAPI;
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
@@ -80,11 +78,10 @@ import org.mitre.openid.connect.view.ClientEntityViewForAdmins;
 import org.mitre.openid.connect.view.ClientEntityViewForUsers;
 import org.mitre.openid.connect.view.ClientInformationResponseView;
 import org.mitre.openid.connect.view.HttpCodeView;
+import org.mitre.openid.connect.view.JWKSetView;
 import org.mitre.openid.connect.view.JsonApprovedSiteView;
 import org.mitre.openid.connect.view.JsonEntityView;
 import org.mitre.openid.connect.view.JsonErrorView;
-import org.mitre.openid.connect.view.UserInfoJWTView;
-import org.mitre.openid.connect.view.UserInfoView;
 import org.mitre.openid.connect.web.ApprovedSiteAPI;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
 import org.mitre.openid.connect.web.BlacklistAPI;
@@ -94,7 +91,6 @@ import org.mitre.openid.connect.web.DynamicClientRegistrationEndpoint;
 import org.mitre.openid.connect.web.JWKSetPublishingEndpoint;
 import org.mitre.openid.connect.web.ProtectedResourceRegistrationEndpoint;
 import org.mitre.openid.connect.web.StatsAPI;
-import org.mitre.openid.connect.web.UserInfoEndpoint;
 import org.mitre.openid.connect.web.WhitelistAPI;
 import org.mitre.springboot.config.annotation.EnableOpenIDConnectServer;
 import org.mitre.uma.service.ResourceSetService;
@@ -139,6 +135,8 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 @Order(101)
 public class OpenIDConnectServerConfig {
 
+	//TODO Configuration for ClientKeyPublisherMapping
+	
 	@Bean(name="config")
 	@ConfigurationProperties(prefix = "openid.connect.server")
 	@ConditionalOnMissingBean(ConfigurationPropertiesBean.class)
@@ -191,56 +189,8 @@ public class OpenIDConnectServerConfig {
 	@Import(value=AuthenticationTimeStamper.class)
 	public static class WebEndpointConfiguration {}
 
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.whitelist.enabled", matchIfMissing=true)
-	@Import(value=WhitelistAPI.class)
-	public static class WhitelistEndpointConfiguration {}
 
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.approvedsite.enabled", matchIfMissing=true)
-	@Import(value={ApprovedSiteAPI.class, JsonApprovedSiteView.class})
-	public static class ApprovedSiteEndpointConfiguration {}
 
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.blacklist.enabled", matchIfMissing=true)
-	@Import(value=BlacklistAPI.class)
-	public static class BlacklistEndpointConfiguration {}
-
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.client.enabled", matchIfMissing=true)
-	@Import(value={ClientAPI.class, ClientEntityViewForAdmins.class, ClientEntityViewForUsers.class})
-	public static class ClientEndpointConfiguration {}
-
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.data.enabled", matchIfMissing=true)
-	@Import(value=DataAPI.class)
-	public static class DataEndpointConfiguration {}
-
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.dynamicclientregistration.enabled", matchIfMissing=true)
-	@Import(value={DynamicClientRegistrationEndpoint.class, ClientInformationResponseView.class})
-	public static class DynamicClientRegistrationEndpointConfiguration {}
-
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.jwksetpublishing.enabled", matchIfMissing=true)
-	@Import(value=JWKSetPublishingEndpoint.class)
-	public static class JWKsetPublishingEndpointConfiguration {}
-
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.userinfo.enabled", matchIfMissing=true)
-	@Import(value={UserInfoEndpoint.class, UserInfoJWTView.class, UserInfoView.class})
-	public static class UserInfoEndpointConfiguration {}
-
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.protectedresourceregistration.enabled", matchIfMissing=true)
-	@Import(value={ProtectedResourceRegistrationEndpoint.class, ClientInformationResponseView.class})
-	public static class ProtectedResourceRegistrationEndpointConfiguration {}
-
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.stats.enabled", matchIfMissing=true)
-	@Import(value=StatsAPI.class)
-	public static class StatsEndpointConfiguration {}
-	
 	/*
 	 * Specific configuration for "org.mitre.jwt.signer.service.impl"
 	 */
@@ -248,15 +198,7 @@ public class OpenIDConnectServerConfig {
 	@Configuration
 	@Import(value={ClientKeyCacheService.class, JWKSetCacheService.class, SymmetricKeyJWTValidatorCacheService.class})
 	public static class JwtSignerServiceConfiguration {}
-	
-	/*
-	 * Enabled configuration for "org.mitre.discovery.view","org.mitre.discovery.web"
-	 */
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oidc.discovery.enabled", matchIfMissing=true)
-	@Import(value={WebfingerView.class, DiscoveryEndpoint.class})
-	public static class DiscoveryEndpointConfiguration {}
-	
+
 	/*
 	 * Override configuration for "org.mitre.oauth2.repository.impl"
 	 */
@@ -370,30 +312,9 @@ public class OpenIDConnectServerConfig {
 	 */
 	
 	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.token.enabled", matchIfMissing=true)
-	@Import(value={TokenApiView.class, TokenAPI.class})
-	public static class TokenAPIConfiguration {}
-	
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.api.scope.enabled", matchIfMissing=true)
-	@Import(value={ScopeAPI.class})
-	public static class ScopeAPIConfiguration {}
-	
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oauth2.introspection.enabled", matchIfMissing=true)
-	@Import(value={IntrospectionEndpoint.class})
-	public static class IntrospectionEndpointConfiguration {}
-	
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oauth2.confirmation.enabled", matchIfMissing=true)
 	@Import(value={OAuthConfirmationController.class})
 	public static class OAuthConfirmationControllerConfiguration {}
-	
-	@Configuration
-	@ConditionalOnProperty(havingValue="true", name="openid.connect.endpoints.oauth2.revocation.enabled", matchIfMissing=true)
-	@Import(value={RevocationEndpoint.class})
-	public static class RevocationEndpointConfiguration {}
-	
+
 	@Bean
 	@ConditionalOnMissingBean(name="corsFilter")
 	public Filter corsFilter() {
@@ -514,23 +435,6 @@ public class OpenIDConnectServerConfig {
 		return new DummyResourceSetService();
 	}
 	
-	@Bean
-	@ConditionalOnMissingBean(MITREidDataService_1_0.class)
-	public MITREidDataService_1_0 MITREidDataService_1_0() {
-		return new MITREidDataService_1_0();
-	}
-	
-	@Bean
-	@ConditionalOnMissingBean(MITREidDataService_1_1.class)
-	public MITREidDataService_1_1 MITREidDataService_1_1() {
-		return new MITREidDataService_1_1();
-	}
-
-	@Bean
-	@ConditionalOnMissingBean(MITREidDataService_1_2.class)
-	public MITREidDataService_1_2 MITREidDataService_1_2() {
-		return new MITREidDataService_1_2();
-	}
 	
 	@Bean
 	@ConditionalOnMissingBean(PairwiseIdentiferService.class)
@@ -561,11 +465,13 @@ public class OpenIDConnectServerConfig {
 		return new TofuUserApprovalHandler();
 	}
 
-	/*
-	 * Configuration for common views in "org.mitre.openid.connect.view"
+	/**
+	 * Configuration for common views in "org.mitre.openid.connect.view" used across most APIs and Endpoints
 	 */
 	@Configuration
 	@Import(value={HttpCodeView.class, JsonEntityView.class,JsonErrorView.class })
 	public static class OpenIDConnectCommonViewConfiguration {}
+	
+
 	
 }

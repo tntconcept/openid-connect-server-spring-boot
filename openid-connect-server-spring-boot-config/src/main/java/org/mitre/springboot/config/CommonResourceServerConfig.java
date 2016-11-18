@@ -20,7 +20,7 @@ public class CommonResourceServerConfig extends ResourceServerConfigurerAdapter 
 		resources.stateless(false);
 		resources.tokenServices(oAuth2TokenEntityService);
 	}
-	
+
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 	}

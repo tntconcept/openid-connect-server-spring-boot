@@ -180,6 +180,12 @@
 	<td align="left">When set to false the Scope API endpoint is not exposed.</td>
 </tr>
 <tr>
+	<td align="left">openid.connect.server.endpoints.api.stats.enabled</td>
+	<td align="center"></td>
+	<td align="center">true</td>
+	<td align="left">When set to false the StatsAPI endpoint is not exposed.</td>
+</tr>
+<tr>
 	<td align="left">openid.connect.server.endpoints.oidc.dynamicclientregistration.enabled</td>
 	<td align="center"></td>
 	<td align="center">true</td>
@@ -209,32 +215,6 @@
 	<td align="center">true</td>
 	<td align="left">When set to false the ProtectedResourceRegistration endpoint is not exposed.</td>
 </tr>
-<tr>
-	<td align="left">openid.connect.server.endpoints.stats.enabled</td>
-	<td align="center"></td>
-	<td align="center">true</td>
-	<td align="left">When set to false the StatsAPI endpoint is not exposed.</td>
-</tr>
-
-<tr>
-	<td align="left">openid.connect.server.endpoints.oauth2.introspection.enabled</td>
-	<td align="center"></td>
-	<td align="center">true</td>
-	<td align="left">When set to false the OAuth 2.0 introspection endpoint is not exposed.</td>
-</tr>
-<tr>
-	<td align="left">openid.connect.server.endpoints.oauth2.revocation.enabled</td>
-	<td align="center"></td>
-	<td align="center">true</td>
-	<td align="left">When set to false the OAuth 2.0 Revocation endpoint is not exposed.</td>
-</tr>
-<tr>
-	<td align="left">openid.connect.server.endpoints.oauth2.confirmation.enabled</td>
-	<td align="center"></td>
-	<td align="center">true</td>
-	<td align="left">When set to false the OAuth 2.0 Access Confirmation endpoint is not exposed.</td>
-</tr>
-
 
 <table>
 
