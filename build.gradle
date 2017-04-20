@@ -73,7 +73,7 @@ subprojects {
 					authentication(userName: ossrhUsername, password: ossrhPassword)
 				}
 	
-				snapshotRepository(url: "http://nexus.corp.iberia.es/repository/snapshots/") {
+				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
 					authentication (userName: ossrhUsername, password: ossrhPassword)
 				}
 				
