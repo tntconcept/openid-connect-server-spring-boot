@@ -2,9 +2,14 @@ package org.mitre.springboot.config;
 
 import javax.servlet.Filter;
 
+import org.mitre.jwt.assertion.AssertionValidator;
+import org.mitre.jwt.assertion.impl.NullAssertionValidator;
+import org.mitre.jwt.assertion.impl.WhitelistedIssuerAssertionValidator;
 import org.mitre.jwt.signer.service.impl.ClientKeyCacheService;
 import org.mitre.jwt.signer.service.impl.JWKSetCacheService;
 import org.mitre.jwt.signer.service.impl.SymmetricKeyJWTValidatorCacheService;
+import org.mitre.oauth2.assertion.AssertionOAuth2RequestFactory;
+import org.mitre.oauth2.assertion.impl.DirectCopyRequestFactory;
 import org.mitre.oauth2.repository.AuthenticationHolderRepository;
 import org.mitre.oauth2.repository.AuthorizationCodeRepository;
 import org.mitre.oauth2.repository.OAuth2ClientRepository;
@@ -29,7 +34,7 @@ import org.mitre.oauth2.service.impl.DefaultSystemScopeService;
 import org.mitre.oauth2.service.impl.UriEncodedClientUserDetailsService;
 import org.mitre.oauth2.token.ChainedTokenGranter;
 import org.mitre.oauth2.token.JWTAssertionTokenGranter;
-import org.mitre.oauth2.token.StructuredScopeAwareOAuth2RequestValidator;
+import org.mitre.oauth2.token.ScopeServiceAwareOAuth2RequestValidator;
 import org.mitre.oauth2.web.CorsFilter;
 import org.mitre.oauth2.web.OAuthConfirmationController;
 import org.mitre.openid.connect.config.ConfigurationPropertiesBean;
@@ -242,7 +247,7 @@ public class OpenIDConnectServerConfig{
 
     @Bean
     @ConditionalOnMissingBean(OAuth2TokenEntityService.class)
-    //Primary is necessary. Sometimes Spring Boot failed when is starting because there are 3 beans of type ResourceServerTokenServices.ç
+    //Primary is necessary. Sometimes Spring Boot failed when is starting because there are 3 beans of type ResourceServerTokenServices.
     // We have to force this bean 
     @Primary
     public OAuth2TokenEntityService defaultOAuth2ProviderTokenService(){
@@ -286,6 +291,30 @@ public class OpenIDConnectServerConfig{
 
     @Bean
     @Autowired
+    @ConditionalOnMissingBean(name = "jwtAssertionValidator")
+    public AssertionValidator jwtAssertionValidator(){
+        return new NullAssertionValidator();
+    }
+
+    @Bean
+    @Autowired
+    @ConditionalOnMissingBean(name = "jwtAssertionTokenFactory")
+    public AssertionOAuth2RequestFactory jwtAssertionTokenFactory(){
+        return new DirectCopyRequestFactory();
+    }
+
+    @Bean
+    @Autowired
+    @ConditionalOnMissingBean(name = "clientAssertionValidator")
+    @ConfigurationProperties(prefix = "openid.connect.endpoints.assertion.issuer")
+    public AssertionValidator clientAssertionValidator(){
+        final WhitelistedIssuerAssertionValidator assertionValidator = new WhitelistedIssuerAssertionValidator();
+
+        return assertionValidator;
+    }
+
+    @Bean
+    @Autowired
     @ConditionalOnMissingBean(name = "jwtAssertionTokenGranter")
     public TokenGranter jwtAssertionTokenGranter(final OAuth2TokenEntityService tokenServices,
             final ClientDetailsEntityService clientDetailsService, final OAuth2RequestFactory requestFactory){
@@ -295,7 +324,7 @@ public class OpenIDConnectServerConfig{
     @Bean
     @ConditionalOnMissingBean(OAuth2RequestValidator.class)
     protected OAuth2RequestValidator requestValidator(){
-        return new StructuredScopeAwareOAuth2RequestValidator();
+        return new ScopeServiceAwareOAuth2RequestValidator();
     }
 
     /*

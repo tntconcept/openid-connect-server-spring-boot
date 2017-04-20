@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html data-th-lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org" xmlns:authz="http://www.springframework.org/security/tags">
+<head data-th-replace="fragments/header :: head(#{approve.title})">
+</head>
+<body>
+<div id="wrap">
+	<span data-th-replace="fragments/topbar :: topbar(pageName='Approve')"></span>
+	<div class="container main">
+	
+		<div class="well" style="text-align: center">
+			<h1>
+				<em data-th-text="${client.clientName ?: client.clientId}">XXX</em>
+			</h1>
+			<div class="text-success" data-th-if="${ approved }"><i class="icon-ok"></i> <span data-th-text="#{device.approve.approved}" data-th-remove="tag"></span></div>
+			<div class="text-error" data-th-unless="${ approved }"><i class="icon-remove"></i> <span data-th-text="#{device.approve.notApproved}" data-th-remove="tag"></span></div>
+	
+		</div>
+	</div>
+	<div id="push"></div>
+</div>
+<th-block data-th-replace="fragments/footer :: footer"/>
+</body>
+</html>	

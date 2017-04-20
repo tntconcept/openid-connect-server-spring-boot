@@ -2,6 +2,10 @@
 -- Tables for Spring Security's user details service
 --
   
+-- 
+-- Tables for Spring Security's user details service
+--
+  
 create table IF NOT EXISTS users(
       username varchar(50) not null primary key,
       password varchar(50) not null,

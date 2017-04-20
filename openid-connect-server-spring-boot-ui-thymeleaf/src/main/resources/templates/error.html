@@ -9,9 +9,9 @@
 	
 	<div class="container-fluid main">
 		<div class="row-fluid">
-			<div class="span10">
+			<div class="offset1 span10">
 				<div class="hero-unit">
-					<h1><span data-th-text="ErrorHeader"></span>
+					<h1><span data-th-text="#{error.header}"></span>
 						<span class="text-error" data-th-text="ErrorCode"></span>
 					</h1>
 					<p>
@@ -22,7 +22,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="push"></div>
+	<div id="push"></div>	
 </div>
 <th-block data-th-replace="fragments/footer :: footer"/>
 

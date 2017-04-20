@@ -4,7 +4,7 @@ subprojects {
 			springVersion = "4.3.7.RELEASE"
 			springBootVersion = "1.5.2.RELEASE"
 			springSecurityOauthVersion = "2.0.13.RELEASE"
-			openIdConnectVersion = "1.2.6"
+			openIdConnectVersion = "1.3.0"
 		}
 		repositories {
 			mavenCentral()
@@ -31,8 +31,8 @@ subprojects {
 	group = "net.simpledynamics"
 	version = projectVersion
 
-	sourceCompatibility = 1.7
-	targetCompatibility = 1.7
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
 
 	repositories {
 		mavenCentral()
@@ -73,7 +73,7 @@ subprojects {
 					authentication(userName: ossrhUsername, password: ossrhPassword)
 				}
 	
-				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				snapshotRepository(url: "http://nexus.corp.iberia.es/repository/snapshots/") {
 					authentication (userName: ossrhUsername, password: ossrhPassword)
 				}
 				
