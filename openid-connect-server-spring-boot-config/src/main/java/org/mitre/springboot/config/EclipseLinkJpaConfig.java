@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,11 +55,13 @@ public class EclipseLinkJpaConfig extends JpaBaseConfiguration{
 
     /*
      * Explicitly defining this bean as MITRE code looks for a persistenceUnit named "defaultPersistenceUnit"
+     * 
      * */
     @Bean
     @Primary
     @Override
     @ConditionalOnMissingBean({LocalContainerEntityManagerFactoryBean.class, EntityManagerFactory.class})
+    @ConfigurationProperties(prefix = "openid.connect.jpa")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             final EntityManagerFactoryBuilder factoryBuilder){
         final LocalContainerEntityManagerFactoryBean factory = super.entityManagerFactory(factoryBuilder);
