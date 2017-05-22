@@ -20,6 +20,7 @@ The possibility of using a different password encoders for users and clients has
 To configure a different encoder type (the default encoder NoOpPasswordEncoder), the following configuration must be added to the yml file:
 
 openid:
+  connect:
     crypto:
       password-encoder:
         clients:
@@ -31,7 +32,7 @@ openid:
             enabled: true
             strength: -1    
             
-openid.crypto.password-encoder.clients defines the password encoder for clients and in openid.crypto.password-encoder.users for users.            
+openid.connect.crypto.password-encoder.clients defines the password encoder for clients and in openid.crypto.password-encoder.users for users.            
 
 The configuration of the different types of encoders is shown below.          
 
@@ -42,6 +43,7 @@ To configure a BCrypt password encoder you will need to add the bcrypt property 
  * strength: the log rounds to use, between 4 and 31
 
 openid:
+  connect:
     crypto:
       password-encoder:
         clients:
@@ -64,6 +66,7 @@ To configure a SCrypt password encoder you will need to add the scrypt property 
  * salt-length: salt length (as defined in scrypt this is the length of S). The default is currently 64.
 
 openid:
+  connect:
     crypto:
       password-encoder:
         clients:
@@ -90,6 +93,7 @@ To configure a Standard password encoder you will need to add the standard prope
  * secret: the secret key used in the encoding process (should not be shared). Default ""
 
 openid:
+  connect:
     crypto:
       password-encoder:
         clients:
@@ -108,6 +112,7 @@ To configure a Pbkdf2 password encoder you will need to add the pbkdf2 property 
  * secret: the secret key used in the encoding process (should not be shared)
 
 openid:
+  connect:
     crypto:
       password-encoder:
         clients:

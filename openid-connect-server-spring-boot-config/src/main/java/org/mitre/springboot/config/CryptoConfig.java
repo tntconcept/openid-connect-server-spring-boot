@@ -65,7 +65,7 @@ public class CryptoConfig{
     }
 
     @Bean("clientPasswordEncoder")
-    @ConditionalOnProperty(prefix = "openid.crypto.password-encoder.clients.bcrypt", name = "enabled")
+    @ConditionalOnProperty(prefix = "openid.connect.crypto.password-encoder.clients.bcrypt", name = "enabled")
     public PasswordEncoder clientBCryptPasswordEncoder(@Qualifier("clientPasswordEncoders")
     final PasswordEncoderTypeConfig passwordEncoderConfig){
         final BCryptPasswordEncoderConfig bcryptConfig = passwordEncoderConfig.getBcrypt();
@@ -74,7 +74,7 @@ public class CryptoConfig{
     }
 
     @Bean("userPasswordEncoder")
-    @ConditionalOnProperty(prefix = "openid.crypto.password-encoder.users.bcrypt", name = "enabled")
+    @ConditionalOnProperty(prefix = "openid.connect.crypto.password-encoder.users.bcrypt", name = "enabled")
     public PasswordEncoder userBCryptPasswordEncoder(@Qualifier("userPasswordEncoders")
     final PasswordEncoderTypeConfig passwordEncoderConfig){
         final BCryptPasswordEncoderConfig bcryptConfig = passwordEncoderConfig.getBcrypt();
@@ -83,7 +83,7 @@ public class CryptoConfig{
     }
 
     @Bean("clientPasswordEncoder")
-    @ConditionalOnProperty(prefix = "openid.crypto.password-encoder.clients.scrypt", name = "enabled")
+    @ConditionalOnProperty(prefix = "openid.connect.crypto.password-encoder.clients.scrypt", name = "enabled")
     public PasswordEncoder clientSCryptPasswordEncoder(@Qualifier("clientPasswordEncoders")
     final PasswordEncoderTypeConfig passwordEncoderConfig){
         final SCryptPasswordEncoderConfig scryptConfig = passwordEncoderConfig.getSCrypt();
@@ -93,7 +93,7 @@ public class CryptoConfig{
     }
 
     @Bean("userPasswordEncoder")
-    @ConditionalOnProperty(prefix = "openid.crypto.password-encoder.users.scrypt", name = "enabled")
+    @ConditionalOnProperty(prefix = "openid.connect.crypto.password-encoder.users.scrypt", name = "enabled")
     public PasswordEncoder userSCryptPasswordEncoder(@Qualifier("userPasswordEncoders")
     final PasswordEncoderTypeConfig passwordEncoderConfig){
         final SCryptPasswordEncoderConfig scryptConfig = passwordEncoderConfig.getSCrypt();
@@ -103,7 +103,7 @@ public class CryptoConfig{
     }
 
     @Bean("clientPasswordEncoder")
-    @ConditionalOnProperty(prefix = "openid.crypto.password-encoder.clients.standard", name = "enabled")
+    @ConditionalOnProperty(prefix = "openid.connect.crypto.password-encoder.clients.standard", name = "enabled")
     public PasswordEncoder clientStandardPasswordEncoder(@Qualifier("clientPasswordEncoders")
     final PasswordEncoderTypeConfig passwordEncoderConfig){
         final StandardPasswordEncoderConfig standardConfig = passwordEncoderConfig.getStandard();
@@ -112,7 +112,7 @@ public class CryptoConfig{
     }
 
     @Bean("userPasswordEncoder")
-    @ConditionalOnProperty(prefix = "openid.crypto.password-encoder.users.standard", name = "enabled")
+    @ConditionalOnProperty(prefix = "openid.connect.crypto.password-encoder.users.standard", name = "enabled")
     public PasswordEncoder userStandardPasswordEncoder(@Qualifier("userPasswordEncoders")
     final PasswordEncoderTypeConfig passwordEncoderConfig){
         final StandardPasswordEncoderConfig standardConfig = passwordEncoderConfig.getStandard();
@@ -121,7 +121,7 @@ public class CryptoConfig{
     }
 
     @Bean("clientPasswordEncoder")
-    @ConditionalOnProperty(prefix = "openid.crypto.password-encoder.clients.pbkdf2", name = "enabled")
+    @ConditionalOnProperty(prefix = "openid.connect.crypto.password-encoder.clients.pbkdf2", name = "enabled")
     public PasswordEncoder clientPbkdf2PasswordEncoder(@Qualifier("clientPasswordEncoders")
     final PasswordEncoderTypeConfig passwordEncoderConfig){
         final Pbkdf2PasswordEncoderConfig pbkdf2Config = passwordEncoderConfig.getPbkdf2();
@@ -130,7 +130,7 @@ public class CryptoConfig{
     }
 
     @Bean("userPasswordEncoder")
-    @ConditionalOnProperty(prefix = "openid.crypto.password-encoder.users.pbkdf2", name = "enabled")
+    @ConditionalOnProperty(prefix = "openid.connect.crypto.password-encoder.users.pbkdf2", name = "enabled")
     public PasswordEncoder userPbkdf2PasswordEncoder(@Qualifier("userPasswordEncoders")
     final PasswordEncoderTypeConfig passwordEncoderConfig){
         final Pbkdf2PasswordEncoderConfig pbkdf2Config = passwordEncoderConfig.getPbkdf2();
@@ -151,13 +151,13 @@ public class CryptoConfig{
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "openid.crypto.password-encoder.users")
+    @ConfigurationProperties(prefix = "openid.connect.crypto.password-encoder.users")
     public PasswordEncoderTypeConfig userPasswordEncoders(){
         return new PasswordEncoderTypeConfig();
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "openid.crypto.password-encoder.clients")
+    @ConfigurationProperties(prefix = "openid.connect.crypto.password-encoder.clients")
     public PasswordEncoderTypeConfig clientPasswordEncoders(){
         return new PasswordEncoderTypeConfig();
     }

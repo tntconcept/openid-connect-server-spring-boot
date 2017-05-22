@@ -3,6 +3,7 @@ spring:
     url: jdbc:h2:mem:oauth_standard
 
 openid:
+  connect:
     crypto:
       password-encoder:
         clients:
