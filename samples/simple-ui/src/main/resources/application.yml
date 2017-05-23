@@ -30,9 +30,13 @@ openid:
         blacklist.enabled: false
         client.enabled: false
         data.enabled: false
+        token.enabled: false
+        scope.enabled: false
+        stats.enabled: false   
       oidc:
         dynamicclientregistration.enabled: false
-        jwksetpublishing.enabled: false
-        userinfo.enabled: false
-      protectedresourceregistration.enabled: false
-      stats.enabled: false
+        jwksetpublishing.enabled: true
+        userinfo.enabled: true
+        discovery.enabled: true
+      protectedresourceregistration.enabled: true
+      
