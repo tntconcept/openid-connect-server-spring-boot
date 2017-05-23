@@ -1,6 +1,11 @@
 package org.mitre.springboot.config.ui;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.mitre.openid.connect.config.JsonMessageSource;
+import org.mitre.openid.connect.config.UIConfiguration;
 import org.mitre.openid.connect.web.RootController;
 import org.mitre.openid.connect.web.ServerConfigInterceptor;
 import org.mitre.openid.connect.web.UserInfoInterceptor;
@@ -19,53 +24,76 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @EnableWebMvc
-public class WebMvcConfig extends WebMvcConfigurerAdapter {
+public class WebMvcConfig extends WebMvcConfigurerAdapter{
 
-	@Bean
-	@ConditionalOnMissingBean(UserInfoInterceptor.class)
-	public UserInfoInterceptor getUserInfoInterceptor() {
-		return new UserInfoInterceptor();
-	}
+    @Bean
+    @ConditionalOnMissingBean(UserInfoInterceptor.class)
+    public UserInfoInterceptor getUserInfoInterceptor(){
+        return new UserInfoInterceptor();
+    }
 
-	@Bean
-	@ConditionalOnMissingBean(ServerConfigInterceptor.class)
-	public ServerConfigInterceptor getServerConfigInterceptor() {
-		return new ServerConfigInterceptor();
-	}
+    @Bean
+    @ConditionalOnMissingBean(ServerConfigInterceptor.class)
+    public ServerConfigInterceptor getServerConfigInterceptor(){
+        return new ServerConfigInterceptor();
+    }
 
-	@Bean
-	@ConditionalOnMissingBean(JsonMessageSource.class)
-	@ConfigurationProperties(prefix = "openid.connect.jsonMessageSource")
-	public JsonMessageSource messageSource(
-			@Value("classpath:/static/resources/js/locale/") Resource baseDirectory,
-			@Value("true") Boolean useCodeAsDefaultMessage) {
-		JsonMessageSource jsonMessageSource = new JsonMessageSource();
-		jsonMessageSource.setBaseDirectory(baseDirectory);
-		jsonMessageSource.setUseCodeAsDefaultMessage(useCodeAsDefaultMessage);
-		return jsonMessageSource;
-	}
+    @Bean
+    @ConditionalOnMissingBean(JsonMessageSource.class)
+    @ConfigurationProperties(prefix = "openid.connect.jsonMessageSource")
+    public JsonMessageSource messageSource(@Value("classpath:/static/resources/js/locale/")
+    final Resource baseDirectory, @Value("true")
+    final Boolean useCodeAsDefaultMessage){
+        final JsonMessageSource jsonMessageSource = new JsonMessageSource();
+        jsonMessageSource.setBaseDirectory(baseDirectory);
+        jsonMessageSource.setUseCodeAsDefaultMessage(useCodeAsDefaultMessage);
+        return jsonMessageSource;
+    }
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(getUserInfoInterceptor());
-		registry.addInterceptor(getServerConfigInterceptor());
-	}
+    @Bean(name = "uiConfiguration")
+    @ConfigurationProperties(prefix = "openid.connect.server.ui")
+    @ConditionalOnMissingBean(UIConfiguration.class)
+    public UIConfiguration configurationPropertiesBean(){
+        final UIConfiguration uiConfiguration = new UIConfiguration();
+     // @formatter:off
+        final Set<String> jsResources = new HashSet<String>(
+                Arrays.asList(
+                        "resources/js/client.js",
+                        "resources/js/grant.js",
+                        "resources/js/scope.js",
+                        "resources/js/whitelist.js",
+                        "resources/js/dynreg.js",
+                        "resources/js/rsreg.js",
+                        "resources/js/token.js",
+                        "resources/js/blacklist.js",
+                        "resources/js/profile.js"
+                        ));
+     // @formatter:on
 
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/login").setViewName("login");
-	}
+        uiConfiguration.setJsFiles(jsResources);
+        uiConfiguration.setTemplateFiles(new HashSet<>());
+        return uiConfiguration;
+    }
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**").addResourceLocations(
-				"classpath:/static/resources/");
-	}
-	
-	@Configuration
-	@Import(RootController.class)
-	public static class RootControllerConfiguration {}
+    @Override
+    public void addInterceptors(final InterceptorRegistry registry){
+        registry.addInterceptor(getUserInfoInterceptor());
+        registry.addInterceptor(getServerConfigInterceptor());
+    }
 
-	
+    @Override
+    public void addViewControllers(final ViewControllerRegistry registry){
+        registry.addViewController("/login").setViewName("login");
+    }
+
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry){
+        registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/static/resources/");
+    }
+
+    @Configuration
+    @Import(RootController.class)
+    public static class RootControllerConfiguration{
+    }
 
 }

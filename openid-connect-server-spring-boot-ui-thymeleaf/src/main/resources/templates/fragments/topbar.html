@@ -24,7 +24,7 @@
 					<li data-th-unless="${pageName == 'Contact'}"><a data-th-text="#{topbar.contact}" href="contact" data-toggle="collapse" data-target=".nav-collapse">Contact</a></li>
 				</ul>
 				<ul class="nav hidden-desktop" data-sec-authorize="hasRole('ROLE_USER')" data-th-include="fragments/actionmenu::actionmenu"></ul>
-				<ul class="nav pull-right">
+				<ul class="nav pull-right visible-desktop">
 					<li class="dropdown" data-sec-authorize="hasRole('ROLE_USER')">
 						<a id="userButton" class="dropdown-toggle" data-toggle="dropdown" href=""><i class="icon-user icon-white"></i> <th-block data-th-text="${ userInfo.preferredUsername } ?: ${ userInfo.sub }">shortName</th-block> <span class="caret"></span></a>
 						<ul class="dropdown-menu pull-right">

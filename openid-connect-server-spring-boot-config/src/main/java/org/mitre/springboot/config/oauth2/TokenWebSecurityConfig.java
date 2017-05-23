@@ -25,6 +25,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
@@ -39,95 +40,101 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
  */
 @Configuration
 @Order(110)
-public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	@Autowired
-	@Qualifier("corsFilter")
-	protected Filter corsFilter;
-	
-	@Autowired
-	protected OAuth2AuthenticationEntryPoint authenticationEntryPoint;
-	
-	@Autowired
-	@Qualifier("clientUserDetailsService")
-	protected UserDetailsService clientUserDetailsService;
-	
-	@Autowired
-	@Qualifier("uriEncodedClientUserDetailsService")
-	protected UserDetailsService uriEncodedClientUserDetailsService;
-	
-	@Autowired
-	protected OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler;
-	
-	@Autowired
-	@Lazy
-	protected ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter;
-	
-	@Autowired
-	@Lazy
-	protected JWTBearerClientAssertionTokenEndpointFilter jwtBearerClientAssertionTokenEndpointFilter;
-	
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(clientUserDetailsService);
-		auth.userDetailsService(uriEncodedClientUserDetailsService);
-	}
-	
-	@Bean
-	@ConditionalOnMissingBean(IntrospectionEndpoint.class)
-	protected IntrospectionEndpoint introspectionEndpoint()  {
-		return new IntrospectionEndpoint();
-	}
-	
-	@Bean
-	@ConditionalOnMissingBean(RevocationEndpoint.class)
-	protected RevocationEndpoint revocationEndpoint()  {
-		return new RevocationEndpoint();
-	}
-	
-	@Bean
-	@Autowired
-	@ConditionalOnMissingBean(ClientCredentialsTokenEndpointFilter.class)
-	public ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter(
-			@Qualifier("clientAuthenticationMatcher") MultiUrlRequestMatcher clientAuthenticationMatcher
-			) throws Exception {
-		ClientCredentialsTokenEndpointFilter filter = new ClientCredentialsTokenEndpointFilter();
-		filter.setRequiresAuthenticationRequestMatcher(clientAuthenticationMatcher);
-		filter.setAuthenticationManager(authenticationManager());
-		return filter;
-	}
-	
-	@Autowired
-	@Bean
-	@ConditionalOnMissingBean(JWTBearerClientAssertionTokenEndpointFilter.class)
-	public JWTBearerClientAssertionTokenEndpointFilter jwtBearerClientAssertionTokenEndpointFilter(
-			@Qualifier("clientAuthenticationMatcher") MultiUrlRequestMatcher clientAuthenticationMatcher,
-			JWTBearerAuthenticationProvider jwtBearerAuthenticationProvider
-			) {
-		JWTBearerClientAssertionTokenEndpointFilter filter = new JWTBearerClientAssertionTokenEndpointFilter(clientAuthenticationMatcher);	
-		filter.setAuthenticationManager(new ProviderManager(Collections.<AuthenticationProvider>singletonList(jwtBearerAuthenticationProvider)));
-		return filter;
-	}
+public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter{
 
-	@Bean
-	@ConditionalOnMissingBean(JWTBearerAuthenticationProvider.class)
-	public JWTBearerAuthenticationProvider jwtBearerAuthenticationProvider() {
-		return new JWTBearerAuthenticationProvider();
-	}
-	
-	@Bean(name="clientAuthenticationMatcher")
-	@ConditionalOnMissingBean(type={"javax.servlet.http.HttpServletRequest.MultiUrlRequestMatcher"}, name="clientAuthenticationMatcher")
-	public MultiUrlRequestMatcher clientAuthenticationMatcher() {
-		HashSet<String> urls = new HashSet<String>();
-		urls.add("/introspect");
-		urls.add("/revoke");
-		urls.add("/token");
-		return new MultiUrlRequestMatcher(urls);
-	}
-	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		// @formatter:off
+    @Autowired
+    @Qualifier("corsFilter")
+    protected Filter corsFilter;
+
+    @Autowired
+    protected OAuth2AuthenticationEntryPoint authenticationEntryPoint;
+
+    @Autowired
+    @Qualifier("clientUserDetailsService")
+    protected UserDetailsService clientUserDetailsService;
+
+    @Autowired
+    @Qualifier("uriEncodedClientUserDetailsService")
+    protected UserDetailsService uriEncodedClientUserDetailsService;
+
+    @Autowired
+    protected OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler;
+
+    @Autowired
+    @Lazy
+    protected ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter;
+
+    @Autowired
+    @Lazy
+    protected JWTBearerClientAssertionTokenEndpointFilter jwtBearerClientAssertionTokenEndpointFilter;
+
+    @Autowired
+    @Qualifier("clientPasswordEncoder")
+    private PasswordEncoder clientPasswordEncoder;
+
+    @Override
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception{
+        auth.userDetailsService(clientUserDetailsService).passwordEncoder(clientPasswordEncoder);
+        auth.userDetailsService(uriEncodedClientUserDetailsService).passwordEncoder(clientPasswordEncoder);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(IntrospectionEndpoint.class)
+    protected IntrospectionEndpoint introspectionEndpoint(){
+        return new IntrospectionEndpoint();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RevocationEndpoint.class)
+    protected RevocationEndpoint revocationEndpoint(){
+        return new RevocationEndpoint();
+    }
+
+    @Bean
+    @Autowired
+    @ConditionalOnMissingBean(ClientCredentialsTokenEndpointFilter.class)
+    public ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter(
+            @Qualifier("clientAuthenticationMatcher")
+            final MultiUrlRequestMatcher clientAuthenticationMatcher) throws Exception{
+        final ClientCredentialsTokenEndpointFilter filter = new ClientCredentialsTokenEndpointFilter();
+        filter.setRequiresAuthenticationRequestMatcher(clientAuthenticationMatcher);
+        filter.setAuthenticationManager(authenticationManager());
+        return filter;
+    }
+
+    @Autowired
+    @Bean
+    @ConditionalOnMissingBean(JWTBearerClientAssertionTokenEndpointFilter.class)
+    public JWTBearerClientAssertionTokenEndpointFilter jwtBearerClientAssertionTokenEndpointFilter(
+            @Qualifier("clientAuthenticationMatcher")
+            final MultiUrlRequestMatcher clientAuthenticationMatcher, final JWTBearerAuthenticationProvider jwtBearerAuthenticationProvider){
+        final JWTBearerClientAssertionTokenEndpointFilter filter = new JWTBearerClientAssertionTokenEndpointFilter(
+                clientAuthenticationMatcher);
+        filter.setAuthenticationManager(new ProviderManager(
+                Collections.<AuthenticationProvider> singletonList(jwtBearerAuthenticationProvider)));
+        return filter;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(JWTBearerAuthenticationProvider.class)
+    public JWTBearerAuthenticationProvider jwtBearerAuthenticationProvider(){
+        return new JWTBearerAuthenticationProvider();
+    }
+
+    @Bean(name = "clientAuthenticationMatcher")
+    @ConditionalOnMissingBean(type = {
+            "javax.servlet.http.HttpServletRequest.MultiUrlRequestMatcher"}, name = "clientAuthenticationMatcher")
+    public MultiUrlRequestMatcher clientAuthenticationMatcher(){
+        final HashSet<String> urls = new HashSet<String>();
+        urls.add("/introspect");
+        urls.add("/revoke");
+        urls.add("/token");
+        return new MultiUrlRequestMatcher(urls);
+    }
+
+    @Override
+    protected void configure(final HttpSecurity http) throws Exception{
+        // @formatter:off
 		http
 			.requestMatchers()
 				.antMatchers(
@@ -154,5 +161,5 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		;
 		// @formatter:on
-	}
+    }
 }

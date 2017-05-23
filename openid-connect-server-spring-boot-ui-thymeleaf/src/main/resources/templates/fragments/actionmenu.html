@@ -5,20 +5,20 @@
 <ul data-th-fragment="actionmenu">
 	<th:block data-sec-authorize="hasRole('ROLE_ADMIN')">
 		<li data-th-text="#{sidebar.administrative.title}" class="nav-header"></li>
-		<li><a href="manage/#admin/clients" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.administrative.manage_clients}"  ></a></li>
-		<li><a href="manage/#admin/whitelists" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.administrative.whitelisted_clients}"></a></li>
-		<li><a href="manage/#admin/blacklist" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.administrative.blacklisted_clients}"></a></li>
-		<li><a href="manage/#admin/scope" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.administrative.system_scopes}"></a></li>
+		<li data-th-if="${@environment.getProperty('openid.connect.endpoints.api.client.enabled')}"><a href="manage/#admin/clients" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.administrative.manage_clients}"  ></a></li>
+		<li data-th-if="${@environment.getProperty('openid.connect.endpoints.api.whitelist.enabled')}"><a href="manage/#admin/whitelists" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.administrative.whitelisted_clients}"></a></li>
+		<li data-th-if="${@environment.getProperty('openid.connect.endpoints.api.blacklist.enabled')}"><a href="manage/#admin/blacklist" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.administrative.blacklisted_clients}"></a></li>
+		<li data-th-if="${@environment.getProperty('openid.connect.endpoints.api.scope.enabled')}"><a href="manage/#admin/scope" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.administrative.system_scopes}"></a></li>
 		<li class="divider"></li>
 	</th:block>
 	<li class="nav-header" data-th-text="#{sidebar.personal.title}"></li>
-	<li><a href="manage/#user/approved" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.personal.approved_sites}"></a></li>
-	<li><a href="manage/#user/tokens" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.personal.active_tokens}"></a></li>
-	<li><a href="manage/#user/profile" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.personal.profile_information}"></a></li>
+	<li data-th-if="${@environment.getProperty('openid.connect.endpoints.api.approvedsite.enabled')}"><a href="manage/#user/approved" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.personal.approved_sites}"></a></li>
+	<li data-th-if="${@environment.getProperty('openid.connect.endpoints.api.token.enabled')}"><a href="manage/#user/tokens" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.personal.active_tokens}"></a></li>
+	<li data-th-if="${@environment.getProperty('openid.connect.endpoints.oidc.userinfo.enabled')}"><a href="manage/#user/profile" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.personal.profile_information}"></a></li>
 	<li class="divider"></li>
 	<li class="nav-header" data-th-text="#{sidebar.developer.title}" ></li>
-	<li><a href="manage/#dev/dynreg" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.developer.client_registration}" ></a></li>
-	<li><a href="manage/#dev/resource" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.developer.resource_registration}"></a></li>
+	<li data-th-if="${@environment.getProperty('openid.connect.endpoints.oidc.dynamicclientregistration.enabled')}"><a href="manage/#dev/dynreg" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.developer.client_registration}" ></a></li>
+	<li data-th-if="${@environment.getProperty('openid.connect.endpoints.protectedresourceregistration.enabled')}"><a href="manage/#dev/resource" data-toggle="collapse" data-target=".nav-collapse" data-th-text="#{sidebar.developer.resource_registration}"></a></li>
 </ul>
 
 </body>

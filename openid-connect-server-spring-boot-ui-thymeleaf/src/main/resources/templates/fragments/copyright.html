@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <th-block data-th-fragment="copyright">
+<span class="pull-left" data-th-if="${config.heartMode}"><img src="resources/images/heart_mode.png" alt="HEART Mode" title="This server is running in HEART Compliance Mode" /></span> 
 <span data-th-utext="#{copyright(${project == null ? '' : project.version})}"></span>
 </th-block>
 </body>

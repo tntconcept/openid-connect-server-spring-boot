@@ -3,7 +3,7 @@
 <body>
 
 <th-block data-th-fragment="statsContent">
-<h2>Current Statistics</h2>
+<h2 data-th-text="#{statistics.title}">Current Statistics</h2>
 
 <p>There have been 
 	<span class="label label-info" data-th-text="${statsSummary['userCount']}">X</span><th-block data-th-inline="text"> user[[${statsSummary['userCount'] == 1 ? '' : 's'}]] of this system who have logged in to </th-block> 

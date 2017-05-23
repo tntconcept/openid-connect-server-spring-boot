@@ -115,29 +115,30 @@ public abstract class OAuthAuthorizationTestsBase extends EndpointTestsBase {
 	}
 	
 	protected String getClientAccessToken() throws Exception {
-		 String clientId = "client";
-		 String secret = "secret";
-		 MvcResult result = mockMvc.perform(
-			post("/token")
-			.with(httpBasic(clientId,secret))
-			.param("grant_type", "client_credentials")
-			.param("response_type", "token id_token")
-			.param("client_id", clientId)
-			.param("client_secret", secret)
-			.param("scope", "openid profile")
-			)
-			// curl https://api.mysite.com/token -d 'grant_type=client_credentials&client_id=TestClient&client_secret=TestSecret'
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("token_type", is("Bearer")))
-			.andExpect(jsonPath("scope", is("openid profile")))
-			.andExpect(jsonPath("expires_in", lessThan(3600)))
-			.andReturn()      
-	         ;     
-		String json = result.getResponse().getContentAsString();  
-        HashMap<String,Object> map = mapper.readValue(json, new TypeReference<HashMap<String,Object>>(){}); 
-        return map.get("access_token").toString();
-           
+		 return getClientAccessToken("client", "secret");
 	}
+	
+    protected String getClientAccessToken(final String clientId, final String secret) throws Exception{
+        final MvcResult result = mockMvc
+                .perform(post("/token")
+                .with(httpBasic(clientId, secret))
+                .param("grant_type", "client_credentials")
+                .param("response_type", "token id_token")
+                .param("client_id", clientId)
+                .param("client_secret", secret)
+                .param("scope", "openid profile"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("token_type", is("Bearer")))
+                .andExpect(jsonPath("scope", is("openid profile")))
+                .andExpect(jsonPath("expires_in", lessThan(3600)))
+                .andReturn();
+        
+        final String json = result.getResponse().getContentAsString();
+        final HashMap<String, Object> map = mapper.readValue(json, new TypeReference<HashMap<String, Object>>(){
+        });
+        return map.get("access_token").toString();
+
+    }
 	
 }

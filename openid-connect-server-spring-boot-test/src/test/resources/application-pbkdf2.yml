@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:oauth_pbkdf2
+
+openid:
+  connect:
+    crypto:
+      password-encoder:
+        clients:
+          pbkdf2:
+            enabled: true
+            secret: salt
+        users:
+          pbkdf2: 
+            enabled: true
+            secret: salt            
+      keystore:
+        path: classpath:keystore.jwks
+      signing:
+        defaultSignerKeyId: rsa1
+        defaultSigningAlgorithmName: RS256
+      encrypt:
+        defaultAlgorithm: RSA1_5
+        defaultDecryptionKeyId: rsa1
+        defaultEncryptionKeyId: rsa1
+    

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html data-th-lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org" xmlns:authz="http://www.springframework.org/security/tags">
+<head data-th-replace="fragments/header :: head(#{approve.title})">
+</head>
+<body>
+<div id="wrap">
+	<span data-th-replace="fragments/topbar :: topbar(pageName='Approve')"></span>
+	<div class="container main">
+		<div class="alert-message error" data-th-if="${session.SPRING_SECURITY_LAST_EXCEPTION != null and not (session.SPRING_SECURITY_LAST_EXCEPTION instanceof T(org.springframework.security.oauth2.common.exceptions.UnapprovedClientAuthenticationException)) }">
+			<a href="#" class="close">&times;</a>
+	
+			<p><strong data-th-text="#{approve.error.not_granted}"></strong> 
+				(<span data-th-text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" data-th-remove="tag"></span>)
+			</p>
+		</div>
+		<!-- ${session.removeAttribute('SPRING_SECURITY_LAST_EXCEPTION') -->
+	
+		<div class="well" style="text-align: center">
+			<h1>
+				<span data-th-text="#{approve.required_for}" data-th-remove="tag"></span>
+				<em data-th-text="${client.clientName ?: client.clientId}">XXX</em>
+			</h1>
+	
+			<form name="confirmationForm"
+				data-th-action="@{/device/approve}" method="post">
+	
+				<div class="row">
+					<div class="span5 offset1 well-small" style="text-align: left">
+						<th-block data-th-if="${ client.dynamicallyRegistered }">
+		                    <th-block data-th-if="${ gras }">
+									<!-- client is "generally recognized as safe, display a more muted block -->
+									<div>
+									    <p class="alert alert-info">
+									        <i class="icon-globe"></i>
+									        <span data-th-utext="#{approve.dynamically_registered}" data-th-remove="tag"></span>
+									   </p>
+									</div>
+	 						</th-block>								
+							<th-block data-th-unless="${ gras }">
+									<!-- client is dynamically registered -->
+									<div class="alert alert-block ${ count eq 0 ? 'alert-error' : 'alert-warn' }|" />">
+										<h4>
+											<i class="icon-globe"></i> <span data-th-text="#{approve.caution.title}" data-th-remove="tag">:
+										</h4>
+										<p data-th-text="${approve.dynamically_registered(${client.createdAt})}">
+	                          			</p>
+	                          			<p data-th-text="|${ count } time${ count == 1 ? '' : 's' } previously.|">
+				                  			<th:block th:switch="${status.value}">
+				                  				<span th:case="0" data-th-text="#{approve.caution.message.none(${count})}" data-th-remove="tag"></span>
+				                  				<span th:case="1" data-th-text="#{approve.caution.message.singular(${count})}" data-th-remove="tag"></span>
+				                  				<span th:case="*" data-th-text="#{approve.caution.message.plural(${count})}" data-th-remove="tag"></span>
+											</th:block>
+				                        </p>
+									</div>
+							</th-block>
+						</th-block>
+	
+						<th-block data-th-if="${ not #strings.isEmpty(client.logoUri) }">
+							<ul class="thumbnails">
+								<li class="span5">
+									<a class="thumbnail" data-toggle="modal" data-target="#logoModal"><img data-th-src="@{client.logoUri}" /></a>
+								</li>
+							</ul>
+							<!-- Modal -->
+							<div id="logoModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="logoModalLabel" aria-hidden="true">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									<h3 id="logoModalLabel">
+										<em data-th-text="${ client.clientName ?: client.clientId}"></em>
+									</h3>
+								</div>
+								<div class="modal-body">
+								<img data-th-src="@{client.logoUri}" />
+									<img data-th-src="@{client.logoUri}" />
+									<a data-th-if="${ not #strings.isEmpty(client.clientUri) }" data-th-href="${ client.clientUri }" data-th-text="${ client.clientUri }"></a>
+								</div>
+								<div class="modal-footer">
+									<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+								</div>
+							</div>
+						</th-block>
+							<div class="muted moreInformationContainer" data-th-if="${ not (#strings.isEmpty(client.clientDescription) and #strings.isEmpty(client.clientUri) and #strings.isEmpty(client.policyUri) and #strings.isEmpty(client.tosUri) and #strings.isEmpty(contacts)) }">
+								<th-block data-th-text="${client.clientDescription}" />
+								<th-block data-th-if="${ not ( #strings.isEmpty(client.clientUri) and #strings.isEmpty(client.policyUri) and #strings.isEmpty(client.tosUri) and #strings.isEmpty(contacts) ) }">
+									<div id="toggleMoreInformation" style="cursor: pointer;">
+										<small><i class="icon-chevron-right"></i> <span data-th-text="#{approve.more_information}"></span></small>
+									</div>
+									<div id="moreInformation" class="hide">
+										<ul>
+											<li data-th-if="${not #strings.isEmpty(client.clientUri)}"><span data-th-text="#{approve.home_page}"></span>: <a data-th-href="${ client.clientUri }" data-th-text="${ client.clientUri }"></a></li>
+											<li data-th-if="${not #strings.isEmpty(client.policyUri)}"><span data-th-text="#{approve.policy}"></span>: <a data-th-href="${ client.policyUri }" data-th-text="${ client.policyUri }"></a></li>
+											<li data-th-if="${not #strings.isEmpty(client.tosUri)}"><span data-th-text="#{approve.terms}"></span>: <a data-th-href="${ client.tosUri }" data-th-text="${ client.tosUri }"></a></li>
+											<li data-th-if="${not #strings.isEmpty(contacts))}"><span data-th-text="|#{approve.contacts} ${ contacts }|"></span></li>
+										</ul>
+									</div>
+								</th-block>
+							</div>
+	
+						<div class="alert alert-success" data-th-if="${ client.subjectType == 'PAIRWISE' }"
+							data-th-text="#{approve.pairwise}">
+						</div>
+	
+					</div>
+					<div class="span4">
+						<fieldset style="text-align: left" class="well">
+							<legend style="margin-bottom: 0;" data-th-text="|#{approve.access_to}:|"></legend>
+	
+								<div class="alert alert-block alert-error" data-th-if="${ #strings.isEmpty(client.scope) }">
+									<h4>
+										<i class="icon-info-sign"></i> <span data-th-text="#{approve.warning}" data-th-remove="tag"/>:
+									</h4>
+									<p data-th-text="#{approve.no_scopes}">
+										This client does not have any scopes registered and is therefore allowed to
+										request <em>any</em> scopes available on the system. Proceed with caution.
+									</p>
+								</div>
+	
+							<ul>
+								<li data-th-each="scope : ${ scopes }">
+									<i data-th-class="|icon-${scope.icon}|" data-th-if="${!#strings.isEmpty(scope.icon)}"></i>
+									<span data-th-text="${ scope.description ?: scope.value}" data-th-remove="tag"></span>
+									
+									<span class="claim-tooltip" data-toggle="popover"
+									data-html="true"
+									data-placement="right"
+									data-trigger="hover"
+									data-title="These values will be sent:"
+									data-th-attr="data-content=|&lt;div style=&quot;text-align: left;&quot;>&lt;ul>${#strings.listJoin(claims[scope.value].!['&lt;li>&lt;b>'+ key +'&lt;/b>: ' + value + '&lt;/li>' ], '')}&lt;/ul>&lt;/div>|"
+									data-th-if="${not #maps.isEmpty(claims[scope.value])}">
+										<i class="icon-question-sign"></i>
+									</span>
+									
+								</li>
+							</ul>
+						</fieldset>
+	
+					</div>
+	
+				</div>
+	
+				<div class="row">
+					<h3 data-th-text="|#{approve.do_authorize} &quot;${client.clientName ?: client.Name }&quot;?|">
+					</h3>
+	                <input id="user_oauth_approval" name="user_oauth_approval" value="true" type="hidden" />
+	                <input data-th-name="user_code" data-th-value="${_csrf.token}" type="hidden" />
+					<input type="hidden" name="user_code" value="${ dc.userCode }" />
+	                <input data-th-name="${_csrf.parameterName}" data-th-value="${_csrf.token}" type="hidden" />
+	                <input name="authorize" data-th-value="#{approve.label.authorize}" type="submit"
+					onclick="$('#user_oauth_approval').attr('value',true)" class="btn btn-success btn-large" />
+					&nbsp; 
+					<input name="deny" data-th-value="#{approve.label.deny}" type="submit" onclick="$('#user_oauth_approval').attr('value',false)"
+					class="btn btn-secondary btn-large" />
+				</div>
+	
+			</form>
+	
+		</div>
+	</div>
+	<div id="push"></div>	
+</div>	
+<script type="text/javascript" data-th-inline="javascript">
+/* <![CDATA[ */
+
+$(document).ready(function() {
+		$('.claim-tooltip').popover();
+		$('.claim-tooltip').on('click', function(e) {
+			e.preventDefault();
+			$(this).popover('show');
+		});
+
+		$(document).on('click', '#toggleMoreInformation', function(event) {
+			event.preventDefault();
+			if ($('#moreInformation').is(':visible')) {
+				// hide it
+				$('.moreInformationContainer', this.el).removeClass('alert').removeClass('alert-info').addClass('muted');
+				$('#moreInformation').hide('fast');
+				$('#toggleMoreInformation i').attr('class', 'icon-chevron-right');
+			} else {
+				// show it
+				$('.moreInformationContainer', this.el).addClass('alert').addClass('alert-info').removeClass('muted');
+				$('#moreInformation').show('fast');
+				$('#toggleMoreInformation i').attr('class', 'icon-chevron-down');
+			}
+		});
+		
+    		var creationDate = [[${ client.createdAt }]];
+		var displayCreationDate = $.t('approve.dynamically-registered-unkown');
+		var hoverCreationDate = "";
+		if (creationDate != null && moment(creationDate).isValid()) {
+			creationDate = moment(creationDate);
+			if (moment().diff(creationDate, 'months') < 6) {
+				displayCreationDate = creationDate.fromNow();
+			} else {
+				displayCreationDate = "on " + creationDate.format("LL");
+			}
+			hoverCreationDate = creationDate.format("LLL");
+		}
+		
+		$('#registrationTime').html(displayCreationDate);
+		$('#registrationTime').attr('title', hoverCreationDate);
+
+		
+		
+});
+
+/* ]]> */</script>
+<span data-th-replace="fragments/footer :: footer"></span>

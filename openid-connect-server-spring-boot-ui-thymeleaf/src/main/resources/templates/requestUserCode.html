@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html data-th-lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head data-th-replace="fragments/header :: head(#{device.request_code.title})">
+</head>
+<body>
+<div id="wrap">
+	<span data-th-replace="fragments/topbar :: topbar(pageName='Approve')"></span>
+	<div class="container main">
+	
+		<div class="well" style="text-align: center">
+			<h1 data-th-text="#{device.request_code.header}"></h1>
+	
+			<th-block data-th-switch="${error}" data-th-if="${param.error != null}">
+				<div class="alert alert-error" data-th-case="'noUserCode'" data-th-text="#{device.error.noUserCode}"></div>
+				<div class="alert alert-error" data-th-case="'expiredUserCode'" data-th-text="#{device.error.expiredUserCode}"></div>
+				<div class="alert alert-error" data-th-case="'userCodeAlreadyApproved'" data-th-text="#{device.error.userCodeAlreadyApproved}"></div>
+				<div class="alert alert-error" data-th-case="'userCodeMismatch'" data-th-text="#{device.error.userCodeMismatch}"></div>
+				<div class="alert alert-error" data-th-case="*" data-th-text="#{device.error.error}"></div>
+			</th-block>
+	
+		<form data-th-action="@{/device/verify}" method="post">
+				<div class="row-fluid">
+					<div class="span12">
+						
+		                <div>
+			                <div class="input-block-level input-xlarge">
+				                <input type="text" name="user_code" placeholder="code" autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false" value="" />
+			                </div>
+		                </div>
+						<input type="hidden" data-th-name="${_csrf.parameterName}" data-th-value="${_csrf.token}" />
+						<input name="approve" data-th-value="#{device.request_code.submit}" type="submit" class="btn btn-info btn-large" /> 
+					</div>
+				</div>
+	
+			</form>
+	
+		</div>
+	</div>
+	<div id="push"></div>
+</div>
+<th-block data-th-replace="fragments/footer :: footer"/>
+</body>
+</html>	
+

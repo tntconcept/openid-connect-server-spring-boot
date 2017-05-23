@@ -3,6 +3,7 @@ dependencies {
 	
 	// OpenID Connect
     compile("org.mitre:openid-connect-server:${openIdConnectVersion}")
+    compile("org.springframework.security.oauth:spring-security-oauth2:${springSecurityOauthVersion}")
     compile("org.bouncycastle:bcprov-jdk15on:1.52")    
     
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")

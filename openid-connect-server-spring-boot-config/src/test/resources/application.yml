@@ -67,9 +67,9 @@ openid:
         scope.enabled: true
         stats.enabled: true   
       oidc:
-        dynamicclientregistration.enabled: true
-        jwksetpublishing.enabled: true
-        userinfo.enabled: true
-        discovery.enabled: true
-      protectedresourceregistration.enabled: true
+        dynamicclientregistration.enabled: false
+        jwksetpublishing.enabled: false
+        userinfo.enabled: false
+        discovery.enabled: false
+      protectedresourceregistration.enabled: false
          

@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:oauth_scrypt
+
+openid:
+  connect:
+    crypto:
+      password-encoder:
+        clients:
+          scrypt:
+            enabled: true
+            cpu-cost: 16384
+            memory-cost: 8
+            parallelization: 1
+            key-lenght: 32
+            salt-lenght: 64
+        users:
+          scrypt: 
+            enabled: true
+            cpu-cost: 16384
+            memory-cost: 8
+            parallelization: 1
+            key-lenght: 32
+            salt-lenght: 64 
+      keystore:
+        path: classpath:keystore.jwks
+      signing:
+        defaultSignerKeyId: rsa1
+        defaultSigningAlgorithmName: RS256
+      encrypt:
+        defaultAlgorithm: RSA1_5
+        defaultDecryptionKeyId: rsa1
+        defaultEncryptionKeyId: rsa1
+    

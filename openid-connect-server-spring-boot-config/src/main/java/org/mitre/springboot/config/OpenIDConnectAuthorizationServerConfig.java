@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
@@ -64,6 +65,10 @@ public class OpenIDConnectAuthorizationServerConfig extends AuthorizationServerC
 	@Autowired 
 	private OAuth2RequestValidator oAuth2RequestValidator;
 	
+	@Autowired
+	@Qualifier("clientPasswordEncoder")
+	private PasswordEncoder clientPasswordEncoder;
+	
 	protected TokenGranter tokenGranter() {
 		return new CompositeTokenGranter(Arrays.<TokenGranter>asList(
 				new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices, clientDetailsService, requestFactory),
@@ -96,7 +101,7 @@ public class OpenIDConnectAuthorizationServerConfig extends AuthorizationServerC
 	
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-
+	    oauthServer.passwordEncoder(clientPasswordEncoder);
 	}
 	
 	@Override
