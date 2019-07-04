@@ -235,7 +235,7 @@ public class OpenIDConnectServerConfig{
 
     @Bean
     @ConditionalOnMissingBean(AuthorizationCodeServices.class)
-    public AuthorizationCodeServices defaultOAuth2AuthorizationCodeService(){
+    public DefaultOAuth2AuthorizationCodeService defaultOAuth2AuthorizationCodeService(){
         return new DefaultOAuth2AuthorizationCodeService();
     }
 
@@ -250,7 +250,7 @@ public class OpenIDConnectServerConfig{
     //Primary is necessary. Sometimes Spring Boot failed when is starting because there are 3 beans of type ResourceServerTokenServices.
     // We have to force this bean 
     @Primary
-    public OAuth2TokenEntityService defaultOAuth2ProviderTokenService(){
+    public DefaultOAuth2ProviderTokenService defaultOAuth2ProviderTokenService(){
         return new DefaultOAuth2ProviderTokenService();
     }
 
