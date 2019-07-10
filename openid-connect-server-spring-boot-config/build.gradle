@@ -2,16 +2,16 @@ apply plugin: "java-library"
 
 dependencies {
     // Spring Boot Starters
-    api libs.springBootStarterWeb
-    api libs.springBootStarterSecurity
-    api libs.springSecurityOauth2
-    api(libs.springBootStarterDataJPA) {
+    compile libs.springBootStarterWeb
+    compile libs.springBootStarterSecurity
+    compile libs.springSecurityOauth2
+    compile(libs.springBootStarterDataJPA) {
     	exclude group: 'org.hibernate', module: 'hibernate-entitymanager'
     }
 
     // OpenID Connect
-    api libs.mitreOpenIdConnectServer
-    api libs.bouncyCastle
+    compile libs.mitreOpenIdConnectServer
+    compile libs.bouncyCastle
 
     runtime libs.eclipsePersistenceJpa
     runtime libs.hikariCP
