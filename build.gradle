@@ -67,24 +67,23 @@ subprojects {
 				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 				
 				//for local maven deploy testing
-				//repository(url: mavenLocal().url)
+//				repository(url: mavenLocal().url)
 					
 				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
 					authentication(userName: ossrhUsername, password: ossrhPassword)
 				}
-	
+
 				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
 					authentication (userName: ossrhUsername, password: ossrhPassword)
 				}
-				
-	
-				pom.project {
+
+                pom.project {
 					name project.name
 					description project.description
 					packaging 'jar'
 					url 'https://github.com/simpledynamics/openid-connect-server-spring-boot'
-					
-					scm {
+
+                    scm {
 						connection 'scm:git:https://github.com/simpledynamics/openid-connect-server-spring-boot.git'
 						developerConnection 'scm:git:https://github.com/simpledynamics/openid-connect-server-spring-boot.git'
 						url 'https://github.com/simpledynamics/openid-connect-server-spring-boot'
