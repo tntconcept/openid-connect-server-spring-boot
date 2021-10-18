@@ -22,7 +22,7 @@ project.ext.set("githubAutentiaToken", project.hasProperty("githubAutentiaToken"
 repositories {
 	mavenCentral()
     maven {
-        url = uri("https://maven.pkg.github.com/cgmarcos-autentia/openid-connect-server-spring-boot")
+        url = uri("https://maven.pkg.github.com/autentia/openid-connect-server-spring-boot")
         credentials {
             username = githubAutentiaUsername
             password = githubAutentiaToken
