@@ -4,7 +4,7 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
-	}
+    }
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
@@ -14,10 +14,20 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
-eclipse.project.name = 'openid-connect-server-spring-boot-samples-default' 
+eclipse.project.name = 'openid-connect-server-spring-boot-samples-default'
+
+project.ext.set("githubAutentiaUsername", project.hasProperty("githubAutentiaUsername") ? githubAutentiaUsername : System.getenv("GITHUB_AUTENTIA_USERNAME"))
+project.ext.set("githubAutentiaToken", project.hasProperty("githubAutentiaToken") ? githubAutentiaToken : System.getenv("GITHUB_AUTENTIA_TOKEN"))
 
 repositories {
 	mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/cgmarcos-autentia/openid-connect-server-spring-boot")
+        credentials {
+            username = githubAutentiaUsername
+            password = githubAutentiaToken
+        }
+    }
 }
 
 dependencies {
