@@ -1,5 +1,8 @@
 include ':openid-connect-server-spring-boot-config'
 include ':openid-connect-server-spring-boot-ui-thymeleaf'
 include ':openid-connect-server-spring-boot-test'
-include ':samples/default'
-include ':samples/simple-ui'
+include ':default'
+include ':simple-ui'
+
+project(":default").projectDir = file("samples/default")
+project(":simple-ui").projectDir = file("samples/simple-ui")

@@ -1,3 +1,10 @@
+//plugins {
+//    id "eclipse" version =
+//    id "idea"
+//    id "java"
+//    id "maven"
+//    id "signing"
+//}
 subprojects {
 	buildscript {
 		ext {
@@ -14,7 +21,7 @@ subprojects {
 			maven {url "http://repo.spring.io/release"}
 		}
 	}
-	
+
 	apply plugin: "eclipse"
 	apply plugin: "idea" 
 	apply plugin: "java"
@@ -67,7 +74,7 @@ subprojects {
 				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 				
 				//for local maven deploy testing
-//				repository(url: mavenLocal().url)
+				repository(url: mavenLocal().url)
 					
 				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
 					authentication(userName: ossrhUsername, password: ossrhPassword)
