@@ -9,7 +9,7 @@ The [default](samples/default) sample application attempts to be as close as pos
 
 Pull requests and feature improvements are welcome.
 
-Currently supports Spring Boot 1.5.2, MitreId Connect 1.3.0, and Spring Security 4.3.7
+Currently supports Spring Boot 1.5.21, MitreId Connect 1.3.3, and Spring Security 4.3.22
 
 ## Password Encoders
 
@@ -17,6 +17,7 @@ The possibility of using a different password encoders for users and clients has
 
 To configure a different encoder type (the default encoder NoOpPasswordEncoder), the following configuration must be added to the yml file:
 
+```yaml
 openid:
   connect:
     crypto:
@@ -28,7 +29,8 @@ openid:
         users:
           bcrypt: 
             enabled: true
-            strength: -1    
+            strength: -1    `
+```            
             
 openid.connect.crypto.password-encoder.clients defines the password encoder for clients and in openid.crypto.password-encoder.users for users.            
 
@@ -40,6 +42,7 @@ To configure a BCrypt password encoder you will need to add the bcrypt property 
  * enabled: enables (true) or disables (false) the encoder
  * strength: the log rounds to use, between 4 and 31
 
+```yaml
 openid:
   connect:
     crypto:
@@ -52,6 +55,7 @@ openid:
           bcrypt: 
             enabled: true
             strength: -1   
+```  
 
 ### SCrypt Password Encoder
 To configure a SCrypt password encoder you will need to add the scrypt property with the following properties:
@@ -63,6 +67,7 @@ To configure a SCrypt password encoder you will need to add the scrypt property 
  * key-length: key length for the algorithm (as defined in scrypt this is dkLen). The default is currently 32.
  * salt-length: salt length (as defined in scrypt this is the length of S). The default is currently 64.
 
+```yaml
 openid:
   connect:
     crypto:
@@ -83,6 +88,7 @@ openid:
             parallelization: 1
             key-length: 32
             salt-length: 64 
+```  
 
 ### Standard Password Encoder
 To configure a Standard password encoder you will need to add the standard property with the following properties:
@@ -90,6 +96,7 @@ To configure a Standard password encoder you will need to add the standard prope
  * enabled: enables (true) or disables (false) the encoder
  * secret: the secret key used in the encoding process (should not be shared). Default ""
 
+```yaml
 openid:
   connect:
     crypto:
@@ -102,13 +109,14 @@ openid:
           standard: 
             enabled: true
             secret: a_secret_word     
-            
+```            
 ### Pbkdf2 Password Encoder
 To configure a Pbkdf2 password encoder you will need to add the pbkdf2 property with the following properties:
 
  * enabled: enables (true) or disables (false) the encoder
  * secret: the secret key used in the encoding process (should not be shared)
 
+```yaml
 openid:
   connect:
     crypto:
@@ -120,4 +128,5 @@ openid:
         users:
           pbkdf2: 
             enabled: true
-            secret: a_secret_word                      
+            secret: a_secret_word
+```                      
