@@ -1,10 +1,3 @@
-//plugins {
-//    id "eclipse" version =
-//    id "idea"
-//    id "java"
-//    id "maven"
-//    id "signing"
-//}
 subprojects {
 	buildscript {
 		ext {
@@ -43,7 +36,6 @@ subprojects {
 
 	repositories {
 		mavenCentral()
-		maven {url "http://oss.sonatype.org/content/groups/public"}
 	}
 
 	task javadocJar(type: Jar) {
@@ -65,9 +57,6 @@ subprojects {
 		sign configurations.archives
 	}
 
-    project.ext.set("ossrhUsername", project.hasProperty("ossrhUsername") ? ossrhUsername : System.getenv("SONATYPE_USERNAME"))
-    project.ext.set("ossrhPassword", project.hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("SONATYPE_PASSWORD"))
-
     project.ext.set("githubAutentiaUsername", project.hasProperty("githubAutentiaUsername") ? githubAutentiaUsername : System.getenv("GITHUB_AUTENTIA_USERNAME"))
     project.ext.set("githubAutentiaToken", project.hasProperty("githubAutentiaToken") ? githubAutentiaToken : System.getenv("GITHUB_AUTENTIA_TOKEN"))
 
@@ -78,35 +67,25 @@ subprojects {
 			mavenDeployer {
 				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-				//for local maven deploy testing
-				//repository(url: mavenLocal().url)
-
-                if(ossrhUsername != null && ossrhPassword != null) {
-
-                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                        authentication(userName: ossrhUsername, password: ossrhPassword)
-                    }
-                    snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                        authentication(userName: ossrhUsername, password: ossrhPassword)
-                    }
-                }
-
                 if(githubAutentiaUsername != null && githubAutentiaToken != null) {
                     repository(url: "https://maven.pkg.github.com/autentia/openid-connect-server-spring-boot") {
                         authentication(userName: githubAutentiaUsername, password: githubAutentiaToken)
                     }
+                } else {
+                    //for local maven deploy testing
+                    repository(url: mavenLocal().url)
                 }
 
                 pom.project {
 					name project.name
 					description project.description
 					packaging 'jar'
-					url 'https://github.com/simpledynamics/openid-connect-server-spring-boot'
+					url 'https://github.com/autentia/openid-connect-server-spring-boot'
 
                     scm {
-						connection 'scm:git:https://github.com/simpledynamics/openid-connect-server-spring-boot.git'
-						developerConnection 'scm:git:https://github.com/simpledynamics/openid-connect-server-spring-boot.git'
-						url 'https://github.com/simpledynamics/openid-connect-server-spring-boot'
+						connection 'scm:git:https://github.com/autentia/openid-connect-server-spring-boot'
+						developerConnection 'scm:git:https://github.com/autentia/openid-connect-server-spring-boot'
+						url 'https://github.com/autentia/openid-connect-server-spring-boot'
 					}
 	
 					licenses {
