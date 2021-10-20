@@ -4,8 +4,8 @@
 RETVAL=$?
 
 if [ $RETVAL -eq 0 ]; then
-    echo 'Artifacts published to Sonatype'
+    echo 'Artifacts published'
 else
-    echo 'Sonatype publish failed.'
+    echo 'Publish failed.'
     return 1
 fi

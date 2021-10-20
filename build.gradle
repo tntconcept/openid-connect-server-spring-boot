@@ -32,7 +32,6 @@ subprojects {
 
 	repositories {
 		mavenCentral()
-		maven {url "http://oss.sonatype.org/content/groups/public"}
 	}
 
 	task javadocJar(type: Jar) {
@@ -57,9 +56,6 @@ subprojects {
     project.ext.set("githubAutentiaUsername", project.hasProperty("githubAutentiaUsername") ? githubAutentiaUsername : System.getenv("GITHUB_AUTENTIA_USERNAME"))
     project.ext.set("githubAutentiaToken", project.hasProperty("githubAutentiaToken") ? githubAutentiaToken : System.getenv("GITHUB_AUTENTIA_TOKEN"))
 
-	project.ext.set("ossrhUsername",  project.hasProperty("ossrhUsername") ? ossrhUsername : System.getenv("SONATYPE_USERNAME"))
-	project.ext.set("ossrhPassword",  project.hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("SONATYPE_PASSWORD"))
-
 
 	uploadArchives {
 		repositories {
@@ -73,16 +69,8 @@ subprojects {
                 } else {
 				//for local maven deploy testing
                     repository(url: mavenLocal().url)
-					
-				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-					authentication(userName: ossrhUsername, password: ossrhPassword)
 				}
-	
-				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-					authentication (userName: ossrhUsername, password: ossrhPassword)
-				}
-				
-	
+
 				pom.project {
 					name project.name
 					description project.description
