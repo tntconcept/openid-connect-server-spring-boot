@@ -1,6 +1,6 @@
 ext {
     h2DatabaseVersion = "1.4.192"
-    openIdConnectSpringBootVersion = "0.1.4-SNAPSHOT"
+    openIdConnectSpringBootVersion = "0.1.4"
 
 
     libs = [
