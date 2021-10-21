@@ -18,20 +18,12 @@ buildscript {
 	}
 }
 
-project.ext.set("githubAutentiaUsername", project.hasProperty("githubAutentiaUsername") ? githubAutentiaUsername : System.getenv("GITHUB_AUTENTIA_USERNAME"))
-project.ext.set("githubAutentiaToken", project.hasProperty("githubAutentiaToken") ? githubAutentiaToken : System.getenv("GITHUB_AUTENTIA_TOKEN"))
-
 repositories {
 	mavenLocal()
 	mavenCentral()
     maven {
-        url = uri("https://maven.pkg.github.com/autentia/openid-connect-server-spring-boot")
-        credentials {
-            username = githubAutentiaUsername
-            password = githubAutentiaToken
-        }
+        url "https://maven.pkg.github.com/autentia/openid-connect-server-spring-boot"
     }
-
 }
 
 dependencies {
