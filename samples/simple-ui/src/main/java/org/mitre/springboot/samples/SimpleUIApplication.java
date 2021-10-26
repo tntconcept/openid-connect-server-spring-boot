@@ -1,6 +1,5 @@
 package org.mitre.springboot.samples;
 
-import org.mitre.oauth2.web.CorsFilter;
 import org.mitre.openid.connect.web.AuthenticationTimeStamper;
 import org.mitre.springboot.config.annotation.EnableOpenIDConnectServer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -20,10 +20,10 @@ public class SimpleUIApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SimpleUIApplication.class, args);
 	}
-	
+
 	@Configuration
 	public static class LoginConfiguration extends WebSecurityConfigurerAdapter {
-		
+
 		@Autowired
 		private CorsFilter corsFilter;
 		
@@ -40,10 +40,10 @@ public class SimpleUIApplication {
 				.csrf()
 					.and()
 				.formLogin()
-					.loginPage("/")
-					.loginProcessingUrl("/login")
+                    .loginPage("/session")
+                    .loginProcessingUrl("/login")
 					.successHandler(authenticationTimeStamper)
-					.failureUrl("/?error")
+					.failureUrl("/session?error")
 					.permitAll()
 					.and()
 				.authorizeRequests()
@@ -52,10 +52,10 @@ public class SimpleUIApplication {
 					.and()
 				.addFilterBefore(corsFilter, SecurityContextPersistenceFilter.class)
 				.logout()
-					.logoutSuccessUrl("/?logout")
+                    .logoutSuccessUrl("/session?logout")
 					.permitAll()
 					.and()
-				.exceptionHandling().accessDeniedPage("/?denied") //in this simple case usually due to a InvalidCsrfTokenException after session timeout
+				.exceptionHandling().accessDeniedPage("/session?denied") //in this simple case usually due to a InvalidCsrfTokenException after session timeout
 				.and()
 				.anonymous()
 					.and()
@@ -72,10 +72,10 @@ public class SimpleUIApplication {
 
 		@Override
 		public void addViewControllers(ViewControllerRegistry registry) {
-			registry.addViewController("/").setViewName("index");
+			registry.addViewController("/session").setViewName("session");
 			registry.addViewController("/sampleclient").setViewName("sampleclient");
 		}
 
-	}
+    }
 	
 }

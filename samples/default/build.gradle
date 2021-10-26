@@ -10,6 +10,7 @@ buildscript {
 		springBootVersion = "1.5.21.RELEASE"
 	}
 	repositories {
+        mavenLocal()
 		mavenCentral()
 	}
 	dependencies {
@@ -21,7 +22,11 @@ repositories {
 	mavenLocal()
 	mavenCentral()
     maven {
-        url "https://maven.pkg.github.com/autentia/openid-connect-server-spring-boot"
+        url =uri("https://maven.pkg.github.com/autentia/openid-connect-server-spring-boot")
+        credentials {
+            username = githubAutentiaUsername
+            password = githubAutentiaToken
+        }
     }
 }
 
